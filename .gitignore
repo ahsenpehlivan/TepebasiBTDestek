@@ -1,0 +1,39 @@
+# Node.js
+node_modules/
+apps/web/node_modules/
+.next/
+apps/web/.next/
+out/
+dist/
+build/
+coverage/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+*.env
+
+# Android / Gradle
+.gradle/
+apps/android/.gradle/
+apps/android/local.properties
+apps/android/**/build/
+*.keystore
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
