@@ -4,60 +4,71 @@
 
 | Alan | Sonuc | Not |
 | --- | --- | --- |
-| Web `npm run lint` | gecti | 2026-07-06 tarihinde calistirildi |
-| Web `npm run build` | gecti | Ortam degiskenleri olmadan build tamamladi |
-| Android `gradlew.bat assembleDebug` | gecti | Android tarafinda regresyon gorulmedi |
+| Web `npm run lint` | gecti | 2026-07-06 tarihinde yeniden calistirildi |
+| Web `npm run build` | gecti | Build `.env.local` ile tamamlandi; icerik raporlanmadi |
+| Android `gradlew.bat assembleDebug` | gecti | 2026-07-06 tarihinde yeniden calistirildi |
+| `docker version` | gecti | Docker engine erisimi var |
 | `npx supabase --version` | gecti | `2.109.0` |
-| `docker version` | kaldi | Docker daemon/engine erisimi yok |
-| `npx supabase status` | kaldi | Docker engine kapali oldugu icin calismadi |
+| `npx supabase stop` | gecti | Yerel stack temiz bicimde durduruldu |
+| `npx supabase start` | gecti | Yerel stack yeniden ayaga kalkti |
+| `npx supabase db reset` | gecti | Tum migrationlar ve seed basariyla uygulandi |
+| `npx supabase status` | gecti | Local stack calisiyor |
 
 ## Supabase Dogrulama Durumu
 
 | Kontrol | Durum | Neden |
 | --- | --- | --- |
-| `npx supabase stop` | test edilemedi | Docker engine kapali |
-| `npx supabase start` | test edilemedi | Docker engine kapali |
-| `npx supabase db reset` | test edilemedi | Docker engine kapali |
-| Yerel seed sonucu | test edilemedi | `db reset` calismadi |
-| `schema_smoke_test.sql` | test edilemedi | Yerel PostgreSQL container acilamadi |
-| `rls_smoke_test.sql` | test edilemedi | Yerel PostgreSQL container acilamadi |
-| Uzak migration push | test edilemedi | Yerel reset kapisi gecilemedi, project ref saglanmadi |
+| Yerel migration zinciri | gecti | `20260703000100` -> `20260703000500` arasi tum migrationlar uygulandi |
+| Yerel seed sonucu | gecti | `supabase/seed.sql` reset sonrasinda yüklendi |
+| Enum varligi | gecti | 7 hedef enum olustu |
+| 9 ana tablo | gecti | Beklenen 9 tablo olustu |
+| RLS etkinligi | gecti | 9 ana tablonun tamaminda `relrowsecurity = true` |
+| `ticket-attachments` private bucket | gecti | Bucket `public = false` |
+| `departments` seed kayitlari | gecti | 6 kayit mevcut |
+| Demo cihaz seed kayitlari | gecti | 4 kayit mevcut |
+| Trigger ve helper functionlar | gecti | Beklenen helper function ve trigger isimleri bulundu |
+| Uzak migration push | test edilemedi | Bu asama yalnizca yerel dogrulama icin yapildi; remote islem calistirilmadi |
 
-Bu nedenle migration ve RLS tarafinda bu asamada yalnizca statik dosya incelemesi ve komut hazirligi vardir; runtime basari raporlanmamistir.
+## Smoke Testleri
+
+Bu iki SQL dosyasi gercek rol davranisini degil, sema, RLS ve policy varligini kontrol eden smoke testlerdir.
+
+| Test | Sonuc | Neden |
+| --- | --- | --- |
+| `supabase/tests/schema_smoke_test.sql` | gecti | `BEGIN -> DO -> ROLLBACK` ile hatasiz tamamlandi |
+| `supabase/tests/rls_smoke_test.sql` | gecti | `BEGIN -> DO -> ROLLBACK` ile hatasiz tamamlandi |
 
 ## Auth ve Role Testleri
 
 | Kod | Senaryo | Beklenen | Sonuc | Neden |
 | --- | --- | --- | --- | --- |
-| AUTH-01 | Gecersiz e-posta/parola ile giris | Turkce hata, dashboard acilmaz | test edilemedi | `.env.local` ve demo hesaplar hazir degil |
-| AUTH-02 | Technician hesabiyla giris | Dashboard acilir | test edilemedi | Demo auth kullanicisi olusturulmadi |
-| AUTH-03 | Admin hesabiyla giris | Dashboard acilir | test edilemedi | Demo auth kullanicisi olusturulmadi |
-| AUTH-04 | Employee hesabiyla giris | Access denied ekrani acilir | test edilemedi | Demo auth kullanicisi olusturulmadi |
-| AUTH-05 | Oturum acmadan `/dashboard` | `/login` sayfasina redirect | test edilemedi | Runtime env degerleri eklenmedi |
-| AUTH-06 | Oturum acmadan `/tickets` | `/login` sayfasina redirect | test edilemedi | Runtime env degerleri eklenmedi |
+| AUTH-01 | Gecersiz e-posta/parola ile giris | Turkce hata, dashboard acilmaz | test edilemedi | Gercek demo auth kullanicilari ve kontrollu giris verisi bu turda hazirlanmadi |
+| AUTH-02 | Technician hesabiyla giris | Dashboard acilir | test edilemedi | Demo technician hesabi olusturulmadi |
+| AUTH-03 | Admin hesabiyla giris | Dashboard acilir | test edilemedi | Demo admin hesabi olusturulmadi |
+| AUTH-04 | Employee hesabiyla giris | Access denied ekrani acilir | test edilemedi | Demo employee hesabi olusturulmadi |
+| AUTH-05 | Oturum acmadan `/dashboard` | `/login` sayfasina redirect | test edilemedi | Browser session senaryosu bu turda tekrar koşturulmadi |
+| AUTH-06 | Oturum acmadan `/tickets` | `/login` sayfasina redirect | test edilemedi | Browser session senaryosu bu turda tekrar koşturulmadi |
 | AUTH-07 | Technician `/tickets` | RLS tarafindan izin verilen liste veya empty state | test edilemedi | Demo technician session'i yok |
 | AUTH-08 | Logout | Session kapanir ve `/login` acilir | test edilemedi | Gercek oturum olusturulmadi |
 | AUTH-09 | Logout sonrasi `/dashboard` | Tekrar `/login` | test edilemedi | Gercek oturum olusturulmadi |
 | AUTH-10 | Pasif profile ile giris | Yonetim paneline erisim verilmez | test edilemedi | Pasif demo profile hazir degil |
 | AUTH-11 | Profile satiri olmayan auth kullanicisi | Kontrollu hata; uygulama cokmez | test edilemedi | Bu durum icin demo auth kaydi olusturulmadi |
-| AUTH-12 | Environment variable eksik | Secret gostermeyen anlasilir gelistirme hatasi | gecti | Browser uzerinden `/login` acildiginda anlasilir env hata mesaji goruldu |
+| AUTH-12 | Environment variable eksik | Secret gostermeyen anlasilir gelistirme hatasi | test edilemedi | Bu turda `.env.local` mevcut oldugu icin eksik env senaryosu tekrar uretilmedi |
 
-## Browser Tabanli Hizli Kontrol
+## Diger Dogrulamalar
 
-| Senaryo | Sonuc | Not |
+| Kontrol | Sonuc | Neden |
 | --- | --- | --- |
-| Ana sayfa `/` acilisi | gecti | Giris linki ve guncel kapsam kartlari goruldu |
-| `/login` env eksik davranisi | gecti | Beklenen gelistirme hatasi uretiliyor |
+| `apps/web/.env.local` Git takibi | gecti | Dosya mevcut ama Git tarafindan izlenmiyor |
 
 ## RLS Runtime Testleri
 
-RLS runtime testleri bu asamada test edilemedi.
+RLS runtime testleri bu asamada halen test edilemedi.
 
 Nedenler:
 
-- Yerel Supabase stack baslatilamadi
-- Uzak gelistirme projesi baglanmadi
-- Demo kullanicilar olusturulmadi
-- Demo ticket ve yorum verisi hazir degil
+- Demo auth kullanicilari olusturulmadi
+- Rol bazli gercek publishable-key + user session senaryolari kosulmadi
+- Demo ticket/comment verisi hazir degil
 
-Sonraki asamada demo kullanicilar ve kontrollu demo ticket verileri hazirlandiginda, gercek session uzerinden publishable key + user session davranisi test edilmelidir.
+Yerel SQL smoke testleri gecti, ancak bunlar runtime yetki davranisinin tam kaniti olarak yorumlanmamalidir.
