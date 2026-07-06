@@ -10,7 +10,7 @@
 | `docker version` | gecti | Docker engine erisimi var |
 | `npx supabase --version` | gecti | `2.109.0` |
 | `npx supabase db reset` | gecti | Yeni migration dahil tum migrationlar ve seed basariyla uygulandi |
-| `npx supabase db push` | kaldi | `20260706000200_restore_public_api_grants.sql` icin tekrar denendi ancak CLI `SUPABASE_DB_PASSWORD` degiskeni bu ortamda hazir olmadigindan push tamamlanamadi |
+| Remote grant migration gecmisi | gecti | Linked remote `supabase_migrations.schema_migrations` sorgusunda `20260706000200_restore_public_api_grants.sql` kaydi dogrulandi |
 | `apps/web/.env.local` Git takibi | gecti | Dosya untracked; icerik raporlanmadi |
 
 ## Supabase Dogrulama Durumu
@@ -25,7 +25,7 @@
 | `ticket-attachments` private bucket | gecti | Bucket `public = false` |
 | Trigger ve helper functionlar | gecti | `protect_profile_mutation()` dahil beklenen functionlar bulundu |
 | Data API grant tutarliligi | gecti | Local reset sonrasi `anon` ve `authenticated` rollerine gerekli tablo/function/sequence grant'leri `20260706000200_restore_public_api_grants.sql` ile kalici hale getirildi |
-| Uzak migration push | kaldi | Bu turde yeni grant migration'i linked remote projeye CLI DB parola degiskeni olmadigi icin push edilemedi |
+| Uzak grant migration varligi | gecti | Linked remote migration gecmisinde `20260706000200` kaydi bulundu |
 
 ## Smoke Testleri
 
@@ -109,9 +109,37 @@ Not: Demo kullanici parolalari repository icinde tutulmadigi icin browser auth t
 | Public/internal yorum action'i | gecti | Ticket `#1003` comment sayisi 2'den 3'e, internal comment sayisi 1'den 2'ye yukselerek dogrulandi |
 | Dashboard gercek count kartlari | gecti | Ticket ve cihaz sayaclari gercek sorgularla beslendi; remote toplam demo ticket `6`, cihaz sayisi `4` |
 
+## Device ve Maintenance Testleri
+
+| Test | Sonuc | Neden |
+| --- | --- | --- |
+| `/devices` listeleme | gecti | Remote browser akisinda 4 demo cihaz tablo halinde goruldu |
+| `/devices` filtreleme | gecti | `status=in_repair` filtresi ile liste tek cihaz kaydina daraldi |
+| `/devices/[id]` detay goruntuleme | gecti | Remote browser'da cihaz ozeti, QR token ozeti, ilgili ticket alani ve bakim bolumu acildi |
+| Device create action | gecti | Ilk denemede kayit olustu ancak formda kalma UX hatasi bulundu; action server redirect ile duzeltildi ve ikinci denemede detay sayfasina yonlendirerek dogrulandi |
+| Device edit action | gecti | Remote browser'da model, atanan kullanici, durum, isletim sistemi ve notlar guncellenip detay ekraninda goruldu |
+| Device pasife alma action | gecti | Onayli akista cihaz `is_active = false` ve `status = retired` durumuna gecti; form disabled oldu |
+| QR onizleme ekrani | gecti | Protected QR sayfasinda payload `TBT-DEVICE:<token>` ve yazdir butonu goruldu |
+| QR token route | gecti | `/devices/qr/[token]` route'u ilgili cihaz detayina yonlendirdi |
+| Bakim kaydi ekleme action'i | gecti | Remote browser'da bakim kaydi eklendi ve ayni detay ekraninda listelendi |
+
+## Device ve Maintenance RLS Runtime Testleri
+
+| Kontrol | Sonuc | Neden |
+| --- | --- | --- |
+| DEVICE-RLS-01 Employee kendi atanmis aktif cihazini okuyabiliyor | gecti | Local employee session ile technician tarafindan atanan test cihaz `1` kayit olarak goruldu |
+| DEVICE-RLS-02 Employee tum cihaz listesini goremiyor | gecti | Local employee session yalniz atanmis cihazini gordu; unassigned demo cihazlar gorunmedi |
+| DEVICE-RLS-03 Technician cihaz listesini gorebiliyor | gecti | Local technician session ile toplam `6` cihaz kaydi okundu |
+| DEVICE-RLS-04 Technician cihaz olusturabiliyor | gecti | Local technician session ile yeni demo cihaz insert edildi |
+| DEVICE-RLS-05 Technician cihaz guncelleyebiliyor | gecti | Local technician session ile ayni cihaz `status = in_repair` ve not guncellemesi basariyla uygulandi |
+| DEVICE-RLS-06 Employee cihaz olusturamiyor | gecti | Local employee session insert denemesi RLS ile engellendi |
+| MAINT-RLS-01 Technician bakim kaydi ekleyebiliyor | gecti | Local technician session ile yeni maintenance kaydi olusturuldu |
+| MAINT-RLS-02 Employee bakim kaydi ekleyemiyor | gecti | Local employee session maintenance insert denemesi RLS ile engellendi |
+| MAINT-RLS-03 Cihaz detayinda bakim gecmisi gorunuyor | gecti | Local technician session sorgusunda 1 maintenance kaydi dondu; remote browser detayinda da gorundu |
+| Pasife alma sonrasi employee gorunurlugu | gecti | Local technician session ile pasife alinan cihaz employee session gorunumunden dustu |
+
 ## Hala Manuel Olan Kontroller
 
 | Kontrol | Sonuc | Neden |
 | --- | --- | --- |
 | AUTH-12 eksik env browser akisi | test edilemedi | Next.js build cache etkisini bozmadan ayrik browser instance ile eksik env senaryosu tekrar uretilemedi |
-| Son grant migration'inin remote `db push` ile uygulanmasi | test edilemedi | CLI tarafinda gerekli DB parola degiskeni bu ortamda hazir degildi |

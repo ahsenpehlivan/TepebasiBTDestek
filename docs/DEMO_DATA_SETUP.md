@@ -11,6 +11,13 @@
 
 Seed tekrar calistirildiginda duplicate olusturmamasi icin `on conflict` yaklasimi kullanilir.
 
+Bu asamadaki web cihaz ekranlari seed ile gelen su 4 demo cihazi temel alir:
+
+- `DEMO-PC-001`
+- `DEMO-LPT-001`
+- `DEMO-PRN-001`
+- `DEMO-SCN-001`
+
 ## Seed Neleri Bilerek Olusturmaz
 
 - `auth.users` icine demo kullanici
@@ -201,6 +208,12 @@ where ticket_id in (
   where title like 'Demo %'
 );
 ```
+
+Web cihaz create/edit/pasife alma dogrulamasi icin acilan yeni kayitlar da demo kalmalidir:
+
+- asset tag degerleri `DEMO-` veya benzeri acik prototip etiketi tasimalidir
+- gercek seri numarasi, gercek IP, gercek MAC veya gercek kullanici bilgisi kullanilmamalidir
+- pasife alma sonrasinda hard delete yapilmamalidir
 
 ## Kurallar
 

@@ -58,6 +58,12 @@
   font-weight: 600;
 }
 
+.navLink[data-active="true"] {
+  border-color: rgba(11, 94, 215, 0.16);
+  background-color: rgba(11, 94, 215, 0.08);
+  color: var(--accent);
+}
+
 .navLink:hover,
 .navLink:focus-visible {
   border-color: var(--border);

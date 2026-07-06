@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { logoutAction } from "@/app/actions/auth";
+import { PanelNav } from "@/components/layout/panel-nav";
 import { roleLabels } from "@/lib/constants/role-labels";
 import type { AuthenticatedProfile } from "@/types/domain";
 
@@ -15,6 +16,7 @@ type PanelShellProps = {
 const navigationItems = [
   { label: "Dashboard", href: "/dashboard" },
   { label: "Talepler", href: "/tickets" },
+  { label: "Cihazlar", href: "/devices" },
 ];
 
 export function PanelShell({ profile, children }: PanelShellProps) {
@@ -29,13 +31,7 @@ export function PanelShell({ profile, children }: PanelShellProps) {
             </Link>
           </div>
 
-          <nav className={styles.nav} aria-label="Panel gezinme">
-            {navigationItems.map((item) => (
-              <Link key={item.label} href={item.href} className={styles.navLink}>
-                {item.label}
-              </Link>
-            ))}
-          </nav>
+          <PanelNav items={navigationItems} />
 
           <div className={styles.userPanel}>
             <div className={styles.userMeta}>

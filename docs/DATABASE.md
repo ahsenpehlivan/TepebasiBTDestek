@@ -59,6 +59,40 @@ Bu dokuz tablo ana uygulama verisini tasir ve tamaminda RLS etkindir.
 - `write_ticket_activity_log()`
 - `write_device_activity_log()`
 
+## Cihaz ve Bakim Is Kurallari
+
+`devices` tablosu icin bu asamada web tarafinda su alanlar aktif olarak kullanilir:
+
+- `asset_tag`
+- `qr_token`
+- `device_type`
+- `brand`
+- `model`
+- `serial_number`
+- `department_id`
+- `assigned_user_id`
+- `status`
+- `purchase_date`
+- `warranty_end_date`
+- `operating_system`
+- `notes`
+- `is_active`
+- `created_by`
+
+`qr_token` opak UUID olarak tutulur ve web QR ekraninda yalnizca:
+
+- `TBT-DEVICE:<qr_token>`
+
+payload modeliyle kullanilir. Ham seri numarasi, IP, MAC veya kullanici bilgisi QR payload'ina eklenmez.
+
+`device_maintenance_records` tablosunda:
+
+- `performed_by` trigger ile mevcut auth kullanicisindan alinabilir
+- `cost` negatif olamaz
+- `description` en az 3 karakter olmalidir
+- `ticket_id` opsiyoneldir
+- `parts_used` bos ise `null`'a normalize edilir
+
 ## API Grant Tutarliligi
 
 Supabase Data API'nin local reset sonrasinda da RLS policy'lerine ulasabilmesi icin public schema grant'leri migration ile korunur.
@@ -138,6 +172,8 @@ Bu snippet:
 - public ve internal yorumlari ekler
 - mevcut trigger ve status transition kurallariyla uyumlu sekilde history/activity log uretir
 - tekrar calistirildiginda mumkun oldugunca duplicate uretmez
+
+Web cihaz ekranlari icin ayri migration eklenmemistir; mevcut `supabase/seed.sql` altindaki 4 demo cihaz ve technician/admin tarafindan web uzerinden acilan kontrollu demo cihaz kayitlari kullanilir.
 
 ## Storage Yaklasimi
 

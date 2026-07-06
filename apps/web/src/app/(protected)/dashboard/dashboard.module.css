@@ -125,9 +125,37 @@
   font-weight: 700;
 }
 
+.actionGroup {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1.2rem;
+}
+
 .primaryAction:hover,
 .primaryAction:focus-visible {
   background-color: #094fb7;
+}
+
+.secondaryAction {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding: 0.85rem 1.2rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background-color: var(--surface);
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.secondaryAction:hover,
+.secondaryAction:focus-visible {
+  border-color: rgba(11, 94, 215, 0.24);
+  background-color: rgba(11, 94, 215, 0.08);
+  color: var(--accent);
 }
 
 .scopeList {

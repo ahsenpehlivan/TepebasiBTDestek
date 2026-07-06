@@ -184,3 +184,71 @@ export type TicketDetailRecord = {
   resolvedAt: string | null;
   closedAt: string | null;
 };
+
+export type DeviceListItem = {
+  id: string;
+  assetTag: string;
+  deviceType: DeviceType;
+  brand: string;
+  model: string;
+  departmentId: string | null;
+  departmentName: string | null;
+  assignedUserId: string | null;
+  assignedUserName: string | null;
+  status: DeviceStatus;
+  warrantyEndDate: string | null;
+  isActive: boolean;
+  createdAt: string;
+};
+
+export type DeviceRelatedTicketItem = {
+  id: string;
+  ticketNumber: string;
+  title: string;
+  status: TicketStatus;
+  priority: TicketPriority;
+  createdAt: string;
+};
+
+export type DeviceMaintenanceItem = {
+  id: string;
+  maintenanceType: MaintenanceType;
+  description: string;
+  performedByName: string | null;
+  performedAt: string;
+  cost: number;
+  partsUsed: string | null;
+  relatedTicket: DeviceRelatedTicketItem | null;
+};
+
+export type DeviceUserOption = {
+  id: string;
+  fullName: string;
+  role: AppRole;
+};
+
+export type DeviceFormRecord = {
+  id: string;
+  assetTag: string;
+  deviceType: DeviceType;
+  brand: string;
+  model: string;
+  serialNumber: string | null;
+  departmentId: string | null;
+  assignedUserId: string | null;
+  status: DeviceStatus;
+  purchaseDate: string | null;
+  warrantyEndDate: string | null;
+  operatingSystem: string | null;
+  notes: string | null;
+  isActive: boolean;
+};
+
+export type DeviceDetailRecord = DeviceFormRecord & {
+  qrToken: string;
+  departmentName: string | null;
+  assignedUserName: string | null;
+  createdByName: string | null;
+  createdAt: string;
+  updatedAt: string;
+};

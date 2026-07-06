@@ -51,3 +51,15 @@ Bu istisna:
 rollerine acik degildir.
 
 Dolayisiyla normal uygulama kullanicilari kendi rollerini yukseltemez.
+
+## Runtime Dogrulama Notlari
+
+2026-07-06 tarihli gercek session testlerinde:
+
+- Employee session ile yalnizca kendisine atanmis aktif cihaz kaydi goruldu.
+- Technician session ile tum demo cihazlar ve technician tarafindan acilan yeni demo cihaz kayitlari goruldu.
+- Employee session ile `devices` insert islemi RLS tarafindan engellendi.
+- Technician session ile `devices` insert ve update islemleri basariyla calisti.
+- Technician session ile `device_maintenance_records` insert islemi basariyla calisti.
+- Employee session ile `device_maintenance_records` insert islemi RLS tarafindan engellendi.
+- Pasife alinan cihaz kaydi employee session gorunumunden dustu.

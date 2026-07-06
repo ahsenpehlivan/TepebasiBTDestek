@@ -59,10 +59,14 @@ Bu repository bir uretim sistemi degildir. Gercek kurum verisi, gercek personel 
 - Technician/admin icin ticket atama, durum degistirme ve public/internal yorum action'lari
 - Dashboard kartlarinin gercek ticket ve cihaz sayilariyla beslenmesi
 - Controlled demo ticket/comment SQL snippet'i ve local/remote demo veri dogrulamasi
+- Cihaz envanteri listeleme, filtreleme ve detay ekranlari
+- Technician/admin icin cihaz olusturma, duzenleme ve pasife alma akislari
+- Cihaz bakim kayitlarini goruntuleme ve ekleme akisi
+- Protected QR onizleme ve token yonlendirme route'lari
 - Yerel `supabase db reset`, seed ve smoke test dogrulamalari
 - Remote `db push` ve demo profile rol/department kontrolu
 - Gercek browser oturumu ile auth ve protected route dogrulamasi
-- Gercek session ile ticket, comment ve profile RLS runtime dogrulamasi
+- Gercek session ile ticket, comment, device ve maintenance RLS runtime dogrulamasi
 - Web lint ve production build dogrulamasi
 - Android `assembleDebug` regresyon dogrulamasi
 - Migration, seed, RLS ve storage SQL dosyalari
@@ -70,10 +74,9 @@ Bu repository bir uretim sistemi degildir. Gercek kurum verisi, gercek personel 
 ### Henuz Tamamlanmayan veya Bloklu Alanlar
 
 - Ticket create/update ekranlari
-- Cihaz envanteri web ekranlari
 - Android Supabase entegrasyonu
 - QR, realtime, bildirim ve dosya yukleme akislari
-- Bakim kayitlari ve cihaz detay akislarinin web'e tasinmasi
+- Web cihaz ekranlarinda ek polish ve bos/pasif senaryo iyilestirmeleri
 - AUTH-12 eksik env senaryosunun ayrik browser instance ile tekrar uretimi
 
 ## Supabase Durumu
@@ -81,10 +84,10 @@ Bu repository bir uretim sistemi degildir. Gercek kurum verisi, gercek personel 
 - `npx supabase --version`: `2.109.0`
 - `docker version`: Docker engine erisimi var
 - `npx supabase db reset`: gecti
-- `npx supabase db push`: onceki bootstrap migration icin gecti; son grant migration'i bu turde CLI DB parola degiskeni olmadan tekrar push edilemedi
+- Linked remote migration gecmisi: `20260706000200_restore_public_api_grants.sql` kaydi mevcut
 - Schema ve RLS smoke testleri: gecti
 
-2026-07-06 tarihi itibariyla linked remote Supabase projesi uzerinde demo profile kayitlari, controlled demo ticket/comment verileri, `/tickets` ve `/tickets/[id]` ekranlari ile web auth akislari dogrulanmistir. Local ortamda ise `20260706000200_restore_public_api_grants.sql` migration'i ile Data API grant'leri reset sonrasinda kalici hale getirilmis ve gercek session ile ticket/comment RLS testleri gecmistir.
+2026-07-06 tarihi itibariyla linked remote Supabase projesi uzerinde demo profile kayitlari, controlled demo ticket/comment verileri, `/tickets`, `/tickets/[id]`, `/devices`, `/devices/[id]` ve `/devices/[id]/qr` ekranlari ile web auth akislari dogrulanmistir. Local ortamda ise `20260706000200_restore_public_api_grants.sql` migration'i ile Data API grant'leri reset sonrasinda kalici hale getirilmis; gercek session ile ticket/comment/device/maintenance RLS testleri gecmistir.
 
 ## Web Ortam Degiskenleri
 

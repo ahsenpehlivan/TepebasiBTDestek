@@ -62,18 +62,24 @@ export default async function DashboardPage() {
           <div className={styles.sectionHeader}>
             <div>
               <span className={styles.sectionEyebrow}>Gercek Veri</span>
-              <h2>Ticket akisina gecin</h2>
+              <h2>Ticket ve cihaz akisina gecin</h2>
             </div>
           </div>
 
           <p>
-            Sayfa ustundeki sayaclar `tickets` tablosundan okunur. Detayli
-            listeyi gormek icin korumali ticket ekranini kullanabilirsiniz.
+            Sayfa ustundeki sayaclar `tickets` ve `devices` tablolarindan
+            beslenir. Ticket listesi ve cihaz envanteri korumali panel
+            icinden gercek Supabase oturumu ile acilir.
           </p>
 
-          <Link href="/tickets" className={styles.primaryAction}>
-            Ticket Listesini Ac
-          </Link>
+          <div className={styles.actionGroup}>
+            <Link href="/tickets" className={styles.primaryAction}>
+              Ticket Listesini Ac
+            </Link>
+            <Link href="/devices" className={styles.secondaryAction}>
+              Cihaz Envanterini Ac
+            </Link>
+          </div>
         </article>
 
         <article className={styles.secondaryCard}>
@@ -89,6 +95,7 @@ export default async function DashboardPage() {
             <li>Profile tablosundan rol cozumleme</li>
             <li>Technician ve admin icin protected route yapisi</li>
             <li>Gercek ticket listeleme, detay ve yorum akislari</li>
+            <li>Gercek cihaz listeleme, QR onizleme ve bakim kayitlari</li>
           </ul>
         </article>
       </section>
