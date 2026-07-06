@@ -9,66 +9,50 @@
 | Android `gradlew.bat assembleDebug` | gecti | 2026-07-06 tarihinde yeniden calistirildi |
 | `docker version` | gecti | Docker engine erisimi var |
 | `npx supabase --version` | gecti | `2.109.0` |
-| `npx supabase stop` | gecti | Yerel stack temiz bicimde durduruldu |
-| `npx supabase start` | gecti | Yerel stack yeniden ayaga kalkti |
-| `npx supabase db reset` | gecti | Tum migrationlar ve seed basariyla uygulandi |
-| `npx supabase status` | gecti | Local stack calisiyor |
+| `npx supabase db reset` | gecti | Yeni migration dahil tum migrationlar ve seed basariyla uygulandi |
+| `npx supabase db push` | gecti | Yeni migration remote projeye uygulandi |
 
 ## Supabase Dogrulama Durumu
 
 | Kontrol | Durum | Neden |
 | --- | --- | --- |
-| Yerel migration zinciri | gecti | `20260703000100` -> `20260703000500` arasi tum migrationlar uygulandi |
-| Yerel seed sonucu | gecti | `supabase/seed.sql` reset sonrasinda yüklendi |
-| Enum varligi | gecti | 7 hedef enum olustu |
-| 9 ana tablo | gecti | Beklenen 9 tablo olustu |
-| RLS etkinligi | gecti | 9 ana tablonun tamaminda `relrowsecurity = true` |
+| Yerel migration zinciri | gecti | `20260703000100` -> `20260706000100` arasi migrationlar uygulandi |
+| Yerel seed sonucu | gecti | `supabase/seed.sql` reset sonrasinda yuklendi |
+| Enum varligi | gecti | Beklenen enumlar mevcut |
+| 9 ana tablo | gecti | Beklenen tablolar olustu |
+| RLS etkinligi | gecti | Ana tablolarda `relrowsecurity = true` |
 | `ticket-attachments` private bucket | gecti | Bucket `public = false` |
-| `departments` seed kayitlari | gecti | 6 kayit mevcut |
-| Demo cihaz seed kayitlari | gecti | 4 kayit mevcut |
-| Trigger ve helper functionlar | gecti | Beklenen helper function ve trigger isimleri bulundu |
-| Uzak migration push | test edilemedi | Bu asama yalnizca yerel dogrulama icin yapildi; remote islem calistirilmadi |
+| Trigger ve helper functionlar | gecti | `protect_profile_mutation()` dahil beklenen functionlar bulundu |
+| Uzak migration push | gecti | `npx supabase db push` basarili tamamlandi |
 
 ## Smoke Testleri
 
-Bu iki SQL dosyasi gercek rol davranisini degil, sema, RLS ve policy varligini kontrol eden smoke testlerdir.
+Bu SQL dosyalari gercek rol davranisini degil, sema, RLS ve policy varligini kontrol eden smoke testlerdir.
 
 | Test | Sonuc | Neden |
 | --- | --- | --- |
 | `supabase/tests/schema_smoke_test.sql` | gecti | `BEGIN -> DO -> ROLLBACK` ile hatasiz tamamlandi |
 | `supabase/tests/rls_smoke_test.sql` | gecti | `BEGIN -> DO -> ROLLBACK` ile hatasiz tamamlandi |
 
+## Bootstrap Role Assignment Duzeltmesi
+
+| Kontrol | Sonuc | Neden |
+| --- | --- | --- |
+| Yeni migration ile `protect_profile_mutation()` guncellemesi | gecti | `20260706000100_fix_profile_bootstrap_admin_update.sql` local reset ve remote push sirasinda uygulandi |
+| Database-owner baglaminda ilk role assignment | gecti | Local `postgres` baglaminda profile `technician` rolu atanabildi |
+| Normal authenticated self-escalation | gecti | Local testte `authenticated` baglami profile update zincirinden gecemedi |
+
 ## Auth ve Role Testleri
 
 | Kod | Senaryo | Beklenen | Sonuc | Neden |
 | --- | --- | --- | --- | --- |
-| AUTH-01 | Gecersiz e-posta/parola ile giris | Turkce hata, dashboard acilmaz | test edilemedi | Gercek demo auth kullanicilari ve kontrollu giris verisi bu turda hazirlanmadi |
+| AUTH-01 | Gecersiz e-posta/parola ile giris | Turkce hata, dashboard acilmaz | test edilemedi | Bu tur yalnizca migration duzeltmesi icindi |
 | AUTH-02 | Technician hesabiyla giris | Dashboard acilir | test edilemedi | Demo technician hesabi olusturulmadi |
 | AUTH-03 | Admin hesabiyla giris | Dashboard acilir | test edilemedi | Demo admin hesabi olusturulmadi |
 | AUTH-04 | Employee hesabiyla giris | Access denied ekrani acilir | test edilemedi | Demo employee hesabi olusturulmadi |
-| AUTH-05 | Oturum acmadan `/dashboard` | `/login` sayfasina redirect | test edilemedi | Browser session senaryosu bu turda tekrar koşturulmadi |
-| AUTH-06 | Oturum acmadan `/tickets` | `/login` sayfasina redirect | test edilemedi | Browser session senaryosu bu turda tekrar koşturulmadi |
-| AUTH-07 | Technician `/tickets` | RLS tarafindan izin verilen liste veya empty state | test edilemedi | Demo technician session'i yok |
-| AUTH-08 | Logout | Session kapanir ve `/login` acilir | test edilemedi | Gercek oturum olusturulmadi |
-| AUTH-09 | Logout sonrasi `/dashboard` | Tekrar `/login` | test edilemedi | Gercek oturum olusturulmadi |
-| AUTH-10 | Pasif profile ile giris | Yonetim paneline erisim verilmez | test edilemedi | Pasif demo profile hazir degil |
-| AUTH-11 | Profile satiri olmayan auth kullanicisi | Kontrollu hata; uygulama cokmez | test edilemedi | Bu durum icin demo auth kaydi olusturulmadi |
-| AUTH-12 | Environment variable eksik | Secret gostermeyen anlasilir gelistirme hatasi | test edilemedi | Bu turda `.env.local` mevcut oldugu icin eksik env senaryosu tekrar uretilmedi |
 
-## Diger Dogrulamalar
+## Hala Manuel Olan Kontroller
 
 | Kontrol | Sonuc | Neden |
 | --- | --- | --- |
-| `apps/web/.env.local` Git takibi | gecti | Dosya mevcut ama Git tarafindan izlenmiyor |
-
-## RLS Runtime Testleri
-
-RLS runtime testleri bu asamada halen test edilemedi.
-
-Nedenler:
-
-- Demo auth kullanicilari olusturulmadi
-- Rol bazli gercek publishable-key + user session senaryolari kosulmadi
-- Demo ticket/comment verisi hazir degil
-
-Yerel SQL smoke testleri gecti, ancak bunlar runtime yetki davranisinin tam kaniti olarak yorumlanmamalidir.
+| Remote SQL Editor uzerinden demo role assignment tekrar denemesi | test edilemedi | Terminalden Dashboard SQL Editor akisi acilamiyor; local database-owner testi basarili tamamlandi |

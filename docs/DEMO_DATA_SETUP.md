@@ -2,12 +2,12 @@
 
 ## Seed Neleri Olusturur
 
-`supabase/seed.sql` yalnizca guvenli demo referans verileri uretir:
+`supabase/seed.sql` su guvenli demo referans verilerini olusturur:
 
 - Departman kayitlari
-- Kurgusal cihaz envanteri
+- Kurgusal cihaz envanteri kayitlari
 - QR token degerleri
-- Marka, model ve garanti bitis bilgileri
+- Ornek marka, model ve garanti bilgileri
 
 Seed tekrar calistirildiginda duplicate olusturmamasi icin `on conflict` yaklasimi kullanilir.
 
@@ -20,29 +20,29 @@ Seed tekrar calistirildiginda duplicate olusturmamasi icin `on conflict` yaklasi
 - Bakim kayitlari
 - Activity log kayitlari
 
-Auth kullanicilari ve role atamalari migration veya seed icine gomulmez.
+Bu karar, kullanici kimligi gerektiren verileri migration veya seed icine gommemek icindir.
 
-## Demo Kullanici Olusturma Sirasi
+## Demo Kullanici Hesaplari Nasil Olusturulur
 
-Migrationlar uzak gelistirme projesine uygulandiktan sonra Supabase Dashboard > Auth bolumunden su kurgusal hesaplar olusturulabilir:
+Supabase projesi hazir olduktan sonra Dashboard > Auth uzerinden yalnizca kurgusal hesaplar olusturulmalidir:
 
 - `employee.demo@example.com`
 - `technician.demo@example.com`
 - `admin.demo@example.com`
 
-Parola bu dokumana yazilmaz. Gercek kurum e-postasi veya gercek personel adi kullanilmaz.
-
-Metadata alaninda su kurgu isimler tercih edilebilir:
+Metadata tarafinda su kurgu isimler kullanilabilir:
 
 - `Demo Personel`
 - `Demo Teknik Personel`
 - `Demo Yonetici`
 
+Parola bu dokumana yazilmaz.
+
 ## Beklenen Trigger Davranisi
 
-Yeni auth kullanicisi olusturuldugunda `handle_new_user()` trigger'inin `public.profiles` tablosunda bir satir olusturmasi beklenir.
+Yeni auth kullanicilari olusturuldugunda `handle_new_user()` trigger'inin `public.profiles` tablosunda ilgili satiri olusturmasi beklenir.
 
-Ilk kontrol icin:
+Ilk kontrol ornegi:
 
 ```sql
 select
@@ -60,6 +60,12 @@ where u.email in (
   'admin.demo@example.com'
 );
 ```
+
+## Bootstrap Role Assignment Notu
+
+Ilk demo admin veya technician role assignment islemi icin yalnizca database-owner baglaminda calisan kontrollu bootstrap istisnasi eklenmistir. Normal `authenticated` kullanicilar kendi rollerini yukseltemez.
+
+Bu nedenle SQL Editor uzerinden ilk rol atamasi yapilabilir; ancak uygulama kullanicilari icin role elevation korumasi devam eder.
 
 ## Rol ve Birim Atama Ornekleri
 
@@ -140,6 +146,6 @@ order by u.email;
 
 ## Kurallar
 
-- Migration veya seed icine sabit auth UUID koymayin.
-- Parolalari, token'lari veya secret key'leri bu dokumana yazmayin.
-- Gercek kurum verisi, gercek cihaz seri numarasi veya gercek personel bilgisi kullanmayin.
+- Migration veya seed icine sabit auth UUID koymayin
+- Parolalari, token'lari veya secret key'leri bu dokumana yazmayin
+- Gercek kurum verisi, gercek cihaz seri numarasi veya gercek personel bilgisi kullanmayin
