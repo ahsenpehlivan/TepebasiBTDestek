@@ -4,7 +4,7 @@
 }
 
 .headerCard,
-.tableCard,
+.filterCard,
 .messageCard {
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
@@ -13,6 +13,7 @@
 }
 
 .headerCard,
+.filterCard,
 .messageCard {
   padding: 1.35rem;
 }
@@ -39,34 +40,30 @@
   line-height: 1.7;
 }
 
-.tableCard {
-  padding: 1.2rem;
+.filterCard {
+  display: grid;
+  gap: 1rem;
 }
 
-.tableWrap {
-  overflow-x: auto;
+.filterHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
-.table {
-  width: 100%;
-  min-width: 840px;
-  border-collapse: collapse;
-}
-
-.table th,
-.table td {
-  padding: 0.9rem 0.8rem;
-  border-bottom: 1px solid var(--border);
-  text-align: left;
-  font-size: 0.94rem;
-}
-
-.table th {
-  color: var(--text-secondary);
-  font-weight: 700;
-  background-color: #fbfcfe;
-}
-
-.table td {
+.filterHeader h2 {
+  margin-bottom: 0.4rem;
   color: var(--text-primary);
+}
+
+.filterHeader p,
+.limitHint {
+  color: var(--text-secondary);
+}
+
+.limitHint {
+  font-size: 0.9rem;
+  font-weight: 700;
 }

@@ -10,7 +10,7 @@
 | `docker version` | gecti | Docker engine erisimi var |
 | `npx supabase --version` | gecti | `2.109.0` |
 | `npx supabase db reset` | gecti | Yeni migration dahil tum migrationlar ve seed basariyla uygulandi |
-| `npx supabase db push` | gecti | `20260706000100_fix_profile_bootstrap_admin_update.sql` remote projeye uygulandi |
+| `npx supabase db push` | kaldi | `20260706000200_restore_public_api_grants.sql` icin tekrar denendi ancak CLI `SUPABASE_DB_PASSWORD` degiskeni bu ortamda hazir olmadigindan push tamamlanamadi |
 | `apps/web/.env.local` Git takibi | gecti | Dosya untracked; icerik raporlanmadi |
 
 ## Supabase Dogrulama Durumu
@@ -24,7 +24,8 @@
 | RLS etkinligi | gecti | Ana tablolarda `relrowsecurity = true` |
 | `ticket-attachments` private bucket | gecti | Bucket `public = false` |
 | Trigger ve helper functionlar | gecti | `protect_profile_mutation()` dahil beklenen functionlar bulundu |
-| Uzak migration push | gecti | Linked remote proje ile `npx supabase db push` basarili tamamlandi |
+| Data API grant tutarliligi | gecti | Local reset sonrasi `anon` ve `authenticated` rollerine gerekli tablo/function/sequence grant'leri `20260706000200_restore_public_api_grants.sql` ile kalici hale getirildi |
+| Uzak migration push | kaldi | Bu turde yeni grant migration'i linked remote projeye CLI DB parola degiskeni olmadigi icin push edilemedi |
 
 ## Smoke Testleri
 
@@ -55,7 +56,7 @@ Not: Demo kullanici parolalari repository icinde tutulmadigi icin browser auth t
 | AUTH-04 | Employee hesabiyla giris | Access denied ekrani acilir | gecti | Gecici remote employee hesabi `/access-denied` ekranina yonlendirildi |
 | AUTH-05 | Oturum acmadan `/dashboard` | `/login` sayfasina yonlenir | gecti | `/login?next=%2Fdashboard` yonlendirmesi gozlemlendi |
 | AUTH-06 | Oturum acmadan `/tickets` | `/login` sayfasina yonlenir | gecti | `/login?next=%2Ftickets` yonlendirmesi gozlemlendi |
-| AUTH-07 | Technician `/tickets` | RLS ile izin verilen liste veya empty state | gecti | `/tickets` acildi ve empty state goruldu |
+| AUTH-07 | Technician `/tickets` | RLS ile izin verilen liste veya empty state | gecti | `/tickets` acildi ve demo ticket listesi goruldu |
 | AUTH-08 | Logout | Session kapanir ve `/login` acilir | gecti | Logout sonrasi `/login` sayfasi acildi |
 | AUTH-09 | Logout sonrasi `/dashboard` | Tekrar `/login` | gecti | Logout sonrasi `/login?next=%2Fdashboard` yonlendirmesi oldu |
 | AUTH-10 | Pasif profile ile giris | Yonetim paneline erisim verilmez | gecti | Pasif runtime profile `/access-denied` ekranina yonlendirildi |
@@ -68,14 +69,16 @@ Not: Demo kullanici parolalari repository icinde tutulmadigi icin browser auth t
 | --- | --- | --- |
 | Employee web paneline girememeli | gecti | Browser akisinda login sonrasi `/access-denied` goruldu |
 | Employee `/tickets` rotasina erisememeli | gecti | Browser akisinda `/tickets` istegi `/access-denied` ekraninda kaldi |
-| Technician `/tickets` gorebilmeli | gecti | Browser akisinda `/tickets` sayfasi empty state ile acildi |
-| Anonymous `/tickets` gorememeli | gecti | Browser akisinda `/login?next=%2Ftickets` yonlendirmesi oldu; anon SQL sorgusu `0` kayit dondurdu |
-| Employee baska profile okuyamamali | gecti | Employee session ile `profiles` sorgusunda kendi disindaki kayitlar `0` satir dondu |
-| Technician profilleri okuyebilmeli | gecti | Technician session ile `profiles` sorgusu `5` satir dondurdu |
-| Technician ticket sorgusu | gecti | Technician session ile `tickets` sorgusu RLS hatasi vermeden `0` satir dondu |
-| Employee ticket sorgusu | gecti | Employee session ile `tickets` sorgusu RLS hatasi vermeden `0` satir dondu |
-| Internal yorum gorunurlugu | test edilemedi | Remote ortamda yorum verisi yok |
-| Baska kullanici ticket senaryolari | test edilemedi | Remote ortamda demo ticket verisi yok |
+| Technician `/tickets` gorebilmeli | gecti | Browser akisinda `/tickets` sayfasi demo ticket listesiyle acildi |
+| Anonymous `/tickets` gorememeli | gecti | Browser akisinda `/login?next=%2Ftickets` yonlendirmesi oldu; local anon session `tickets` sorgusu `0` satir dondu |
+| Employee baska profile okuyamamali | gecti | Local employee session ile kendi disindaki `profiles` kayitlari `0` satir dondu |
+| Technician profilleri okuyebilmeli | gecti | Local technician session ile 3 demo profile ozeti goruldu |
+| Technician ticket sorgusu | gecti | Local technician session ile 6 demo ticket kaydi dondu |
+| Employee ticket sorgusu | gecti | Local employee session ile 4 kendi ticket kaydi dondu |
+| Employee baska kullanici ticket'ini gorememeli | gecti | Local employee session `Demo dahili teknik kontrol kaydi` kaydini goremedi |
+| Employee public yorumu gorebilmeli | gecti | Local employee session ile hedef ticket'ta 1 public comment dondu |
+| Employee internal yorumu gorememeli | gecti | Local employee session ile ayni ticket'ta `0` internal comment dondu |
+| Technician internal yorumu gorebilmeli | gecti | Local technician session ile ayni ticket'ta `1` internal comment dondu |
 
 ## Bootstrap Role Assignment Duzeltmesi
 
@@ -85,8 +88,30 @@ Not: Demo kullanici parolalari repository icinde tutulmadigi icin browser auth t
 | Database-owner baglaminda ilk role assignment | gecti | Kontrollu bootstrap istisnasi yalnizca privileged database-owner baglamina acik |
 | Normal authenticated self-escalation | gecti | Runtime testlerde authenticated web kullanicilari rol bypass alamadi |
 
+## Demo Ticket ve Comment Veri Testleri
+
+| Test | Sonuc | Neden |
+| --- | --- | --- |
+| Local controlled demo snippet uygulamasi | gecti | `supabase/snippets/create_demo_tickets.sql` local veritabaninda calisti ve 6 ticket olusturdu |
+| Local duplicate korumasi | gecti | Snippet ikinci kez calistirildiginda ayni 6 kayit korundu, duplicate olusmadi |
+| Local comment/history/activity olusumu | gecti | 6 comment, 3 internal comment, history ve activity log kayitlari dogrulandi |
+| Remote controlled demo snippet uygulamasi | gecti | Linked remote projede snippet calisti ve 6 demo ticket olustu |
+| Remote demo comment olusumu | gecti | Linked remote projede 6 comment ve 3 internal comment dogrulandi |
+
+## Ticket Arayuzu ve Action Testleri
+
+| Test | Sonuc | Neden |
+| --- | --- | --- |
+| `/tickets` arama ve filtreleme | gecti | Query parametreli durum filtresi browser akisinda dogrulandi |
+| `/tickets/[id]` detay goruntuleme | gecti | Remote browser'da ticket ozeti, cihaz ozeti, yorumlar ve durum gecmisi acildi |
+| Ticket atama action'i | gecti | Ticket `#1003` icin assignee kaydi `Runtime Teknik Personel 2` olarak dogrulandi |
+| Ticket status transition action'i | gecti | Ticket `#1003` icin `resolved -> closed` gecisi history tablosunda dogrulandi |
+| Public/internal yorum action'i | gecti | Ticket `#1003` comment sayisi 2'den 3'e, internal comment sayisi 1'den 2'ye yukselerek dogrulandi |
+| Dashboard gercek count kartlari | gecti | Ticket ve cihaz sayaclari gercek sorgularla beslendi; remote toplam demo ticket `6`, cihaz sayisi `4` |
+
 ## Hala Manuel Olan Kontroller
 
 | Kontrol | Sonuc | Neden |
 | --- | --- | --- |
-| Remote SQL Editor uzerinden demo role assignment tekrar denemesi | test edilemedi | Bu turde Dashboard SQL Editor acilmadi; linked remote ve browser tarafi terminalden dogrulandi |
+| AUTH-12 eksik env browser akisi | test edilemedi | Next.js build cache etkisini bozmadan ayrik browser instance ile eksik env senaryosu tekrar uretilemedi |
+| Son grant migration'inin remote `db push` ile uygulanmasi | test edilemedi | CLI tarafinda gerekli DB parola degiskeni bu ortamda hazir degildi |

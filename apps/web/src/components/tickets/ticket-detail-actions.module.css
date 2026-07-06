@@ -1,0 +1,127 @@
+.section {
+  display: grid;
+  gap: 1rem;
+}
+
+.sectionHeader {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.sectionHeader h2 {
+  color: var(--text-primary);
+}
+
+.sectionHeader p {
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.eyebrow {
+  display: inline-flex;
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.card {
+  display: grid;
+  gap: 0.9rem;
+  align-content: start;
+  padding: 1.2rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background-color: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.commentCard {
+  grid-column: span 3;
+}
+
+.form {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.4rem;
+  font-weight: 600;
+}
+
+.field span {
+  font-size: 0.88rem;
+}
+
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background-color: #fbfcfe;
+  color: var(--text-primary);
+  font: inherit;
+}
+
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.primaryButton {
+  min-height: 2.9rem;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background-color: var(--accent);
+  color: #ffffff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.primaryButton:disabled {
+  cursor: wait;
+  opacity: 0.75;
+}
+
+.errorMessage,
+.successMessage {
+  padding: 0.8rem 0.95rem;
+  border-radius: var(--radius-md);
+  line-height: 1.55;
+}
+
+.errorMessage {
+  border: 1px solid rgba(194, 65, 65, 0.2);
+  background-color: rgba(194, 65, 65, 0.08);
+  color: var(--danger);
+}
+
+.successMessage {
+  border: 1px solid rgba(45, 138, 75, 0.16);
+  background-color: rgba(45, 138, 75, 0.08);
+  color: var(--success);
+}
+
+@media (max-width: 980px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .commentCard {
+    grid-column: auto;
+  }
+}

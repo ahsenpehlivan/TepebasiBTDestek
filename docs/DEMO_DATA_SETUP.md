@@ -22,6 +22,23 @@ Seed tekrar calistirildiginda duplicate olusturmamasi icin `on conflict` yaklasi
 
 Bu karar, kullanici kimligi gerektiren verileri migration veya seed icine gommemek icindir.
 
+## Controlled Demo Ticket ve Comment Snippet'i
+
+Dosya:
+
+- `supabase/snippets/create_demo_tickets.sql`
+
+Bu dosya migration degildir. SQL Editor veya dogrudan SQL baglantisi uzerinden kontrollu demo veri uretmek icindir.
+
+Snippette:
+
+- auth user UUID degerleri e-posta ile cozumlenir
+- cihaz UUID degerleri `asset_tag` ile bulunur
+- en az 6 kurgusal ticket olusturulur
+- en az 6 public/internal yorum eklenir
+- mevcut trigger ve status transition kurallarina uyulur
+- tekrar calistirildiginda mumkun oldugunca duplicate olusmaz
+
 ## Demo Kullanici Hesaplari Nasil Olusturulur
 
 Supabase projesi hazir olduktan sonra Dashboard > Auth uzerinden yalnizca kurgusal hesaplar olusturulmalidir:
@@ -122,6 +139,29 @@ where p.id = u.id
   and u.email = 'employee.demo@example.com';
 ```
 
+## Snippet Calistirma
+
+Local SQL baglantisi icin:
+
+```bash
+npx supabase db reset
+psql "$DB_URL" -f supabase/snippets/create_demo_tickets.sql
+```
+
+Remote SQL Editor veya linked proje icin:
+
+```bash
+npx supabase db query --linked --file supabase/snippets/create_demo_tickets.sql
+```
+
+Calistirma sonrasi beklenen temel sonuc:
+
+- 6 demo ticket
+- 6 demo comment
+- 3 internal comment
+
+Not: Web uzerinden atama, durum veya yorum aksiyonlari tekrar test edilirse ilgili ticket'larda status/comment sayilari kontrollu olarak artabilir.
+
 ## Son Kontrol
 
 ```sql
@@ -144,8 +184,27 @@ where u.email in (
 order by u.email;
 ```
 
+Demo ticket/comment kontrolu icin:
+
+```sql
+select count(*) as demo_ticket_count
+from public.tickets
+where title like 'Demo %';
+
+select
+  count(*) as demo_comment_count,
+  count(*) filter (where is_internal) as internal_comment_count
+from public.ticket_comments
+where ticket_id in (
+  select id
+  from public.tickets
+  where title like 'Demo %'
+);
+```
+
 ## Kurallar
 
 - Migration veya seed icine sabit auth UUID koymayin
 - Parolalari, token'lari veya secret key'leri bu dokumana yazmayin
 - Gercek kurum verisi, gercek cihaz seri numarasi veya gercek personel bilgisi kullanmayin
+- Demo kullanici parolalarini repository veya dokumantasyona yazmayin

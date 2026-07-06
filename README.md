@@ -54,21 +54,26 @@ Bu repository bir uretim sistemi degildir. Gercek kurum verisi, gercek personel 
 - Profile ve rol cozumleme
 - Technician ve admin icin protected route yapisi
 - Employee web erisim reddi sayfasi
-- Gercek `tickets` tablosundan ilk listeleme sayfasi
+- Gercek `tickets` tablosundan filtrelenebilir listeleme sayfasi
+- Ticket detay route'u, durum gecmisi ve yorum gorunumu
+- Technician/admin icin ticket atama, durum degistirme ve public/internal yorum action'lari
+- Dashboard kartlarinin gercek ticket ve cihaz sayilariyla beslenmesi
+- Controlled demo ticket/comment SQL snippet'i ve local/remote demo veri dogrulamasi
 - Yerel `supabase db reset`, seed ve smoke test dogrulamalari
 - Remote `db push` ve demo profile rol/department kontrolu
 - Gercek browser oturumu ile auth ve protected route dogrulamasi
-- Gercek session ile temel RLS runtime dogrulamasi
+- Gercek session ile ticket, comment ve profile RLS runtime dogrulamasi
 - Web lint ve production build dogrulamasi
 - Android `assembleDebug` regresyon dogrulamasi
 - Migration, seed, RLS ve storage SQL dosyalari
 
 ### Henuz Tamamlanmayan veya Bloklu Alanlar
 
-- Ticket create/update/assignment/comment akislari
+- Ticket create/update ekranlari
+- Cihaz envanteri web ekranlari
 - Android Supabase entegrasyonu
 - QR, realtime, bildirim ve dosya yukleme akislari
-- Demo ticket ve comment verileri ile derin RLS senaryolari
+- Bakim kayitlari ve cihaz detay akislarinin web'e tasinmasi
 - AUTH-12 eksik env senaryosunun ayrik browser instance ile tekrar uretimi
 
 ## Supabase Durumu
@@ -76,10 +81,10 @@ Bu repository bir uretim sistemi degildir. Gercek kurum verisi, gercek personel 
 - `npx supabase --version`: `2.109.0`
 - `docker version`: Docker engine erisimi var
 - `npx supabase db reset`: gecti
-- `npx supabase db push`: gecti
+- `npx supabase db push`: onceki bootstrap migration icin gecti; son grant migration'i bu turde CLI DB parola degiskeni olmadan tekrar push edilemedi
 - Schema ve RLS smoke testleri: gecti
 
-2026-07-06 tarihi itibariyla linked remote Supabase projesi uzerinde demo profile kayitlari, web auth akislari ve temel RLS runtime davranislari dogrulanmistir.
+2026-07-06 tarihi itibariyla linked remote Supabase projesi uzerinde demo profile kayitlari, controlled demo ticket/comment verileri, `/tickets` ve `/tickets/[id]` ekranlari ile web auth akislari dogrulanmistir. Local ortamda ise `20260706000200_restore_public_api_grants.sql` migration'i ile Data API grant'leri reset sonrasinda kalici hale getirilmis ve gercek session ile ticket/comment RLS testleri gecmistir.
 
 ## Web Ortam Degiskenleri
 
@@ -141,6 +146,7 @@ psql -f supabase/tests/rls_smoke_test.sql
 - Web paneli erisimi yalnizca server-side profile ve rol cozumlemesi ile acilir.
 - Ilk demo admin veya technician role assignment islemi icin yalnizca database-owner baglaminda calisan kontrollu bootstrap istisnasi vardir.
 - Normal `authenticated` kullanicilar kendi rollerini yukseltemez.
+- Public API grant'leri migration ile korunur; local reset sonrasinda tablo erisimleri RLS policy'lerine kadar ulasabilir.
 
 ## Dokumantasyon
 

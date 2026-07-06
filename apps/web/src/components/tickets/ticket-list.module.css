@@ -1,0 +1,173 @@
+.tableCard,
+.ticketCard {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background-color: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.tableCard {
+  padding: 1.2rem;
+}
+
+.tableWrap {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  min-width: 980px;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 0.9rem 0.8rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  font-size: 0.94rem;
+  vertical-align: top;
+}
+
+.table th {
+  color: var(--text-secondary);
+  font-weight: 700;
+  background-color: #fbfcfe;
+}
+
+.table td {
+  color: var(--text-primary);
+}
+
+.titleLink,
+.cardTitle {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.titleLink:hover,
+.cardTitle:hover,
+.titleLink:focus-visible,
+.cardTitle:focus-visible {
+  text-decoration: underline;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.9rem;
+  padding: 0.2rem 0.7rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.82rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.badge[data-kind="status"][data-value="open"] {
+  background-color: rgba(183, 121, 31, 0.12);
+  color: var(--warning);
+}
+
+.badge[data-kind="status"][data-value="assigned"],
+.badge[data-kind="status"][data-value="waiting_user"] {
+  background-color: rgba(11, 94, 215, 0.1);
+  color: var(--accent);
+}
+
+.badge[data-kind="status"][data-value="in_progress"] {
+  background-color: rgba(20, 32, 51, 0.1);
+  color: var(--text-primary);
+}
+
+.badge[data-kind="status"][data-value="resolved"],
+.badge[data-kind="status"][data-value="closed"] {
+  background-color: rgba(45, 138, 75, 0.12);
+  color: var(--success);
+}
+
+.badge[data-kind="status"][data-value="cancelled"] {
+  background-color: rgba(194, 65, 65, 0.12);
+  color: var(--danger);
+}
+
+.badge[data-kind="priority"][data-value="low"] {
+  background-color: rgba(45, 138, 75, 0.1);
+  color: var(--success);
+}
+
+.badge[data-kind="priority"][data-value="normal"] {
+  background-color: rgba(11, 94, 215, 0.1);
+  color: var(--accent);
+}
+
+.badge[data-kind="priority"][data-value="high"] {
+  background-color: rgba(183, 121, 31, 0.14);
+  color: var(--warning);
+}
+
+.badge[data-kind="priority"][data-value="urgent"] {
+  background-color: rgba(194, 65, 65, 0.12);
+  color: var(--danger);
+}
+
+.cardList {
+  display: none;
+}
+
+.ticketCard {
+  display: grid;
+  gap: 0.85rem;
+  padding: 1.1rem;
+}
+
+.cardHeader,
+.cardMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.ticketNumber {
+  color: var(--text-secondary);
+  font-weight: 700;
+}
+
+.cardTitle {
+  font-size: 1rem;
+}
+
+.detailList {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.detailList div {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.detailList dt {
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.detailList dd {
+  color: var(--text-primary);
+}
+
+@media (max-width: 860px) {
+  .tableCard {
+    display: none;
+  }
+
+  .cardList {
+    display: grid;
+    gap: 0.9rem;
+  }
+}

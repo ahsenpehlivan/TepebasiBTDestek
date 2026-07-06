@@ -124,4 +124,63 @@ export type TicketListItem = {
   status: TicketStatus;
   createdAt: string;
   assignedTechnicianName: string | null;
+  createdByName: string | null;
+  departmentId: string;
+  departmentName: string | null;
+};
+
+export type TicketCommentItem = {
+  id: string;
+  authorName: string | null;
+  content: string;
+  isInternal: boolean;
+  createdAt: string;
+};
+
+export type TicketStatusHistoryItem = {
+  id: string;
+  oldStatus: TicketStatus | null;
+  newStatus: TicketStatus;
+  changedByName: string | null;
+  note: string | null;
+  createdAt: string;
+};
+
+export type TicketAssigneeOption = {
+  id: string;
+  fullName: string;
+  role: AppRole;
+};
+
+export type TicketDeviceSummary = {
+  id: string;
+  assetTag: string;
+  brand: string;
+  model: string;
+  deviceType: DeviceType;
+  status: DeviceStatus;
+  notes: string | null;
+};
+
+export type TicketDetailRecord = {
+  id: string;
+  ticketNumber: string;
+  title: string;
+  description: string;
+  category: TicketCategory;
+  priority: TicketPriority;
+  status: TicketStatus;
+  departmentId: string;
+  departmentName: string | null;
+  createdById: string;
+  createdByName: string | null;
+  assignedToId: string | null;
+  assignedToName: string | null;
+  device: TicketDeviceSummary | null;
+  createdAt: string;
+  updatedAt: string;
+  assignedAt: string | null;
+  dueAt: string | null;
+  resolvedAt: string | null;
+  closedAt: string | null;
 };

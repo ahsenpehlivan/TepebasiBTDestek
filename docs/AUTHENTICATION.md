@@ -162,12 +162,28 @@ Bu testler demo kullanici parolalari repository icinde tutulmadigi icin, remote 
 Gercek session sorgularinda:
 
 - Anonymous `tickets` sorgusu `0` satir dondu.
+- Employee local demo session ile kendi 4 ticket kaydini gorebildi.
+- Employee local demo session ile technician tarafindan acilan `Demo dahili teknik kontrol kaydi` ticket'ini goremedi.
+- Technician local demo session ile 6 demo ticket kaydinin tamamini gorebildi.
+- Employee local demo session ile kendi ticket'indaki public yorumu gorebildi.
+- Employee local demo session ile ayni ticket'taki internal yorumu goremedi.
+- Technician local demo session ile ayni ticket'taki internal yorumu gorebildi.
 - Employee kendi `profiles` satirini okuyabildi.
 - Employee diger profile kayitlarini okuyamadi.
-- Technician birden fazla profile kaydini okuyabildi.
-- Technician `tickets` sorgusu RLS hatasi vermeden calisti ve mevcut durumda `0` satir dondu.
+- Technician demo profile ozetlerini okuyabildi.
 
-Remote ortamda ticket ve comment demo verisi olmadigi icin yorum gorunurlugu ve baska kullanici ticket senaryolari bu turde test edilemedi.
+Bu local runtime testleri, `20260706000200_restore_public_api_grants.sql` migration'i eklendikten sonra tekrar calistirildi. Boylece local `db reset` sonrasi Data API erisimi tablo grant'lerinde takilmadan dogrudan RLS policy'lerine kadar ulasabildi.
+
+## Ticket Sayfalari Runtime Dogrulamasi
+
+2026-07-06 tarihinde linked remote Supabase projesi ve gercek browser oturumu ile:
+
+- Technician runtime hesabi `/tickets` ekranini acabildi.
+- URL query parametreli filtreleme dogrulandi.
+- `/tickets/[id]` detay sayfasi gercek demo ticket verisiyle acildi.
+- Ticket atama formu sonucunda ilgili ticket'in assignee kaydi guncellendi.
+- Ticket durum guncelleme formu sonucunda `resolved -> closed` gecisi veritabaninda dogrulandi.
+- Internal yorum formu sonucunda ilgili ticket'in internal comment sayisi kontrollu olarak artti.
 
 ## Guvenlik Kararlari
 
@@ -181,5 +197,4 @@ Remote ortamda ticket ve comment demo verisi olmadigi icin yorum gorunurlugu ve 
 ## Bilinen Eksikler
 
 - AUTH-12 senaryosu, Next.js build cache etkisini bozmadan eksik env ile ayrik browser instance uretilemedigi icin canli browser'da tamamlanamadi
-- Remote ortamda ticket ve comment demo verisi olmadigi icin derin ticket/comment RLS senaryolari test edilemedi
 - Veritabanindan generate edilmis `database.types.ts` bu asamada eklenemedi

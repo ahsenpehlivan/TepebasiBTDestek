@@ -1,28 +1,55 @@
 import type { TicketCategory, TicketPriority, TicketStatus } from "@/types/domain";
 
 export const ticketStatusLabels: Record<TicketStatus, string> = {
-  open: "Açık",
-  assigned: "Atandı",
-  in_progress: "İşlemde",
-  waiting_user: "Kullanıcı Bekleniyor",
-  resolved: "Çözüldü",
-  closed: "Kapandı",
-  cancelled: "İptal Edildi",
+  open: "Acik",
+  assigned: "Atandi",
+  in_progress: "Islemde",
+  waiting_user: "Kullanici Bekleniyor",
+  resolved: "Cozuldu",
+  closed: "Kapandi",
+  cancelled: "Iptal Edildi",
 };
 
 export const ticketPriorityLabels: Record<TicketPriority, string> = {
-  low: "Düşük",
+  low: "Dusuk",
   normal: "Normal",
-  high: "Yüksek",
+  high: "Yuksek",
   urgent: "Acil",
 };
 
 export const ticketCategoryLabels: Record<TicketCategory, string> = {
-  hardware: "Donanım",
-  software: "Yazılım",
-  network: "Ağ",
-  printer_scanner: "Yazıcı / Tarayıcı",
+  hardware: "Donanim",
+  software: "Yazilim",
+  network: "Ag",
+  printer_scanner: "Yazici / Tarayici",
   email_account: "E-posta / Hesap",
-  access_request: "Erişim Talebi",
-  other: "Diğer",
+  access_request: "Erisim Talebi",
+  other: "Diger",
 };
+
+export const ticketStatusOptions: TicketStatus[] = [
+  "open",
+  "assigned",
+  "in_progress",
+  "waiting_user",
+  "resolved",
+  "closed",
+  "cancelled",
+];
+
+export const ticketPriorityOptions: TicketPriority[] = [
+  "low",
+  "normal",
+  "high",
+  "urgent",
+];
+
+export const ticketCategoryOptions: TicketCategory[] = [
+  "hardware",
+  "software",
+  "network",
+  "printer_scanner",
+  "email_account",
+  "access_request",
+  "other",
+];

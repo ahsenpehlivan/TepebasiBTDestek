@@ -59,6 +59,24 @@ Bu dokuz tablo ana uygulama verisini tasir ve tamaminda RLS etkindir.
 - `write_ticket_activity_log()`
 - `write_device_activity_log()`
 
+## API Grant Tutarliligi
+
+Supabase Data API'nin local reset sonrasinda da RLS policy'lerine ulasabilmesi icin public schema grant'leri migration ile korunur.
+
+Migration:
+
+- `20260706000200_restore_public_api_grants.sql`
+
+Bu migration:
+
+- `public` schema icin `usage`
+- `public` schema altindaki tablo, sequence ve function'lar icin gerekli grant'ler
+- ayni nesnelerin gelecekte olusacak surumleri icin default privilege tanimlari
+
+ekler.
+
+Bu sayede local `db reset` sonrasi `authenticated` ve `anon` session'lari tablo seviyesinde `permission denied` hatasina dusmeden RLS policy'leriyle degerlendirilir.
+
 ## Profile Role Guvenligi
 
 `profiles` tablosunda rol ve kritik alan guvenligi iki katmanla korunur:
@@ -104,6 +122,23 @@ Bu istisna su roller icin gecerli degildir:
 
 Sonuc olarak, normal authenticated kullanicilar kendi rollerini yukseltemez. Yalnizca database-owner baglaminda ilk bootstrap role assignment islemi serbesttir.
 
+## Controlled Demo Veri Snippet'i
+
+Demo ticket ve comment verileri migration'a gomulu degildir.
+
+Dosya:
+
+- `supabase/snippets/create_demo_tickets.sql`
+
+Bu snippet:
+
+- demo auth kullanicilarini e-posta ile cozumler
+- demo cihazlari `asset_tag` ile bulur
+- en az 6 kurgusal ticket olusturur
+- public ve internal yorumlari ekler
+- mevcut trigger ve status transition kurallariyla uyumlu sekilde history/activity log uretir
+- tekrar calistirildiginda mumkun oldugunca duplicate uretmez
+
 ## Storage Yaklasimi
 
 - Bucket adi: `ticket-attachments`
@@ -131,6 +166,7 @@ Storage policy'leri ilk path segmentinden ticket UUID cikarir ve `can_access_tic
 4. `20260703000400_enable_rls_and_policies.sql`
 5. `20260703000500_create_storage.sql`
 6. `20260706000100_fix_profile_bootstrap_admin_update.sql`
+7. `20260706000200_restore_public_api_grants.sql`
 
 ## Prototip Karar Notlari
 

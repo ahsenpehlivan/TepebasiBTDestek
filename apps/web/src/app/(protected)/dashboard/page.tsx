@@ -3,109 +3,16 @@ import Link from "next/link";
 import { StatusCard } from "@/components/ui/status-card";
 import { getAuthState } from "@/lib/auth/server";
 import { roleLabels } from "@/lib/constants/role-labels";
-import { createClient } from "@/lib/supabase/server";
-import type { StatItem } from "@/types/dashboard";
+import { loadDashboardStats } from "@/lib/tickets/queries";
 
 import styles from "./dashboard.module.css";
-
-type CountResult = {
-  count: number | null;
-  hasError: boolean;
-};
-
-async function getTicketCount(status?: string): Promise<CountResult> {
-  const supabase = await createClient();
-  let query = supabase.from("tickets").select("id", {
-    count: "exact",
-    head: true,
-  });
-
-  if (status) {
-    query = query.eq("status", status);
-  }
-
-  const { count, error } = await query;
-
-  return {
-    count,
-    hasError: Boolean(error),
-  };
-}
-
-async function getDashboardStats(): Promise<StatItem[]> {
-  const [total, open, inProgress, resolved] = await Promise.all([
-    getTicketCount(),
-    getTicketCount("open"),
-    getTicketCount("in_progress"),
-    getTicketCount("resolved"),
-  ]);
-
-  const hasError =
-    total.hasError || open.hasError || inProgress.hasError || resolved.hasError;
-
-  if (hasError) {
-    return [
-      {
-        label: "Toplam Ticket",
-        value: "-",
-        detail: "Ticket sayac verisi su anda alinamadi.",
-        tone: "neutral",
-      },
-      {
-        label: "Acik",
-        value: "-",
-        detail: "Ticket sayac verisi su anda alinamadi.",
-        tone: "warning",
-      },
-      {
-        label: "Islemde",
-        value: "-",
-        detail: "Ticket sayac verisi su anda alinamadi.",
-        tone: "accent",
-      },
-      {
-        label: "Cozuldu",
-        value: "-",
-        detail: "Ticket sayac verisi su anda alinamadi.",
-        tone: "success",
-      },
-    ];
-  }
-
-  return [
-    {
-      label: "Toplam Ticket",
-      value: String(total.count ?? 0),
-      detail: "Veritabanindaki toplam teknik destek kaydi.",
-      tone: "neutral",
-    },
-    {
-      label: "Acik",
-      value: String(open.count ?? 0),
-      detail: "Henuz atama veya islem bekleyen kayitlar.",
-      tone: "warning",
-    },
-    {
-      label: "Islemde",
-      value: String(inProgress.count ?? 0),
-      detail: "Teknik ekip tarafindan uzerinde calisilan kayitlar.",
-      tone: "accent",
-    },
-    {
-      label: "Cozuldu",
-      value: String(resolved.count ?? 0),
-      detail: "Resolved durumunda bekleyen kayitlar.",
-      tone: "success",
-    },
-  ];
-}
 
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
   const [authState, stats] = await Promise.all([
     getAuthState(),
-    getDashboardStats(),
+    loadDashboardStats(),
   ]);
 
   if (!authState.profile) {
@@ -181,7 +88,7 @@ export default async function DashboardPage() {
             <li>SSR login ve logout akisi</li>
             <li>Profile tablosundan rol cozumleme</li>
             <li>Technician ve admin icin protected route yapisi</li>
-            <li>Gercek ticket listeleme icin temel panel iskeleti</li>
+            <li>Gercek ticket listeleme, detay ve yorum akislari</li>
           </ul>
         </article>
       </section>
