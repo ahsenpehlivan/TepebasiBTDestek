@@ -55,27 +55,31 @@ Bu repository bir uretim sistemi degildir. Gercek kurum verisi, gercek personel 
 - Technician ve admin icin protected route yapisi
 - Employee web erisim reddi sayfasi
 - Gercek `tickets` tablosundan ilk listeleme sayfasi
+- Yerel `supabase db reset`, seed ve smoke test dogrulamalari
+- Remote `db push` ve demo profile rol/department kontrolu
+- Gercek browser oturumu ile auth ve protected route dogrulamasi
+- Gercek session ile temel RLS runtime dogrulamasi
 - Web lint ve production build dogrulamasi
 - Android `assembleDebug` regresyon dogrulamasi
 - Migration, seed, RLS ve storage SQL dosyalari
 
 ### Henuz Tamamlanmayan veya Bloklu Alanlar
 
-- Yerel Supabase `db reset` dogrulamasi
-- Yerel schema smoke test ve RLS smoke test calistirma
-- Uzak gelistirme Supabase projesine migration uygulama
-- Demo auth kullanicilarini olusturma
 - Ticket create/update/assignment/comment akislari
 - Android Supabase entegrasyonu
 - QR, realtime, bildirim ve dosya yukleme akislari
+- Demo ticket ve comment verileri ile derin RLS senaryolari
+- AUTH-12 eksik env senaryosunun ayrik browser instance ile tekrar uretimi
 
 ## Supabase Durumu
 
 - `npx supabase --version`: `2.109.0`
-- `docker version`: Docker client gorunuyor, ancak daemon/engine erisimi yok
-- `npx supabase status`: Docker engine kapali oldugu icin basarisiz
+- `docker version`: Docker engine erisimi var
+- `npx supabase db reset`: gecti
+- `npx supabase db push`: gecti
+- Schema ve RLS smoke testleri: gecti
 
-Bu nedenle 2026-07-06 tarihi itibariyla yerel migration reset kapisi gecilemedi ve uzak Supabase projesine migration uygulama asamasina gecilmedi.
+2026-07-06 tarihi itibariyla linked remote Supabase projesi uzerinde demo profile kayitlari, web auth akislari ve temel RLS runtime davranislari dogrulanmistir.
 
 ## Web Ortam Degiskenleri
 
@@ -122,7 +126,12 @@ npx supabase db reset
 npx supabase status
 ```
 
-Docker engine kapaliyken veya migration reset basarisizken uzak projeye `link` ya da `db push` uygulanmamalidir.
+Smoke testler:
+
+```bash
+psql -f supabase/tests/schema_smoke_test.sql
+psql -f supabase/tests/rls_smoke_test.sql
+```
 
 ## Guvenlik Notlari
 
@@ -130,7 +139,8 @@ Docker engine kapaliyken veya migration reset basarisizken uzak projeye `link` y
 - `.env.local` Git'e eklenmez.
 - Rol bilgisi client state, cookie metadata veya localStorage uzerinden dogrulanmaz.
 - Web paneli erisimi yalnizca server-side profile ve rol cozumlemesi ile acilir.
-- Runtime RLS dogrulamasi tamamlanmadan Supabase katmani guvenli kabul edilmez.
+- Ilk demo admin veya technician role assignment islemi icin yalnizca database-owner baglaminda calisan kontrollu bootstrap istisnasi vardir.
+- Normal `authenticated` kullanicilar kendi rollerini yukseltemez.
 
 ## Dokumantasyon
 

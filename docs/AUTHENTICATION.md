@@ -15,6 +15,8 @@ Bu asamada:
 
 uygulanmistir.
 
+2026-07-06 tarihinde linked remote Supabase projesi uzerinde gercek browser oturumu ve gercek session tabanli RLS dogrulamalari yapilmistir.
+
 ## Browser Client
 
 Konum: `apps/web/src/lib/supabase/client.ts`
@@ -115,6 +117,8 @@ Rol davranisi:
 - `technician` -> `/dashboard`
 - `admin` -> `/dashboard`
 - `employee` -> `/access-denied`
+- `is_active = false` -> `/access-denied`
+- profile satiri yok -> `/auth-error`
 
 ## Logout Akisi
 
@@ -139,6 +143,32 @@ Neden:
 
 Employee girisi sonrasi `access-denied` sayfasi acilir ve logout butonu sunulur.
 
+## Runtime Dogrulama Sonuclari
+
+2026-07-06 tarihli gercek browser akisi sonucunda:
+
+- Gecersiz e-posta veya parola ile giris denemesinde Turkce hata goruldu.
+- Technician rolu dashboard ve `/tickets` sayfasini acabildi.
+- Admin rolu dashboard sayfasini acabildi.
+- Employee rolu web paneline alinmadi ve `/access-denied` ekranina yonlendirildi.
+- Pasif profile sahip kullanici `/access-denied` ekranina yonlendirildi.
+- `profiles` satiri bulunmayan auth kullanicisi `/auth-error` ekraninda kontrollu bicimde durduruldu.
+- Logout sonrasi `/dashboard` ve `/tickets` rotalari tekrar `/login` sayfasina yonlendirildi.
+
+Bu testler demo kullanici parolalari repository icinde tutulmadigi icin, remote projede gecici olarak olusturulan ve test sonunda silinen kontrollu runtime kullanicilarla yapildi. Runtime kullanicilar demo roller ve department atamalariyla eslestirildi.
+
+## Runtime RLS Notlari
+
+Gercek session sorgularinda:
+
+- Anonymous `tickets` sorgusu `0` satir dondu.
+- Employee kendi `profiles` satirini okuyabildi.
+- Employee diger profile kayitlarini okuyamadi.
+- Technician birden fazla profile kaydini okuyabildi.
+- Technician `tickets` sorgusu RLS hatasi vermeden calisti ve mevcut durumda `0` satir dondu.
+
+Remote ortamda ticket ve comment demo verisi olmadigi icin yorum gorunurlugu ve baska kullanici ticket senaryolari bu turde test edilemedi.
+
 ## Guvenlik Kararlari
 
 - `@supabase/auth-helpers-nextjs` kullanilmadi
@@ -146,10 +176,10 @@ Employee girisi sonrasi `access-denied` sayfasi acilir ve logout butonu sunulur.
 - Service role key istemciye eklenmedi
 - `.env.local` repository'e eklenmedi
 - Role guard yalnizca server-side profile sorgusu ile yapildi
+- Ilk demo admin veya technician role assignment islemi icin yalnizca database-owner baglaminda calisan kontrollu bootstrap istisnasi eklendi; normal `authenticated` kullanicilar kendi rollerini yukseltemez
 
 ## Bilinen Eksikler
 
-- Yerel Supabase runtime dogrulamasi Docker engine kapali oldugu icin tamamlanmadi
-- Demo auth kullanicilari henuz olusturulmadi
-- Gercek runtime auth testleri henuz tamamlanmadi
+- AUTH-12 senaryosu, Next.js build cache etkisini bozmadan eksik env ile ayrik browser instance uretilemedigi icin canli browser'da tamamlanamadi
+- Remote ortamda ticket ve comment demo verisi olmadigi icin derin ticket/comment RLS senaryolari test edilemedi
 - Veritabanindan generate edilmis `database.types.ts` bu asamada eklenemedi
