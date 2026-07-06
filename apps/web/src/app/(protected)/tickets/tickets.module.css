@@ -1,0 +1,72 @@
+.page {
+  display: grid;
+  gap: 1rem;
+}
+
+.headerCard,
+.tableCard,
+.messageCard {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background-color: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.headerCard,
+.messageCard {
+  padding: 1.35rem;
+}
+
+.eyebrow {
+  display: inline-flex;
+  margin-bottom: 0.55rem;
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.headerCard h1,
+.messageCard h2 {
+  margin-bottom: 0.7rem;
+  color: var(--text-primary);
+}
+
+.headerCard p,
+.messageCard p {
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.tableCard {
+  padding: 1.2rem;
+}
+
+.tableWrap {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  min-width: 840px;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 0.9rem 0.8rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  font-size: 0.94rem;
+}
+
+.table th {
+  color: var(--text-secondary);
+  font-weight: 700;
+  background-color: #fbfcfe;
+}
+
+.table td {
+  color: var(--text-primary);
+}

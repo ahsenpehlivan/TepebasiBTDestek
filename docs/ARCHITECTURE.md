@@ -1,73 +1,61 @@
 # ARCHITECTURE
 
-## Genel İlişki
+## Genel Yapi
 
-Sistem; yönetici ve teknik personel için web paneli, belediye personeli ve teknik ekip için Android uygulaması ve ileriki aşamalarda veri, dosya ve yetkilendirme altyapısı sağlayacak Supabase katmanından oluşur.
-
-## Mimari Diyagram
+Sistem; teknik personel ve yoneticiler icin Next.js web paneli, personel ve saha kullanimlari icin Android uygulamasi ve Supabase tabanli veri/auth altyapisindan olusur.
 
 ```mermaid
 flowchart LR
-    Web["Web Paneli<br/>Next.js"] --> API["Supabase API Katmanı"]
-    Android["Android Uygulaması<br/>Kotlin + Compose"] --> API
+    Web["Web Paneli<br/>Next.js 16"] --> API["Supabase API Katmani"]
+    Android["Android Uygulamasi<br/>Kotlin + Compose"] --> API
     API --> DB["PostgreSQL"]
-    API --> Storage["Supabase Storage"]
-    API --> Realtime["Supabase Realtime"]
+    API --> Storage["Private Storage Bucket"]
+    API --> Realtime["Realtime (gelecek asama)"]
 ```
 
-## Katmanların Görevleri
+## Katmanlar
 
 ### Web
 
-- Yönetici ve teknik personel için panel deneyimi sunar
-- Dashboard, talep takibi ve envanter ekranlarını barındırır
-- CSS Modules ve ortak tasarım değişkenleri ile sade bir arayüz sağlar
+- Supabase SSR auth yapisi kullanir.
+- Login, logout, protected layout ve role guard server-side calisir.
+- `/dashboard` ve `/tickets` yalnizca `technician` ve `admin` rollerine aciktir.
+- `employee` rolundeki kullanici web paneline alinmaz ve `access-denied` ekranina yonlendirilir.
 
 ### Android
 
-- Mobil kullanım için hızlı erişim ekranları sunar
-- Personel talep oluşturma ve teknik ekibin saha görünümü için hazırlanır
-- Compose tabanlı ekran yapısı ile sonraki özelliklere zemin oluşturur
+- Android uygulamasi halen prototip katmanindadir.
+- `assembleDebug` dogrulamasi korunmustur.
+- Supabase auth ve veri baglantisi sonraki asamaya birakilmistir.
 
 ### Supabase
 
-- İleriki aşamalarda kimlik doğrulama, veritabanı, dosya yükleme ve gerçek zamanlı veri senkronizasyonu sağlayacaktır
-- Veritabanı yönetimi migration dosyaları üzerinden ilerleyecektir
+- PostgreSQL semasi SQL migration dosyalari ile hazirlanmistir.
+- Ana enumlar, dokuz ana tablo, trigger fonksiyonlari ve helper function'lar tanimlanmistir.
+- RLS policy taslagi migration seviyesinde olusturulmustur.
+- `ticket-attachments` private storage bucket migrationi hazirdir.
+- Seed dosyasi yalnizca kurgusal departman ve cihaz referans verisi uretir.
 
-## Verinin Genel Akışı
+## Auth ve Yetkilendirme Akisi
 
-1. Kullanıcı web veya Android istemcisi üzerinden işlem başlatır.
-2. İstemci, doğrulanmış istekleri Supabase API katmanına gönderir.
-3. Yapılandırılmış veri PostgreSQL tablolarında tutulur.
-4. Fotoğraf veya belge benzeri dosyalar Supabase Storage üzerinde saklanır.
-5. Gerekli durumlarda durum değişiklikleri Realtime ile istemcilere iletilir.
+1. `src/proxy.ts`, auth cookie'lerini yenilemek ve temel oturum kontrolunu yapmak icin her protected istekte calisir.
+2. Server component ve server action'lar `@supabase/ssr` ile server client olusturur.
+3. `auth.getUser()` ile dogrulanmis kullanici okunur.
+4. `public.profiles` tablosundan rol, aktiflik ve birim bilgisi cozumlenir.
+5. Protected layout, employee veya pasif profilleri web paneline almaz.
+6. Ticket listesi ve sayaçlar service role kullanmadan, mevcut publishable key + user session ile sorgulanir.
 
-## Kimlik Doğrulama İçin İleri Aşama Yaklaşımı
+## Mevcut Supabase Gercegi
 
-Bu aşamada gerçek kimlik doğrulama uygulanmamaktadır. Sonraki aşamada:
+- Migration dosyalari, RLS ve storage katmani hazir durumdadir.
+- Web ve Android istemci baglantilari asamali olarak kurulmustur; web tarafinda SSR auth katmani eklendi.
+- Runtime RLS guvenligi, yerel `supabase db reset` ve gercek session testleri tamamlanmadan guvenli kabul edilmez.
+- 2026-07-06 tarihinde Docker engine erisimi olmadigi icin yerel migration reset kapisi gecilememistir.
 
-- Web ve Android istemcileri Supabase Auth ile oturum açacaktır.
-- Rol bilgisi kullanıcı profili ve yetki tabloları üzerinden yönetilecektir.
-- Yetkilendirme hem istemci akışlarında hem de Row Level Security politikalarında doğrulanacaktır.
+## Guvenlik Kararlari
 
-## Dosya Yüklemeleri
-
-Talep fotoğrafları ve benzeri ekler, ileriki aşamada Supabase Storage üzerinden yüklenecek ve yalnızca uygun rol ve kayıt sahiplerinin erişebileceği kurallarla korunacaktır.
-
-## Anahtar ve Sır Ayrımı
-
-- İstemci tarafında yalnızca publishable veya anon düzeyi güvenli anahtar kullanılmalıdır.
-- Service role anahtarı yalnızca sunucu tarafı veya güvenli yönetim araçları için düşünülmelidir.
-- Gerçek anahtarlar repository içine eklenmemelidir.
-
-## Migration Tabanlı Veritabanı Yönetimi
-
-Veritabanı şeması ve güvenlik politikaları SQL migration dosyaları ile yönetilecektir. Şema değişiklikleri doğrudan canlı ortamda değil, sürümlenebilir migration akışı ile izlenecektir.
-
-## Android Yapılandırma Notu
-
-Android uygulaması için ileriki aşamada gerekli olabilecek Supabase veya benzeri istemci anahtarları doğrudan kaynak kod içine yazılmamalıdır. Bunun yerine:
-
-- `local.properties` veya Git dışı tutulan yerel yapılandırma mekanizmaları kullanılmalıdır
-- Gerekirse `BuildConfig` alanları yalnızca örnek veya güvenli geliştirme değerleriyle beslenmelidir
-- Gerçek üretim anahtarları bu aşamada eklenmemelidir
+- Service role key istemci tarafina verilmez.
+- Cookie veya localStorage icindeki role degerine guvenilmez.
+- Rol her zaman `profiles.role` alanindan okunur.
+- `middleware.ts` yerine Next.js 16 uyumlu `src/proxy.ts` kullanilir.
+- Uzak Supabase migration uygulamasi, yerel reset ve seed dogrulamasi tamamlanmadan baslatilmaz.

@@ -65,18 +65,45 @@
   background-color: var(--surface);
 }
 
-.badge {
-  display: inline-flex;
+.userPanel {
+  display: flex;
   align-items: center;
-  justify-content: center;
-  min-height: 2.3rem;
-  padding: 0.45rem 0.85rem;
+  gap: 0.9rem;
+}
+
+.userMeta {
+  display: grid;
+  justify-items: end;
+  gap: 0.2rem;
+}
+
+.userMeta strong {
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+.userMeta span {
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+}
+
+.logoutButton {
+  min-height: 2.5rem;
+  padding: 0.45rem 0.9rem;
   border: 1px solid rgba(11, 94, 215, 0.16);
   border-radius: var(--radius-pill);
   background-color: rgba(11, 94, 215, 0.08);
   color: var(--accent);
-  font-size: 0.82rem;
+  font: inherit;
+  font-size: 0.84rem;
   font-weight: 700;
+  cursor: pointer;
+}
+
+.logoutButton:hover,
+.logoutButton:focus-visible {
+  border-color: rgba(11, 94, 215, 0.28);
+  background-color: rgba(11, 94, 215, 0.12);
 }
 
 .content {
@@ -95,7 +122,13 @@
     width: 100%;
   }
 
-  .badge {
-    align-self: flex-start;
+  .userPanel,
+  .userMeta {
+    align-items: flex-start;
+    justify-items: start;
+  }
+
+  .userPanel {
+    flex-direction: column;
   }
 }

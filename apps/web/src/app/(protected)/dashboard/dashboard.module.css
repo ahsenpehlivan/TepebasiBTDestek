@@ -1,0 +1,160 @@
+.page {
+  display: grid;
+  gap: 1rem;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.85fr);
+  gap: 1rem;
+}
+
+.heroCopy,
+.profileCard,
+.primaryCard,
+.secondaryCard {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background-color: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.heroCopy,
+.profileCard,
+.primaryCard,
+.secondaryCard {
+  padding: 1.35rem;
+}
+
+.eyebrow,
+.sectionEyebrow {
+  display: inline-flex;
+  margin-bottom: 0.55rem;
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.heroCopy h1 {
+  margin-bottom: 0.8rem;
+  color: var(--text-primary);
+  font-size: clamp(1.9rem, 4vw, 2.8rem);
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+}
+
+.heroCopy p,
+.primaryCard p,
+.secondaryCard li {
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.profileCard {
+  display: grid;
+  gap: 0.9rem;
+  align-content: start;
+  background:
+    linear-gradient(180deg, rgba(11, 94, 215, 0.08), transparent 100%),
+    var(--surface);
+}
+
+.profileCard h2,
+.primaryCard h2,
+.secondaryCard h2 {
+  color: var(--text-primary);
+  font-size: 1.08rem;
+}
+
+.profileList {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.profileList div {
+  display: grid;
+  gap: 0.18rem;
+}
+
+.profileList dt {
+  color: var(--text-secondary);
+  font-size: 0.86rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.profileList dd {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.contentGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.9fr);
+  gap: 1rem;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.primaryAction {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.2rem;
+  min-height: 3rem;
+  padding: 0.85rem 1.2rem;
+  border-radius: var(--radius-pill);
+  background-color: var(--accent);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.primaryAction:hover,
+.primaryAction:focus-visible {
+  background-color: #094fb7;
+}
+
+.scopeList {
+  display: grid;
+  gap: 0.75rem;
+  padding-left: 1.1rem;
+}
+
+.scopeList li::marker {
+  color: var(--accent);
+}
+
+@media (max-width: 1040px) {
+  .statsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .hero,
+  .contentGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+}

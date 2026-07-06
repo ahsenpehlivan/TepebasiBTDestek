@@ -1,35 +1,57 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-import { dashboardNavigation } from "@/lib/demo-data";
+import { logoutAction } from "@/app/actions/auth";
+import { roleLabels } from "@/lib/constants/role-labels";
+import type { AuthenticatedProfile } from "@/types/domain";
 
 import styles from "./panel-shell.module.css";
 
 type PanelShellProps = {
+  profile: AuthenticatedProfile;
   children: ReactNode;
 };
 
-export function PanelShell({ children }: PanelShellProps) {
+const navigationItems = [
+  { label: "Dashboard", href: "/dashboard" },
+  { label: "Talepler", href: "/tickets" },
+];
+
+export function PanelShell({ profile, children }: PanelShellProps) {
   return (
     <div className={styles.shell}>
       <header className={styles.header}>
         <div className={styles.headerInner}>
           <div className={styles.brandBlock}>
-            <span className={styles.eyebrow}>Tepebaşı BT Destek</span>
+            <span className={styles.eyebrow}>Tepebasi BT Destek</span>
             <Link href="/" className={styles.title}>
-              Yönetici ve Teknik Personel Paneli
+              Yonetici ve Teknik Personel Paneli
             </Link>
           </div>
 
           <nav className={styles.nav} aria-label="Panel gezinme">
-            {dashboardNavigation.map((item) => (
+            {navigationItems.map((item) => (
               <Link key={item.label} href={item.href} className={styles.navLink}>
                 {item.label}
               </Link>
             ))}
           </nav>
 
-          <div className={styles.badge}>Demo Dashboard</div>
+          <div className={styles.userPanel}>
+            <div className={styles.userMeta}>
+              <strong>{profile.fullName}</strong>
+              <span>
+                {roleLabels[profile.role]}
+                {profile.departmentName ? ` • ${profile.departmentName}` : ""}
+              </span>
+            </div>
+
+            <form action={logoutAction}>
+              <button type="submit" className={styles.logoutButton}>
+                Oturumu Kapat
+              </button>
+            </form>
+          </div>
         </div>
       </header>
 

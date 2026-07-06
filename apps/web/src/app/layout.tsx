@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+
 import "./globals.css";
 
 const geistSans = Geist({
@@ -13,9 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Tepebaşı BT Destek Prototipi",
+  title: "Tepebasi BT Destek",
   description:
-    "Teknik destek ve cihaz envanteri yönetimi için hazırlanan web paneli prototipi.",
+    "Teknik destek ve cihaz envanteri yonetimi icin hazirlanan rol kontrollu web paneli prototipi.",
 };
 
 export default function RootLayout({
