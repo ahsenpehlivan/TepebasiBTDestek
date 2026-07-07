@@ -4,9 +4,9 @@
 
 | Alan | Sonuc | Not |
 | --- | --- | --- |
-| Web `npm run lint` | gecti | 2026-07-06 tarihinde remote auth/RLS dogrulamasi sonrasinda yeniden calistirildi |
-| Web `npm run build` | gecti | 2026-07-06 tarihinde remote auth/RLS dogrulamasi sonrasinda yeniden calistirildi |
-| Android `gradlew.bat assembleDebug` | gecti | 2026-07-06 tarihinde yeniden calistirildi |
+| Web `npm run lint` | gecti | 2026-07-07 tarihinde Android handoff cleanup dogrulamasi sonrasinda yeniden calistirildi |
+| Web `npm run build` | gecti | 2026-07-07 tarihinde Android handoff cleanup dogrulamasi sonrasinda yeniden calistirildi |
+| Android `gradlew.bat assembleDebug` | gecti | 2026-07-07 tarihinde yeniden calistirildi |
 | `docker version` | gecti | Docker engine erisimi var |
 | `npx supabase --version` | gecti | `2.109.0` |
 | `npx supabase db reset` | gecti | Yeni migration dahil tum migrationlar ve seed basariyla uygulandi |
@@ -143,3 +143,43 @@ Not: Demo kullanici parolalari repository icinde tutulmadigi icin browser auth t
 | Kontrol | Sonuc | Neden |
 | --- | --- | --- |
 | AUTH-12 eksik env browser akisi | test edilemedi | Next.js build cache etkisini bozmadan ayrik browser instance ile eksik env senaryosu tekrar uretilemedi |
+
+## UI Polish ve Manual Route Testleri
+
+| Test | Sonuc | Neden |
+| --- | --- | --- |
+| `/dashboard` manuel kontrolu | gecti | Local browser oturumunda dashboard kartlari, hizli linkler ve oturum ozeti beklendigi gibi gorundu |
+| `/tickets` manuel kontrolu | gecti | Header, filtre alani, liste/kart yapisi ve detay linkleri kontrol edildi |
+| `/tickets/[id]` manuel kontrolu | gecti | Ticket ozeti, cihaz ozeti, durum gecmisi ve `Ic Not` etiketi yerinde goruldu |
+| `/devices` manuel kontrolu | gecti | Header, filtreler, aktif/pasif cihaz ayrimi ve detay linkleri dogrulandi |
+| `/devices/[id]` manuel kontrolu | gecti | Teknik bilgi bloklari, guvenli QR ozeti ve bakim listesi goruldu |
+| `/devices/new` manuel kontrolu | gecti | Zorunlu alan karti, yardim metinleri ve geri don aksiyonu goruldu |
+| `/devices/[id]/edit` manuel kontrolu | gecti | Duzenleme formu, yardim metinleri ve detay sayfasina don linki goruldu |
+| `/devices/[id]/qr` manuel kontrolu | gecti | QR karti, demo uyarisi ve yazdirma butonu goruldu |
+| `/devices/qr/[token]` manuel kontrolu | gecti | Token route'u ilgili cihaz detayina yonlendi |
+| 390x844 responsive kontrolu | gecti | `/tickets`, `/devices`, `/devices/[id]` ve `/devices/[id]/qr` ekranlarinda yatay tasma olusmadi |
+| 768 genislik responsive kontrolu | gecti | Dashboard, ticket detay ve device edit ekranlarinda tasma olmadan okunabilir duzen korundu |
+| Desktop responsive kontrolu | gecti | Dashboard, tickets, devices ve QR ekranlarinda kart ve bosluk hiyerarsisi tutarli kaldi |
+
+Not: Bu route ve responsive kontrolleri local Supabase'e bagli ayri bir web instance uzerinde manual browser dogrulamasi olarak yapilmistir.
+
+## Android Handoff Cleanup Dogrulamalari
+
+| Test | Sonuc | Neden |
+| --- | --- | --- |
+| `/tickets/[id]` status secenekleri mevcut duruma gore daraliyor mu? | gecti | Local browser akisinda `#1001` icin `in_progress / waiting_user / cancelled`, `#1002` icin `waiting_user / resolved / cancelled`, `#1003` icin yalnizca `closed` secenegi goruldu |
+| Atanmamis open ticket'ta status yardimi dogru mu? | gecti | `#1000` kaydinda yalnizca `cancelled` secenegi acildi ve `Once talebi bir teknik personele atayin...` yardim metni goruldu |
+| Closed/cancelled ticket icin status formu kapanıyor mu? | gecti | Manual UI aksiyonlariyla `#1003` kaydi `closed`, `#1000` kaydi `cancelled` durumuna getirildi; her iki sayfada da select ve submit pasif hale geldi ve son-durum mesaji goruldu |
+| Ticket islem sirasi yardim metni gorunuyor mu? | gecti | Ticket detay ekranlarinda `Onerilen islem sirasi: once talebi teknik personele atayin...` yardim metni goruldu |
+| Device assigned user kavrami UI'da net mi? | gecti | `/devices/[id]`, `/devices/new` ve `/devices/[id]/edit` ekranlarinda `Cihazi Kullanan Personel` etiketi ve teknik atamadan ayri oldugunu belirten yardim metni goruldu |
+| Device assigned user kavrami dokumantasyonda net mi? | gecti | `README.md`, `docs/DATABASE.md`, `docs/DEMO_DATA_SETUP.md` ve `docs/RLS_MATRIX.md` icinde `devices.assigned_user_id` ile `tickets.assigned_to` ayrimi dogrulandi |
+| `docs/MVP_DEMO_SCENARIO.md` guncel mi? | gecti | Demo amaci, roller, veri uyarisi ve 15 adimli sunum akisi manuel olarak kontrol edildi |
+| `docs/SCREENSHOT_PLAN.md` guncel mi? | gecti | `Onerilen Sunum Sirasi` bolumu ile screenshot kanitlari `docs/MVP_DEMO_SCENARIO.md` ile uyumlu bulundu |
+
+## Gelecek Faz Dokumantasyon Kontrolu
+
+| Test | Sonuc | Neden |
+| --- | --- | --- |
+| Gelecek fazlar tamamlanmis ozellik gibi yazilmadi mi? | gecti | `README.md`, `docs/MVP_DEMO_SCENARIO.md` ve `docs/FUTURE_PHASES.md` icinde bu basliklar acikca `gelecek faz` ve `mevcut MVP'nin parcasi degil` olarak konumlandi |
+| Akilli cozum onerisi akisi icin ilk surum yaklasimi net mi? | gecti | Ilk surumun ML zorunlulugu olmadan, onayli cozum kutuphanesi, kategori ve anahtar kelime eslestirmesiyle baslayacagi yazildi |
+| Karar destek paneli icin hedef gostergeler net mi? | gecti | Departman, cihaz, kategori, cozum suresi, bakim ve ticket-acilmadan-cozulen sorun metrikleri gelecekteki analiz ekranlari olarak listelendi |

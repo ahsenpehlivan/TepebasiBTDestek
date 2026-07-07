@@ -1,3 +1,5 @@
+import { PageHeader } from "@/components/ui/page-header";
+import { StateCard } from "@/components/ui/state-card";
 import { TicketFilterForm } from "@/components/tickets/ticket-filter-form";
 import { TicketList } from "@/components/tickets/ticket-list";
 import { loadTicketList, parseTicketListFilters } from "@/lib/tickets/queries";
@@ -23,15 +25,11 @@ export default async function TicketsPage({ searchParams }: TicketsPageProps) {
 
   return (
     <div className={styles.page}>
-      <section className={styles.headerCard}>
-        <span className={styles.eyebrow}>RLS Tabanli Liste</span>
-        <h1>Teknik Destek Talepleri</h1>
-        <p>
-          Bu sayfa veriyi dogrudan Supabase `tickets` tablosundan okur. Filtreler
-          server-side sorguya uygulanir ve kayitlar en yeni olusturulandan eskiye
-          dogru siralanir.
-        </p>
-      </section>
+      <PageHeader
+        eyebrow="RLS Tabanli Liste"
+        title="Teknik Destek Talepleri"
+        description="Bu sayfa veriyi dogrudan Supabase `tickets` tablosundan okur. Filtreler server-side sorguya uygulanir ve kayitlar en yeni olusturulandan eskiye dogru siralanir."
+      />
 
       <section className={styles.filterCard}>
         <div className={styles.filterHeader}>
@@ -49,26 +47,24 @@ export default async function TicketsPage({ searchParams }: TicketsPageProps) {
       </section>
 
       {hasError ? (
-        <section className={styles.messageCard}>
-          <h2>Liste su anda yuklenemedi</h2>
-          <p>
-            Ticket sorgusu basarisiz oldu. Supabase baglanti ayarlarini ve
-            veritabani erisimini kontrol ettikten sonra sayfayi yenileyin.
-          </p>
-        </section>
+        <StateCard
+          tone="error"
+          title="Liste su anda yuklenemedi"
+          description="Ticket sorgusu basarisiz oldu. Supabase baglanti ayarlarini ve veritabani erisimini kontrol ettikten sonra sayfayi yenileyin."
+        />
       ) : tickets.length === 0 ? (
-        <section className={styles.messageCard}>
-          <h2>
-            {hasActiveFilters
+        <StateCard
+          title={
+            hasActiveFilters
               ? "Secilen filtrelerle eslesen ticket bulunamadi."
-              : "Henuz teknik destek talebi bulunmuyor."}
-          </h2>
-          <p>
-            {hasActiveFilters
+              : "Henuz teknik destek talebi bulunmuyor."
+          }
+          description={
+            hasActiveFilters
               ? "Filtreleri temizleyip listeyi yeniden deneyin."
-              : "Kontrollu demo ticket verileri uygulandiginda kayitlar burada listelenecektir."}
-          </p>
-        </section>
+              : "Kontrollu demo ticket verileri uygulandiginda kayitlar burada listelenecektir."
+          }
+        />
       ) : (
         <TicketList tickets={tickets} />
       )}

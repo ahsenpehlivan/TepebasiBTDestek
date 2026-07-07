@@ -27,6 +27,13 @@
   font-weight: 600;
 }
 
+.fieldHint {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
 .field input {
   width: 100%;
   padding: 0.8rem 0.9rem;

@@ -46,7 +46,7 @@ export function DeviceList({ devices }: DeviceListProps) {
                 <th>Cihaz Tipi</th>
                 <th>Marka / Model</th>
                 <th>Departman</th>
-                <th>Atanan Kullanici</th>
+                <th>Cihazi Kullanan Personel</th>
                 <th>Durum</th>
                 <th>Garanti Bitisi</th>
                 <th>Kayit</th>
@@ -54,7 +54,11 @@ export function DeviceList({ devices }: DeviceListProps) {
             </thead>
             <tbody>
               {devices.map((device) => (
-                <tr key={device.id}>
+                <tr
+                  key={device.id}
+                  className={styles.row}
+                  data-inactive={device.isActive ? "false" : "true"}
+                >
                   <td>
                     <Link href={`/devices/${device.id}`} className={styles.titleLink}>
                       {device.assetTag}
@@ -86,7 +90,11 @@ export function DeviceList({ devices }: DeviceListProps) {
 
       <section className={styles.cardList}>
         {devices.map((device) => (
-          <article key={device.id} className={styles.deviceCard}>
+          <article
+            key={device.id}
+            className={styles.deviceCard}
+            data-inactive={device.isActive ? "false" : "true"}
+          >
             <div className={styles.cardHeader}>
               <Link href={`/devices/${device.id}`} className={styles.cardTitle}>
                 {device.assetTag}
@@ -101,6 +109,12 @@ export function DeviceList({ devices }: DeviceListProps) {
             <p className={styles.brandModel}>
               {device.brand} {device.model}
             </p>
+            {!device.isActive ? (
+              <p className={styles.inactiveNote}>
+                Bu kayit pasiflestirildi. Yeni atama veya aktif kullanim icin uygun
+                degildir.
+              </p>
+            ) : null}
 
             <dl className={styles.detailList}>
               <div>
@@ -108,7 +122,7 @@ export function DeviceList({ devices }: DeviceListProps) {
                 <dd>{device.departmentName ?? "Atanmadi"}</dd>
               </div>
               <div>
-                <dt>Atanan Kullanici</dt>
+                <dt>Cihazi Kullanan Personel</dt>
                 <dd>{device.assignedUserName ?? "Atanmadi"}</dd>
               </div>
               <div>
@@ -124,6 +138,10 @@ export function DeviceList({ devices }: DeviceListProps) {
                 <dd>{formatDeviceDateTime(device.createdAt)}</dd>
               </div>
             </dl>
+
+            <Link href={`/devices/${device.id}`} className={styles.detailLink}>
+              Cihaz detayini ac
+            </Link>
           </article>
         ))}
       </section>

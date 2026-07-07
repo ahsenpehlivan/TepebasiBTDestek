@@ -72,4 +72,8 @@
   .fieldGroup {
     grid-template-columns: 1fr;
   }
+
+  .actions {
+    flex-direction: column;
+  }
 }

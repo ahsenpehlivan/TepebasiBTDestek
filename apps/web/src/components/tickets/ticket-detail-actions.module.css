@@ -3,6 +3,16 @@
   gap: 1rem;
 }
 
+.workflowHint {
+  padding: 0.95rem 1rem;
+  border: 1px solid rgba(11, 94, 215, 0.16);
+  border-radius: var(--radius-md);
+  background-color: rgba(11, 94, 215, 0.06);
+  color: var(--text-primary);
+  font-weight: 600;
+  line-height: 1.65;
+}
+
 .sectionHeader {
   display: grid;
   gap: 0.55rem;
@@ -79,6 +89,11 @@
   gap: 0.55rem;
   color: var(--text-primary);
   font-weight: 600;
+}
+
+.helperMessage {
+  color: var(--text-secondary);
+  line-height: 1.6;
 }
 
 .primaryButton {

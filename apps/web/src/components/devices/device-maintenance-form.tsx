@@ -69,6 +69,10 @@ export function DeviceMaintenanceForm({
             placeholder="Yapilan kontrol, onarim veya guncelleme notunu yazin."
             required
           />
+          <small className={styles.fieldHint}>
+            Bos birakilamaz. Aciklama teknik ekibin sonradan takip edebilecegi kadar
+            net olmalidir.
+          </small>
         </label>
 
         <div className={styles.inlineGrid}>
@@ -104,8 +108,11 @@ export function DeviceMaintenanceForm({
             {state.error}
           </p>
         ) : null}
-        {state.success ? <p className={styles.successMessage}>{state.success}</p> : null}
-
+        {state.success ? (
+          <p className={styles.successMessage} aria-live="polite">
+            {state.success}
+          </p>
+        ) : null}
         <button type="submit" className={styles.primaryButton} disabled={pending}>
           {pending ? "Bakim kaydediliyor..." : "Bakim Kaydini Ekle"}
         </button>

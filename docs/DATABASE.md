@@ -79,6 +79,13 @@ Bu dokuz tablo ana uygulama verisini tasir ve tamaminda RLS etkindir.
 - `is_active`
 - `created_by`
 
+`assigned_user_id`, ticket tarafindaki teknik atama alanindan farklidir:
+
+- `devices.assigned_user_id` = cihazi kullanan veya zimmetli gorunen personel
+- `tickets.assigned_to` = talep uzerinde calisan teknik personel
+
+Bu ayrim, web cihaz ekranlari ile Android handoff planinda ozellikle korunur.
+
 `qr_token` opak UUID olarak tutulur ve web QR ekraninda yalnizca:
 
 - `TBT-DEVICE:<qr_token>`

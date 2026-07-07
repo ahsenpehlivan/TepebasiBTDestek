@@ -2,6 +2,8 @@ import Link from "next/link";
 
 import { DeviceFilterForm } from "@/components/devices/device-filter-form";
 import { DeviceList } from "@/components/devices/device-list";
+import { PageHeader } from "@/components/ui/page-header";
+import { StateCard } from "@/components/ui/state-card";
 import {
   loadActiveDepartments,
   loadDeviceList,
@@ -32,22 +34,16 @@ export default async function DevicesPage({ searchParams }: DevicesPageProps) {
 
   return (
     <div className={styles.page}>
-      <section className={styles.headerCard}>
-        <div className={styles.headerContent}>
-          <div>
-            <span className={styles.eyebrow}>Envanter Paneli</span>
-            <h1>Cihaz Envanteri</h1>
-            <p>
-              Bu sayfa veriyi dogrudan Supabase `devices` tablosundan okur. Liste
-              asset tag sirasiyla gelir ve filtreler server-side sorguya uygulanir.
-            </p>
-          </div>
-
+      <PageHeader
+        eyebrow="Envanter Paneli"
+        title="Cihaz Envanteri"
+        description="Bu sayfa veriyi dogrudan Supabase `devices` tablosundan okur. Liste asset tag sirasiyla gelir ve filtreler server-side sorguya uygulanir."
+        actions={
           <Link href="/devices/new" className={styles.primaryLink}>
             Yeni Cihaz Ekle
           </Link>
-        </div>
-      </section>
+        }
+      />
 
       <section className={styles.filterCard}>
         <div className={styles.filterHeader}>
@@ -65,26 +61,24 @@ export default async function DevicesPage({ searchParams }: DevicesPageProps) {
       </section>
 
       {hasError ? (
-        <section className={styles.messageCard}>
-          <h2>Envanter listesi su anda yuklenemedi</h2>
-          <p>
-            Cihaz sorgusu basarisiz oldu. Supabase baglanti ayarlarini ve veritabani
-            erisimini kontrol ettikten sonra sayfayi yenileyin.
-          </p>
-        </section>
+        <StateCard
+          tone="error"
+          title="Envanter listesi su anda yuklenemedi"
+          description="Cihaz sorgusu basarisiz oldu. Supabase baglanti ayarlarini ve veritabani erisimini kontrol ettikten sonra sayfayi yenileyin."
+        />
       ) : devices.length === 0 ? (
-        <section className={styles.messageCard}>
-          <h2>
-            {hasActiveFilters
+        <StateCard
+          title={
+            hasActiveFilters
               ? "Secilen filtrelerle eslesen cihaz bulunamadi."
-              : "Henuz cihaz envanteri kaydi bulunmuyor."}
-          </h2>
-          <p>
-            {hasActiveFilters
+              : "Henuz cihaz envanteri kaydi bulunmuyor."
+          }
+          description={
+            hasActiveFilters
               ? "Filtreleri temizleyip envanteri yeniden deneyin."
-              : "Demo cihaz seed kayitlari veya technician/admin tarafindan acilan yeni envanter kayitlari burada listelenecektir."}
-          </p>
-        </section>
+              : "Demo cihaz seed kayitlari veya technician/admin tarafindan acilan yeni envanter kayitlari burada listelenecektir."
+          }
+        />
       ) : (
         <DeviceList devices={devices} />
       )}

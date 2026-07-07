@@ -6,6 +6,7 @@
 - Admin rolu icin bile RLS kapatilmamistir; admin yetkisi policy uzerinden verilir.
 - Technician kullanicilar prototip kullanimini kolaylastirmak amaciyla ticket kayitlarini genis okuyabilir.
 - Employee kullanicilar yalnizca kendi profile satirlari, kendi ticket kayitlari ve kendi erisebildigi iliskili kayitlarla sinirlidir.
+- `devices.assigned_user_id` cihazin kullanan personelini, `tickets.assigned_to` ise talep uzerinde calisan teknik personeli ifade eder.
 
 ## Yetki Matrisi
 

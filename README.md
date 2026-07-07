@@ -57,12 +57,17 @@ Bu repository bir uretim sistemi degildir. Gercek kurum verisi, gercek personel 
 - Gercek `tickets` tablosundan filtrelenebilir listeleme sayfasi
 - Ticket detay route'u, durum gecmisi ve yorum gorunumu
 - Technician/admin icin ticket atama, durum degistirme ve public/internal yorum action'lari
+- Ticket detay ekraninda mevcut duruma gore daraltilmis status gecisleri ve son durumlarda pasiflesen durum formu
 - Dashboard kartlarinin gercek ticket ve cihaz sayilariyla beslenmesi
 - Controlled demo ticket/comment SQL snippet'i ve local/remote demo veri dogrulamasi
 - Cihaz envanteri listeleme, filtreleme ve detay ekranlari
 - Technician/admin icin cihaz olusturma, duzenleme ve pasife alma akislari
 - Cihaz bakim kayitlarini goruntuleme ve ekleme akisi
 - Protected QR onizleme ve token yonlendirme route'lari
+- Ticket ve device ekranlarinda Android handoff oncesi is akisi ve kavram netlestirmeleri
+- Ticket ve cihaz ekranlari icin UI/UX polish, responsive iyilestirmeler ve tutarli loading/empty/error state'leri
+- QR print ekraninin sunuma uygun sade gorunumu
+- Staj raporu icin screenshot plani
 - Yerel `supabase db reset`, seed ve smoke test dogrulamalari
 - Remote `db push` ve demo profile rol/department kontrolu
 - Gercek browser oturumu ile auth ve protected route dogrulamasi
@@ -76,8 +81,46 @@ Bu repository bir uretim sistemi degildir. Gercek kurum verisi, gercek personel 
 - Ticket create/update ekranlari
 - Android Supabase entegrasyonu
 - QR, realtime, bildirim ve dosya yukleme akislari
-- Web cihaz ekranlarinda ek polish ve bos/pasif senaryo iyilestirmeleri
+- Android auth, role/profile cozumleme ve ticket ekranlari
 - AUTH-12 eksik env senaryosunun ayrik browser instance ile tekrar uretimi
+
+## Gelecek Faz Fikirleri
+
+Detayli gelecek faz notlari icin `docs/FUTURE_PHASES.md` dosyasini kullanin. Bu fikirler mevcut MVP'nin parcasi degildir; Android handoff sonrasinda ayri fazlar olarak ele alinmalidir.
+
+### Akilli Cozum Oneri Akisi
+
+- Personel ticket acmadan once sorunu yazar.
+- Ilk surum ML olmak zorunda degildir; onayli cozum kutuphanesi, kategori eslestirme ve anahtar kelime eslestirme ile baslamalidir.
+- Kullanici onerilen guvenli adimlari denerse ticket acilmadan sorun kapanabilir.
+- Sorun devam ederse ticket acilir ve kayda `onerilen cozum denendi ama cozulmedi` bilgisi eklenir.
+- Ileride bu yapi ML, semantic search veya embedding tabanli onerilere donusturulebilir.
+
+### Istatistiksel Karar Destek Paneli
+
+- Technician ve admin kullanicilar icin karar destek niteliginde analiz ekranlari hedeflenir.
+- En cok ticket acilan departmanlar, sik ariza veren cihaz turleri, kategori yogunlugu ve ortalama cozum suresi gibi gostergeler sunulabilir.
+- Uzun vadede cozum onerisiyle ticket acilmadan kapanan sorun sayisi da bu panelde izlenebilir.
+
+## MVP Demo Akisi
+
+Web MVP'nin Android handoff oncesi onerilen demo sirasi:
+
+1. Login
+2. Dashboard
+3. Ticket listesi ve filtreleme
+4. Ticket detay, teknik atama ve durum degistirme
+5. Public yorum ve internal teknik not
+6. Device listesi ve device detay
+7. QR preview ve maintenance kaydi
+8. Access denied ornegi
+9. RLS ve test kaniti
+
+Detayli sunum akisi icin `docs/MVP_DEMO_SCENARIO.md` dosyasini, ekran goruntusu plani icin `docs/SCREENSHOT_PLAN.md` dosyasini kullanin.
+
+Ticket detay ekraninda yalnizca mevcut duruma uygun status secenekleri gosterilir. `closed` ve `cancelled` durumlarinda form pasif hale gelir ve kullaniciya Turkce son-durum mesaji gosterilir.
+
+Not: `devices.assigned_user_id` cihazi kullanan veya zimmetli personeli, `tickets.assigned_to` ise talep uzerinde calisan teknik personeli ifade eder.
 
 ## Supabase Durumu
 
@@ -160,4 +203,6 @@ psql -f supabase/tests/rls_smoke_test.sql
 - [Demo Data Setup](docs/DEMO_DATA_SETUP.md)
 - [Supabase Remote Setup](docs/SUPABASE_REMOTE_SETUP.md)
 - [Daily Progress](docs/DAILY_PROGRESS.md)
+- [Future Phases](docs/FUTURE_PHASES.md)
 - [Test Plan](docs/TEST_PLAN.md)
+- [Screenshot Plan](docs/SCREENSHOT_PLAN.md)

@@ -85,9 +85,15 @@
 .heroHeader p,
 .helperText,
 .messageCard p,
-.maintenanceCard p {
+.maintenanceCard p,
+.retiredNote {
   color: var(--text-secondary);
   line-height: 1.7;
+}
+
+.retiredNote {
+  margin-top: 0.75rem;
+  font-weight: 600;
 }
 
 .badgeRow {

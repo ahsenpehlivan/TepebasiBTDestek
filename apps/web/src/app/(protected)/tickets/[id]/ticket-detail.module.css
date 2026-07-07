@@ -184,6 +184,13 @@
   background-color: #fbfcfe;
 }
 
+.commentCard:has(.commentBadge[data-internal="true"]) {
+  border-color: rgba(20, 32, 51, 0.16);
+  background:
+    linear-gradient(180deg, rgba(20, 32, 51, 0.04), transparent 100%),
+    #fbfcfe;
+}
+
 .commentHeader {
   display: flex;
   align-items: center;

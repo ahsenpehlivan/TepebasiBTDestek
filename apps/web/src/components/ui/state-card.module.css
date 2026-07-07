@@ -1,0 +1,43 @@
+.card {
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem 1.35rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background-color: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.card[data-tone="loading"] {
+  background:
+    linear-gradient(180deg, rgba(11, 94, 215, 0.05), transparent 100%),
+    var(--surface);
+}
+
+.card[data-tone="error"] {
+  border-color: rgba(194, 65, 65, 0.18);
+  background:
+    linear-gradient(180deg, rgba(194, 65, 65, 0.06), transparent 100%),
+    var(--surface);
+}
+
+.copy {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.copy h2 {
+  color: var(--text-primary);
+}
+
+.copy p {
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.action {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}

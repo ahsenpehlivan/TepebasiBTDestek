@@ -28,7 +28,7 @@
 .card {
   display: grid;
   justify-items: center;
-  gap: 1rem;
+  gap: 1.25rem;
   padding: 1.5rem;
   text-align: center;
 }
@@ -42,6 +42,12 @@
   text-transform: uppercase;
 }
 
+.header {
+  display: grid;
+  gap: 0.55rem;
+  width: min(100%, 36rem);
+}
+
 .card h1 {
   color: var(--text-primary);
 }
@@ -51,6 +57,17 @@
   color: var(--text-secondary);
 }
 
+.notice {
+  width: min(100%, 38rem);
+  padding: 0.95rem 1rem;
+  border: 1px solid rgba(11, 94, 215, 0.16);
+  border-radius: var(--radius-md);
+  background-color: rgba(11, 94, 215, 0.06);
+  color: var(--text-primary);
+  font-weight: 600;
+  line-height: 1.65;
+}
+
 .qrWrap {
   display: flex;
   justify-content: center;
@@ -58,10 +75,17 @@
 }
 
 .qrFrame {
-  padding: 1rem;
+  padding: 1.2rem;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   background-color: #ffffff;
+  box-shadow: inset 0 0 0 0.35rem rgba(11, 94, 215, 0.04);
+}
+
+.qrFrame :global(svg) {
+  display: block;
+  width: min(100%, 18rem);
+  height: auto;
 }
 
 .detailList {
@@ -90,7 +114,22 @@
   word-break: break-word;
 }
 
+@media (max-width: 640px) {
+  .toolbar,
+  .card {
+    padding-inline: 1rem;
+  }
+
+  .qrFrame {
+    width: 100%;
+  }
+}
+
 @media print {
+  .page {
+    gap: 0;
+  }
+
   .toolbar {
     display: none;
   }
@@ -98,5 +137,13 @@
   .card {
     border: 0;
     box-shadow: none;
+    min-height: auto;
+    padding: 0;
+  }
+
+  .notice {
+    color: var(--text-secondary);
+    border-color: var(--border);
+    background-color: transparent;
   }
 }

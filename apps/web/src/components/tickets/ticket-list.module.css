@@ -40,15 +40,18 @@
 }
 
 .titleLink,
-.cardTitle {
+.cardTitle,
+.detailLink {
   color: var(--accent);
   font-weight: 700;
 }
 
 .titleLink:hover,
 .cardTitle:hover,
+.detailLink:hover,
 .titleLink:focus-visible,
-.cardTitle:focus-visible {
+.cardTitle:focus-visible,
+.detailLink:focus-visible {
   text-decoration: underline;
 }
 
@@ -159,6 +162,10 @@
 
 .detailList dd {
   color: var(--text-primary);
+}
+
+.detailLink {
+  width: fit-content;
 }
 
 @media (max-width: 860px) {

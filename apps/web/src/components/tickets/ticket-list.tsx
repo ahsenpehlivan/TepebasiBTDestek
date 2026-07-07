@@ -45,7 +45,7 @@ export function TicketList({ tickets }: TicketListProps) {
                 <th>Durum</th>
                 <th>Olusturan</th>
                 <th>Birim</th>
-                <th>Atanan</th>
+                <th>Atanan Teknik Personel</th>
                 <th>Tarih</th>
               </tr>
             </thead>
@@ -103,7 +103,7 @@ export function TicketList({ tickets }: TicketListProps) {
                 <dd>{ticket.departmentName ?? "Belirsiz"}</dd>
               </div>
               <div>
-                <dt>Atanan</dt>
+                <dt>Atanan Teknik Personel</dt>
                 <dd>{ticket.assignedTechnicianName ?? "Atanmamis"}</dd>
               </div>
               <div>
@@ -111,6 +111,10 @@ export function TicketList({ tickets }: TicketListProps) {
                 <dd>{formatTicketDateTime(ticket.createdAt)}</dd>
               </div>
             </dl>
+
+            <Link href={`/tickets/${ticket.id}`} className={styles.detailLink}>
+              Ticket detayini ac
+            </Link>
           </article>
         ))}
       </section>

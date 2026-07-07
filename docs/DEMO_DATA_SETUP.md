@@ -215,6 +215,22 @@ Web cihaz create/edit/pasife alma dogrulamasi icin acilan yeni kayitlar da demo 
 - gercek seri numarasi, gercek IP, gercek MAC veya gercek kullanici bilgisi kullanilmamalidir
 - pasife alma sonrasinda hard delete yapilmamalidir
 
+`devices.assigned_user_id` alani, ticket uzerindeki teknik atamayi degil cihazi kullanan veya zimmetli gorunen personeli ifade eder. Demo sunumunda:
+
+- cihaz formundaki personel secimi = cihaz kullanicisi / zimmetli personel
+- ticket uzerindeki atama = talep uzerinde calisan teknik personel
+
+olarak anlatilmalidir.
+
+## Ekran Goruntusu Hazirligi
+
+Staj raporu veya sunum icin ekran goruntusu alinacaksa:
+
+- Login ekraninda parola alani dolu halde ekran goruntusu almayin
+- Yalnizca demo kullanici, demo ticket ve demo cihaz verileri kullanin
+- QR ekraninda payload mantigi gosterilebilir; ancak gercek seri numarasi, gercek IP, gercek MAC veya gercek kullanici bilgisi bulunmamalidir
+- Ayrintili plan icin `docs/SCREENSHOT_PLAN.md` dosyasini kullanin
+
 ## Kurallar
 
 - Migration veya seed icine sabit auth UUID koymayin

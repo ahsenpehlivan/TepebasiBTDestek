@@ -38,7 +38,7 @@ export function PanelShell({ profile, children }: PanelShellProps) {
               <strong>{profile.fullName}</strong>
               <span>
                 {roleLabels[profile.role]}
-                {profile.departmentName ? ` • ${profile.departmentName}` : ""}
+                {profile.departmentName ? ` - ${profile.departmentName}` : ""}
               </span>
             </div>
 

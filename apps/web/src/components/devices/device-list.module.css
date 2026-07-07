@@ -12,6 +12,7 @@
 
 .table {
   width: 100%;
+  min-width: 900px;
   border-collapse: collapse;
 }
 
@@ -35,10 +36,24 @@
   border-bottom: 0;
 }
 
+.row[data-inactive="true"] {
+  background-color: rgba(20, 32, 51, 0.03);
+}
+
 .titleLink,
-.cardTitle {
+.cardTitle,
+.detailLink {
   color: var(--accent);
   font-weight: 700;
+}
+
+.titleLink:hover,
+.cardTitle:hover,
+.detailLink:hover,
+.titleLink:focus-visible,
+.cardTitle:focus-visible,
+.detailLink:focus-visible {
+  text-decoration: underline;
 }
 
 .badgeRow {
@@ -103,6 +118,13 @@
   box-shadow: var(--shadow-sm);
 }
 
+.deviceCard[data-inactive="true"] {
+  border-style: dashed;
+  background:
+    linear-gradient(180deg, rgba(20, 32, 51, 0.03), transparent 100%),
+    var(--surface);
+}
+
 .cardHeader {
   display: grid;
   gap: 0.6rem;
@@ -122,6 +144,11 @@
   color: var(--text-primary);
   font-size: 1.05rem;
   font-weight: 700;
+}
+
+.inactiveNote {
+  color: var(--text-secondary);
+  line-height: 1.6;
 }
 
 .detailList {
@@ -144,6 +171,10 @@
 .detailList dd {
   color: var(--text-primary);
   font-weight: 600;
+}
+
+.detailLink {
+  width: fit-content;
 }
 
 @media (max-width: 900px) {

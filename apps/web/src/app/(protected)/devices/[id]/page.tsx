@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 
 import { DeviceDeactivateForm } from "@/components/devices/device-deactivate-form";
 import { DeviceMaintenanceForm } from "@/components/devices/device-maintenance-form";
+import { StateCard } from "@/components/ui/state-card";
 import {
   deviceStatusLabels,
   deviceTypeLabels,
@@ -58,16 +59,16 @@ export default async function DeviceDetailPage({
 
   if (hasError) {
     return (
-      <section className={styles.messageCard}>
-        <h1>Cihaz detayi su anda yuklenemedi</h1>
-        <p>
-          Cihaz kaydi okunurken bir sorun olustu. Supabase erisimini kontrol edip
-          sayfayi yenileyin.
-        </p>
-        <Link href="/devices" className={styles.backLink}>
-          Cihaz listesine don
-        </Link>
-      </section>
+      <StateCard
+        tone="error"
+        title="Cihaz detayi su anda yuklenemedi"
+        description="Cihaz kaydi okunurken bir sorun olustu. Supabase erisimini kontrol edip sayfayi yenileyin."
+        action={
+          <Link href="/devices" className={styles.backLink}>
+            Cihaz listesine don
+          </Link>
+        }
+      />
     );
   }
 
@@ -100,6 +101,12 @@ export default async function DeviceDetailPage({
             <p>
               {deviceTypeLabels[device.deviceType]} - {device.brand} {device.model}
             </p>
+            {!device.isActive ? (
+              <p className={styles.retiredNote}>
+                Bu cihaz kaydi pasif durumdadir. Yeni kullanim veya aktif teslim
+                senaryosu icin uygun degildir.
+              </p>
+            ) : null}
           </div>
 
           <div className={styles.badgeRow}>
@@ -152,7 +159,7 @@ export default async function DeviceDetailPage({
               <dd>{device.departmentName ?? "Atanmadi"}</dd>
             </div>
             <div>
-              <dt>Atanan Kullanici</dt>
+              <dt>Cihazi Kullanan Personel</dt>
               <dd>{device.assignedUserName ?? "Atanmadi"}</dd>
             </div>
             <div>
@@ -201,6 +208,13 @@ export default async function DeviceDetailPage({
             <div>
               <dt>Payload Modeli</dt>
               <dd>TBT-DEVICE:&lt;opaque-token&gt;</dd>
+            </div>
+            <div>
+              <dt>Kullanan Personel Notu</dt>
+              <dd>
+                Cihaz uzerindeki personel bilgisi, ticket kaydinda gorev alan teknik
+                personelden ayridir.
+              </dd>
             </div>
             <div>
               <dt>Kayit Durumu</dt>

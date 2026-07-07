@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { StatusCard } from "@/components/ui/status-card";
+import { StateCard } from "@/components/ui/state-card";
 import { getAuthState } from "@/lib/auth/server";
 import { roleLabels } from "@/lib/constants/role-labels";
 import { loadDashboardStats } from "@/lib/tickets/queries";
@@ -14,6 +15,7 @@ export default async function DashboardPage() {
     getAuthState(),
     loadDashboardStats(),
   ]);
+  const hasStatsError = stats.some((item) => item.value === "-");
 
   if (!authState.profile) {
     return null;
@@ -56,6 +58,14 @@ export default async function DashboardPage() {
           <StatusCard key={item.label} item={item} />
         ))}
       </section>
+
+      {hasStatsError ? (
+        <StateCard
+          tone="error"
+          title="Bazi dashboard verileri alinamadi"
+          description="Sayaclarin bir kismi gecici olarak okunamadi. Panelin kalan bolumleri kullanilmaya devam edebilir; islem oncesi sayfayi yenileyerek veriyi tekrar deneyin."
+        />
+      ) : null}
 
       <section className={styles.contentGrid}>
         <article className={styles.primaryCard}>

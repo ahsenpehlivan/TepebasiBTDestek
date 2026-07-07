@@ -2,6 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { TicketDetailActions } from "@/components/tickets/ticket-detail-actions";
+import { StateCard } from "@/components/ui/state-card";
+import { deviceStatusLabels, deviceTypeLabels } from "@/lib/constants/device-labels";
 import {
   ticketPriorityLabels,
   ticketStatusLabels,
@@ -52,16 +54,16 @@ export default async function TicketDetailPage({
 
   if (hasError) {
     return (
-      <section className={styles.messageCard}>
-        <h1>Ticket detayi su anda yuklenemedi</h1>
-        <p>
-          Ticket detayi okunurken bir sorun olustu. Supabase erisimini kontrol edip
-          sayfayi yenileyin.
-        </p>
-        <Link href="/tickets" className={styles.backLink}>
-          Ticket listesine don
-        </Link>
-      </section>
+      <StateCard
+        tone="error"
+        title="Ticket detayi su anda yuklenemedi"
+        description="Ticket detayi okunurken bir sorun olustu. Supabase erisimini kontrol edip sayfayi yenileyin."
+        action={
+          <Link href="/tickets" className={styles.backLink}>
+            Ticket listesine don
+          </Link>
+        }
+      />
     );
   }
 
@@ -109,7 +111,7 @@ export default async function TicketDetailPage({
               <dd>{ticket.departmentName ?? "Belirsiz"}</dd>
             </div>
             <div>
-              <dt>Atanan</dt>
+              <dt>Atanan Teknik Personel</dt>
               <dd>{ticket.assignedToName ?? "Atanmamis"}</dd>
             </div>
             <div>
@@ -157,11 +159,11 @@ export default async function TicketDetailPage({
               </div>
               <div>
                 <dt>Cihaz Tipi</dt>
-                <dd>{ticket.device.deviceType}</dd>
+                <dd>{deviceTypeLabels[ticket.device.deviceType]}</dd>
               </div>
               <div>
                 <dt>Cihaz Durumu</dt>
-                <dd>{ticket.device.status}</dd>
+                <dd>{deviceStatusLabels[ticket.device.status]}</dd>
               </div>
               <div>
                 <dt>Not</dt>

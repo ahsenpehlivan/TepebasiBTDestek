@@ -1,10 +1,14 @@
+import { StateCard } from "@/components/ui/state-card";
 import styles from "./devices.module.css";
 
 export default function DevicesLoading() {
   return (
-    <section className={styles.messageCard}>
-      <h2>Cihaz envanteri yukleniyor...</h2>
-      <p>Server-side cihaz sorgusu hazirlaniyor. Lutfen bekleyin.</p>
-    </section>
+    <div className={styles.page}>
+      <StateCard
+        tone="loading"
+        title="Cihaz envanteri yukleniyor..."
+        description="Server-side cihaz sorgusu hazirlaniyor. Lutfen bekleyin."
+      />
+    </div>
   );
 }

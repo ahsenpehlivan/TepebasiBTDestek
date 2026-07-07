@@ -58,15 +58,23 @@ export function DeviceEditorForm({
   return (
     <section className={styles.section}>
       <header className={styles.header}>
-        <div>
-          <span className={styles.eyebrow}>
-            {mode === "create" ? "Yeni Cihaz" : "Cihaz Duzenleme"}
-          </span>
-          <h1>
-            {mode === "create"
-              ? "Demo cihaz envanteri kaydi olustur"
-              : `${device?.assetTag ?? "Cihaz"} kaydini guncelle`}
-          </h1>
+        <div className={styles.headerTop}>
+          <div>
+            <span className={styles.eyebrow}>
+              {mode === "create" ? "Yeni Cihaz" : "Cihaz Duzenleme"}
+            </span>
+            <h1>
+              {mode === "create"
+                ? "Demo cihaz envanteri kaydi olustur"
+                : `${device?.assetTag ?? "Cihaz"} kaydini guncelle`}
+            </h1>
+          </div>
+          <Link
+            href={device ? `/devices/${device.id}` : "/devices"}
+            className={styles.headerLink}
+          >
+            {device ? "Detay sayfasina don" : "Envantere don"}
+          </Link>
         </div>
         <p>
           QR token otomatik uretilir; ham token, seri numarasi, IP veya MAC gibi
@@ -80,6 +88,14 @@ export function DeviceEditorForm({
         ) : null}
         {isActive ? <input type="hidden" name="isActive" value="on" /> : null}
 
+        <div className={styles.infoCard}>
+          <strong>Zorunlu alanlar</strong>
+          <p>
+            Asset tag, cihaz tipi, marka ve model alanlari zorunludur. Tum degerler
+            demo veya prototip amacina uygun olmalidir.
+          </p>
+        </div>
+
         <div className={styles.grid}>
           <label className={styles.field}>
             <span>Asset Tag</span>
@@ -90,6 +106,9 @@ export function DeviceEditorForm({
               placeholder="DEMO-DEV-001"
               required
             />
+            <small className={styles.fieldHint}>
+              Zorunlu. Tekil ve kolay ayirt edilebilir demo etiketi kullanin.
+            </small>
           </label>
 
           <label className={styles.field}>
@@ -136,6 +155,9 @@ export function DeviceEditorForm({
               defaultValue={device?.serialNumber ?? ""}
               placeholder="DEMO-SN-1001"
             />
+            <small className={styles.fieldHint}>
+              Gercek seri numarasi yerine acik demo metni kullanin.
+            </small>
           </label>
 
           <label className={styles.field}>
@@ -154,7 +176,7 @@ export function DeviceEditorForm({
           </label>
 
           <label className={styles.field}>
-            <span>Atanan Kullanici</span>
+            <span>Cihazi Kullanan Personel</span>
             <select
               name="assignedUserId"
               defaultValue={device?.assignedUserId ?? ""}
@@ -166,6 +188,10 @@ export function DeviceEditorForm({
                 </option>
               ))}
             </select>
+            <small className={styles.fieldHint}>
+              Bu alan cihazin zimmetli veya cihazi kullanan personelini belirtir.
+              Ticket uzerindeki teknik atama bilgisinden ayridir.
+            </small>
           </label>
 
           <label className={styles.field}>
@@ -195,6 +221,9 @@ export function DeviceEditorForm({
               name="warrantyEndDate"
               defaultValue={device?.warrantyEndDate ?? ""}
             />
+            <small className={styles.fieldHint}>
+              Garanti bitisi satin alma tarihinden once olamaz.
+            </small>
           </label>
 
           <label className={styles.field}>
@@ -232,7 +261,11 @@ export function DeviceEditorForm({
             {state.error}
           </p>
         ) : null}
-        {state.success ? <p className={styles.successMessage}>{state.success}</p> : null}
+        {state.success ? (
+          <p className={styles.successMessage} aria-live="polite">
+            {state.success}
+          </p>
+        ) : null}
 
         <div className={styles.actions}>
           <button type="submit" className={styles.primaryButton} disabled={pending}>

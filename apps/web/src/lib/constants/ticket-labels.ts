@@ -37,6 +37,41 @@ export const ticketStatusOptions: TicketStatus[] = [
   "cancelled",
 ];
 
+export const ticketFinalStatuses: TicketStatus[] = ["closed", "cancelled"];
+
+export const ticketStatusesRequiringAssignee: TicketStatus[] = [
+  "assigned",
+  "in_progress",
+  "waiting_user",
+  "resolved",
+  "closed",
+];
+
+export const ticketStatusTransitionMap: Record<TicketStatus, TicketStatus[]> = {
+  open: ["assigned", "cancelled"],
+  assigned: ["in_progress", "waiting_user", "cancelled"],
+  in_progress: ["waiting_user", "resolved", "cancelled"],
+  waiting_user: ["in_progress", "resolved", "cancelled"],
+  resolved: ["closed"],
+  closed: [],
+  cancelled: [],
+};
+
+export function getAvailableTicketTransitions(
+  currentStatus: TicketStatus,
+  hasAssignee: boolean,
+) {
+  const nextStatuses = ticketStatusTransitionMap[currentStatus];
+
+  if (hasAssignee) {
+    return nextStatuses;
+  }
+
+  return nextStatuses.filter(
+    (status) => !ticketStatusesRequiringAssignee.includes(status),
+  );
+}
+
 export const ticketPriorityOptions: TicketPriority[] = [
   "low",
   "normal",

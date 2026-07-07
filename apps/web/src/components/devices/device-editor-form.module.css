@@ -17,6 +17,14 @@
   gap: 0.6rem;
 }
 
+.headerTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
 .eyebrow {
   display: inline-flex;
   margin-bottom: 0.55rem;
@@ -35,6 +43,11 @@
 .infoCard p {
   color: var(--text-secondary);
   line-height: 1.7;
+}
+
+.headerLink {
+  color: var(--accent);
+  font-weight: 700;
 }
 
 .form {
@@ -56,6 +69,13 @@
 
 .field span {
   font-size: 0.88rem;
+}
+
+.fieldHint {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 1.5;
 }
 
 .field input,

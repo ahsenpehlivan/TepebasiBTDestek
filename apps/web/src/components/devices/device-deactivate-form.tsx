@@ -57,6 +57,10 @@ export function DeviceDeactivateForm({
             placeholder="PASIFE_AL"
             disabled={disabled}
           />
+          <small className={styles.fieldHint}>
+            Yanlislikla pasife alma riskini azaltmak icin onay metnini eksiksiz
+            yazin.
+          </small>
         </label>
 
         {state.error ? (
@@ -64,7 +68,11 @@ export function DeviceDeactivateForm({
             {state.error}
           </p>
         ) : null}
-        {state.success ? <p className={styles.successMessage}>{state.success}</p> : null}
+        {state.success ? (
+          <p className={styles.successMessage} aria-live="polite">
+            {state.success}
+          </p>
+        ) : null}
 
         <button
           type="submit"

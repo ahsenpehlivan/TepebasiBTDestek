@@ -10,8 +10,11 @@ import {
   updateTicketStatusAction,
 } from "@/app/(protected)/tickets/actions";
 import {
+  getAvailableTicketTransitions,
+  ticketFinalStatuses,
   ticketStatusLabels,
-  ticketStatusOptions,
+  ticketStatusTransitionMap,
+  ticketStatusesRequiringAssignee,
 } from "@/lib/constants/ticket-labels";
 import { roleLabels } from "@/lib/constants/role-labels";
 import type { TicketAssigneeOption, TicketStatus } from "@/types/domain";
@@ -54,6 +57,15 @@ export function TicketDetailActions({
 }: TicketDetailActionsProps) {
   const router = useRouter();
   const commentFormRef = useRef<HTMLFormElement>(null);
+  const hasAssignee = Boolean(currentAssigneeId);
+  const mappedTransitions = ticketStatusTransitionMap[currentStatus];
+  const allowedStatuses = getAvailableTicketTransitions(currentStatus, hasAssignee);
+  const isFinalStatus = ticketFinalStatuses.includes(currentStatus);
+  const hasBlockedTransitions =
+    !hasAssignee &&
+    mappedTransitions.some((status) =>
+      ticketStatusesRequiringAssignee.includes(status),
+    );
   const [assignState, assignFormAction, assignPending] = useActionState(
     assignTicketAction,
     initialActionState,
@@ -92,6 +104,11 @@ export function TicketDetailActions({
         </p>
       </header>
 
+      <div className={styles.workflowHint}>
+        Onerilen islem sirasi: once talebi teknik personele atayin, ardindan
+        durumunu is akisina gore guncelleyin.
+      </div>
+
       <div className={styles.grid}>
         <article className={styles.card}>
           <h3>Ticket atama</h3>
@@ -127,18 +144,38 @@ export function TicketDetailActions({
             <input type="hidden" name="ticketId" value={ticketId} />
             <label className={styles.field}>
               <span>Yeni durum</span>
-              <select name="status" defaultValue={currentStatus}>
-                {ticketStatusOptions.map((status) => (
+              <select
+                name="status"
+                defaultValue={allowedStatuses[0] ?? ""}
+                disabled={isFinalStatus || allowedStatuses.length === 0}
+              >
+                {allowedStatuses.map((status) => (
                   <option key={status} value={status}>
                     {ticketStatusLabels[status]}
                   </option>
                 ))}
               </select>
             </label>
+            {isFinalStatus ? (
+              <p className={styles.helperMessage}>
+                Bu talep son durumda oldugu icin durum degistirilemez.
+              </p>
+            ) : null}
+            {!isFinalStatus && hasBlockedTransitions ? (
+              <p className={styles.helperMessage}>
+                Once talebi bir teknik personele atayin. Atama yapilmadan is akisina
+                ait durum gecisleri acilmaz.
+              </p>
+            ) : null}
+            {!isFinalStatus && allowedStatuses.length === 0 ? (
+              <p className={styles.helperMessage}>
+                Bu talep icin su anda ek bir durum gecisi bulunmuyor.
+              </p>
+            ) : null}
             <button
               type="submit"
               className={styles.primaryButton}
-              disabled={statusPending}
+              disabled={statusPending || isFinalStatus || allowedStatuses.length === 0}
             >
               {statusPending ? "Durum kaydediliyor..." : "Durumu Guncelle"}
             </button>

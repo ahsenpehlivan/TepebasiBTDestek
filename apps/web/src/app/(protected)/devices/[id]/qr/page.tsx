@@ -49,11 +49,18 @@ export default async function DeviceQrPage({ params }: DeviceQrPageProps) {
       </section>
 
       <section className={styles.card}>
-        <span className={styles.eyebrow}>QR Onizleme</span>
-        <h1>{device.assetTag}</h1>
-        <p>
-          {deviceTypeLabels[device.deviceType]} - {device.brand} {device.model}
-        </p>
+        <div className={styles.header}>
+          <span className={styles.eyebrow}>QR Onizleme</span>
+          <h1>{device.assetTag}</h1>
+          <p>
+            {deviceTypeLabels[device.deviceType]} - {device.brand} {device.model}
+          </p>
+        </div>
+
+        <div className={styles.notice}>
+          Bu QR yalnizca demo/prototip amaclidir. Icerikte gercek seri numarasi,
+          IP, MAC veya kullanici bilgisi bulunmaz.
+        </div>
 
         <div className={styles.qrWrap}>
           <div
@@ -64,6 +71,13 @@ export default async function DeviceQrPage({ params }: DeviceQrPageProps) {
 
         <dl className={styles.detailList}>
           <div>
+            <dt>Kullanim</dt>
+            <dd>
+              Sunum veya demo sirasinda cihaz etiketini gostermek ve korumali route
+              mantigini anlatmak icin kullanilir.
+            </dd>
+          </div>
+          <div>
             <dt>Payload</dt>
             <dd>{payload}</dd>
           </div>
@@ -72,10 +86,10 @@ export default async function DeviceQrPage({ params }: DeviceQrPageProps) {
             <dd>{getQrTokenPreview(device.qrToken)}</dd>
           </div>
           <div>
-            <dt>Uyari</dt>
+            <dt>Yazdirma Notu</dt>
             <dd>
-              Bu ekran yalnizca demo/prototip kullanim icindir. QR icinde seri
-              numarasi, IP, MAC veya kullanici bilgisi bulunmaz.
+              Yazdirma gorunumunde ust arac cubugu gizlenir ve merkezde tek bir QR
+              karti birakilir.
             </dd>
           </div>
         </dl>
