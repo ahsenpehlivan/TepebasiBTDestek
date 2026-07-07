@@ -42,14 +42,14 @@ export function DeviceList({ devices }: DeviceListProps) {
           <table className={styles.table}>
             <thead>
               <tr>
-                <th>Asset Tag</th>
-                <th>Cihaz Tipi</th>
+                <th>Demirbaş Kodu</th>
+                <th>Cihaz Türü</th>
                 <th>Marka / Model</th>
-                <th>Departman</th>
-                <th>Cihazi Kullanan Personel</th>
+                <th>Birim</th>
+                <th>Zimmetli Personel</th>
                 <th>Durum</th>
-                <th>Garanti Bitisi</th>
-                <th>Kayit</th>
+                <th>Garanti Bitişi</th>
+                <th>Kayıt</th>
               </tr>
             </thead>
             <tbody>
@@ -68,8 +68,8 @@ export function DeviceList({ devices }: DeviceListProps) {
                   <td>
                     {device.brand} {device.model}
                   </td>
-                  <td>{device.departmentName ?? "Atanmadi"}</td>
-                  <td>{device.assignedUserName ?? "Atanmadi"}</td>
+                  <td>{device.departmentName ?? "Atanmadı"}</td>
+                  <td>{device.assignedUserName ?? "Atanmadı"}</td>
                   <td>
                     <StatusBadge status={device.status} />
                   </td>
@@ -111,22 +111,22 @@ export function DeviceList({ devices }: DeviceListProps) {
             </p>
             {!device.isActive ? (
               <p className={styles.inactiveNote}>
-                Bu kayit pasiflestirildi. Yeni atama veya aktif kullanim icin uygun
-                degildir.
+                Bu kayıt pasifleştirildi. Yeni atama veya aktif kullanım için uygun
+                değildir.
               </p>
             ) : null}
 
             <dl className={styles.detailList}>
               <div>
-                <dt>Departman</dt>
-                <dd>{device.departmentName ?? "Atanmadi"}</dd>
+                <dt>Birim</dt>
+                <dd>{device.departmentName ?? "Atanmadı"}</dd>
               </div>
               <div>
-                <dt>Cihazi Kullanan Personel</dt>
-                <dd>{device.assignedUserName ?? "Atanmadi"}</dd>
+                <dt>Zimmetli Personel</dt>
+                <dd>{device.assignedUserName ?? "Atanmadı"}</dd>
               </div>
               <div>
-                <dt>Garanti Bitisi</dt>
+                <dt>Garanti Bitişi</dt>
                 <dd>
                   {device.warrantyEndDate
                     ? formatDeviceDate(device.warrantyEndDate)
@@ -134,13 +134,13 @@ export function DeviceList({ devices }: DeviceListProps) {
                 </dd>
               </div>
               <div>
-                <dt>Kayit Tarihi</dt>
+                <dt>Kayıt Tarihi</dt>
                 <dd>{formatDeviceDateTime(device.createdAt)}</dd>
               </div>
             </dl>
 
             <Link href={`/devices/${device.id}`} className={styles.detailLink}>
-              Cihaz detayini ac
+              Detayı Gör
             </Link>
           </article>
         ))}

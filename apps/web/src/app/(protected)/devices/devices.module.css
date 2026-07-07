@@ -1,6 +1,6 @@
 .page {
   display: grid;
-  gap: 1rem;
+  gap: 1.15rem;
 }
 
 .headerCard,
@@ -10,7 +10,12 @@
   border-radius: var(--radius-lg);
   background-color: var(--surface);
   box-shadow: var(--shadow-sm);
-  padding: 1.35rem;
+  padding: 1.5rem;
+}
+
+.headerCard {
+  display: flex;
+  flex-direction: column;
 }
 
 .headerContent {
@@ -25,7 +30,7 @@
   display: inline-flex;
   margin-bottom: 0.55rem;
   color: var(--accent);
-  font-size: 0.78rem;
+  font-size: 0.82rem;
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -41,6 +46,7 @@
 .messageCard p,
 .filterHeader p {
   color: var(--text-secondary);
+  font-size: 1rem;
   line-height: 1.7;
 }
 
@@ -48,17 +54,26 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 2.9rem;
-  padding: 0.45rem 1rem;
-  border-radius: var(--radius-pill);
+  min-height: 48px;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-md);
   background-color: var(--accent);
-  color: #ffffff;
-  font-weight: 700;
+  color: var(--text-on-primary);
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+
+.primaryLink:hover,
+.primaryLink:focus-visible {
+  background-color: var(--accent-strong);
 }
 
 .filterCard {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 1rem;
+  background-color: var(--surface-alt);
 }
 
 .filterHeader {
@@ -72,10 +87,11 @@
 .filterHeader h2 {
   margin-bottom: 0.4rem;
   color: var(--text-primary);
+  font-size: 1.18rem;
 }
 
 .limitHint {
   color: var(--text-secondary);
-  font-size: 0.9rem;
+  font-size: 0.98rem;
   font-weight: 700;
 }

@@ -27,42 +27,42 @@ export function DeviceFilterForm({
       <div className={styles.fieldGroup}>
         <label className={styles.field}>
           <span>Arama</span>
-          <input
-            type="search"
-            name="q"
-            defaultValue={filters.query}
-            placeholder="Asset tag, marka veya model"
-          />
-        </label>
+            <input
+              type="search"
+              name="q"
+              defaultValue={filters.query}
+              placeholder="Demirbaş kodu, marka veya model"
+            />
+          </label>
 
-        <label className={styles.field}>
-          <span>Cihaz Tipi</span>
-          <select name="type" defaultValue={filters.deviceType}>
-            <option value="all">Tum tipler</option>
-            {deviceTypeOptions.map((deviceType) => (
-              <option key={deviceType} value={deviceType}>
-                {deviceTypeLabels[deviceType]}
-              </option>
-            ))}
-          </select>
-        </label>
+          <label className={styles.field}>
+            <span>Cihaz Türü</span>
+            <select name="type" defaultValue={filters.deviceType}>
+              <option value="all">Tüm türler</option>
+              {deviceTypeOptions.map((deviceType) => (
+                <option key={deviceType} value={deviceType}>
+                  {deviceTypeLabels[deviceType]}
+                </option>
+              ))}
+            </select>
+          </label>
 
-        <label className={styles.field}>
-          <span>Durum</span>
-          <select name="status" defaultValue={filters.status}>
-            <option value="all">Tum durumlar</option>
-            {deviceStatusOptions.map((status) => (
-              <option key={status} value={status}>
-                {deviceStatusLabels[status]}
-              </option>
-            ))}
-          </select>
-        </label>
+          <label className={styles.field}>
+            <span>Durum</span>
+            <select name="status" defaultValue={filters.status}>
+              <option value="all">Tüm durumlar</option>
+              {deviceStatusOptions.map((status) => (
+                <option key={status} value={status}>
+                  {deviceStatusLabels[status]}
+                </option>
+              ))}
+            </select>
+          </label>
 
-        <label className={styles.field}>
-          <span>Departman</span>
-          <select name="department" defaultValue={filters.departmentId}>
-            <option value="all">Tum departmanlar</option>
+          <label className={styles.field}>
+            <span>Birim</span>
+            <select name="department" defaultValue={filters.departmentId}>
+              <option value="all">Tüm birimler</option>
             {departments.map((department) => (
               <option key={department.id} value={department.id}>
                 {department.name}

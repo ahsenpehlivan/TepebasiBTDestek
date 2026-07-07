@@ -7,7 +7,8 @@
 }
 
 .tableCard {
-  padding: 1.2rem;
+  padding: 1.5rem;
+  background-color: var(--surface);
 }
 
 .tableWrap {
@@ -22,17 +23,18 @@
 
 .table th,
 .table td {
-  padding: 0.9rem 0.8rem;
+  padding: 1rem 0.9rem;
   border-bottom: 1px solid var(--border);
   text-align: left;
-  font-size: 0.94rem;
+  font-size: 0.98rem;
   vertical-align: top;
 }
 
 .table th {
   color: var(--text-secondary);
+  font-size: 0.84rem;
   font-weight: 700;
-  background-color: #fbfcfe;
+  background-color: var(--surface-muted);
 }
 
 .table td {
@@ -40,18 +42,15 @@
 }
 
 .titleLink,
-.cardTitle,
-.detailLink {
-  color: var(--accent);
+.cardTitle {
+  color: var(--text-primary);
   font-weight: 700;
 }
 
 .titleLink:hover,
 .cardTitle:hover,
-.detailLink:hover,
 .titleLink:focus-visible,
-.cardTitle:focus-visible,
-.detailLink:focus-visible {
+.cardTitle:focus-visible {
   text-decoration: underline;
 }
 
@@ -59,58 +58,57 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 1.9rem;
-  padding: 0.2rem 0.7rem;
+  padding: 0.25rem 0.75rem;
   border-radius: var(--radius-pill);
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   font-weight: 700;
   white-space: nowrap;
 }
 
 .badge[data-kind="status"][data-value="open"] {
-  background-color: rgba(183, 121, 31, 0.12);
+  background-color: var(--warning-bg);
   color: var(--warning);
 }
 
 .badge[data-kind="status"][data-value="assigned"],
 .badge[data-kind="status"][data-value="waiting_user"] {
-  background-color: rgba(11, 94, 215, 0.1);
-  color: var(--accent);
+  background-color: var(--info-bg);
+  color: var(--info);
 }
 
 .badge[data-kind="status"][data-value="in_progress"] {
-  background-color: rgba(20, 32, 51, 0.1);
+  background-color: var(--surface-muted);
   color: var(--text-primary);
 }
 
 .badge[data-kind="status"][data-value="resolved"],
 .badge[data-kind="status"][data-value="closed"] {
-  background-color: rgba(45, 138, 75, 0.12);
+  background-color: var(--success-bg);
   color: var(--success);
 }
 
 .badge[data-kind="status"][data-value="cancelled"] {
-  background-color: rgba(194, 65, 65, 0.12);
+  background-color: var(--danger-bg);
   color: var(--danger);
 }
 
 .badge[data-kind="priority"][data-value="low"] {
-  background-color: rgba(45, 138, 75, 0.1);
+  background-color: var(--success-bg);
   color: var(--success);
 }
 
 .badge[data-kind="priority"][data-value="normal"] {
-  background-color: rgba(11, 94, 215, 0.1);
-  color: var(--accent);
+  background-color: var(--info-bg);
+  color: var(--info);
 }
 
 .badge[data-kind="priority"][data-value="high"] {
-  background-color: rgba(183, 121, 31, 0.14);
+  background-color: var(--warning-bg);
   color: var(--warning);
 }
 
 .badge[data-kind="priority"][data-value="urgent"] {
-  background-color: rgba(194, 65, 65, 0.12);
+  background-color: var(--danger-bg);
   color: var(--danger);
 }
 
@@ -119,9 +117,11 @@
 }
 
 .ticketCard {
-  display: grid;
-  gap: 0.85rem;
-  padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+  background-color: var(--surface);
 }
 
 .cardHeader,
@@ -134,12 +134,21 @@
 }
 
 .ticketNumber {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0.2rem 0.7rem;
+  border-radius: var(--radius-pill);
+  background-color: var(--surface-muted);
   color: var(--text-secondary);
+  font-size: 0.86rem;
   font-weight: 700;
+  letter-spacing: 0.04em;
 }
 
 .cardTitle {
-  font-size: 1rem;
+  font-size: 1.12rem;
+  line-height: 1.45;
 }
 
 .detailList {
@@ -154,7 +163,7 @@
 
 .detailList dt {
   color: var(--text-secondary);
-  font-size: 0.82rem;
+  font-size: 0.86rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -162,10 +171,29 @@
 
 .detailList dd {
   color: var(--text-primary);
+  font-size: 0.98rem;
 }
 
 .detailLink {
+  display: inline-flex;
   width: fit-content;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.5rem 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background-color: var(--surface);
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.detailLink:hover,
+.detailLink:focus-visible {
+  border-color: var(--border-strong);
+  background-color: var(--surface-subtle);
+  text-decoration: none;
 }
 
 @media (max-width: 860px) {

@@ -25,12 +25,12 @@ export default async function AuthErrorPage() {
   return (
     <main className={styles.page}>
       <section className={styles.card}>
-        <span className={styles.badge}>Profil Hatasi</span>
-        <h1>Profil kaydi bulunamadi</h1>
+        <span className={styles.badge}>Yönlendirme Bilgisi</span>
+        <h1>Hesap bilgisi tamamlanamadı</h1>
         <p>
-          Auth kullanicisi dogrulandi ancak `profiles` tablosunda eslesen satir
-          bulunamadi. `handle_new_user()` trigger mekanizmasini ve demo kullanici kurulum
-          adimlarini kontrol edin.
+          Giriş işlemi doğrulandı; ancak hesabınız için gerekli panel bilgileri
+          hazır olmadığından sayfa açılamadı. Demo kullanıcı kurulumu ve profil
+          eşleşmesi kontrol edilmelidir.
         </p>
 
         <form action={logoutAction}>

@@ -1,38 +1,59 @@
 .card {
-  display: grid;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
   gap: 1rem;
-  padding: 1.25rem 1.35rem;
+  padding: 1.5rem;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   background-color: var(--surface);
   box-shadow: var(--shadow-sm);
 }
 
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background-color: var(--border-strong);
+}
+
 .card[data-tone="loading"] {
-  background:
-    linear-gradient(180deg, rgba(11, 94, 215, 0.05), transparent 100%),
-    var(--surface);
+  background-color: var(--surface-alt);
+}
+
+.card[data-tone="loading"]::before {
+  background-color: var(--accent);
 }
 
 .card[data-tone="error"] {
-  border-color: rgba(194, 65, 65, 0.18);
-  background:
-    linear-gradient(180deg, rgba(194, 65, 65, 0.06), transparent 100%),
-    var(--surface);
+  border-color: var(--danger);
+  background-color: var(--danger-bg);
+}
+
+.card[data-tone="error"]::before {
+  background-color: var(--danger);
 }
 
 .copy {
-  display: grid;
-  gap: 0.55rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .copy h2 {
   color: var(--text-primary);
+  font-size: 1.25rem;
+  font-weight: 700;
 }
 
 .copy p {
   color: var(--text-secondary);
-  line-height: 1.7;
+  font-size: 1rem;
+  line-height: 1.6;
 }
 
 .action {
@@ -40,4 +61,9 @@
   align-items: center;
   gap: 0.75rem;
   flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.action > * {
+  min-height: 44px;
 }

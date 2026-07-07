@@ -38,12 +38,12 @@ export function TicketList({ tickets }: TicketListProps) {
           <table className={styles.table}>
             <thead>
               <tr>
-                <th>Ticket No</th>
-                <th>Baslik</th>
+                <th>Talep No</th>
+                <th>Başlık</th>
                 <th>Kategori</th>
-                <th>Oncelik</th>
+                <th>Öncelik</th>
                 <th>Durum</th>
-                <th>Olusturan</th>
+                <th>Oluşturan</th>
                 <th>Birim</th>
                 <th>Atanan Teknik Personel</th>
                 <th>Tarih</th>
@@ -67,7 +67,7 @@ export function TicketList({ tickets }: TicketListProps) {
                   </td>
                   <td>{ticket.createdByName ?? "Belirsiz"}</td>
                   <td>{ticket.departmentName ?? "Belirsiz"}</td>
-                  <td>{ticket.assignedTechnicianName ?? "Atanmamis"}</td>
+                  <td>{ticket.assignedTechnicianName ?? "Atanmamış"}</td>
                   <td>{formatTicketDateTime(ticket.createdAt)}</td>
                 </tr>
               ))}
@@ -95,7 +95,7 @@ export function TicketList({ tickets }: TicketListProps) {
 
             <dl className={styles.detailList}>
               <div>
-                <dt>Olusturan</dt>
+                <dt>Oluşturan</dt>
                 <dd>{ticket.createdByName ?? "Belirsiz"}</dd>
               </div>
               <div>
@@ -104,7 +104,7 @@ export function TicketList({ tickets }: TicketListProps) {
               </div>
               <div>
                 <dt>Atanan Teknik Personel</dt>
-                <dd>{ticket.assignedTechnicianName ?? "Atanmamis"}</dd>
+                <dd>{ticket.assignedTechnicianName ?? "Atanmamış"}</dd>
               </div>
               <div>
                 <dt>Tarih</dt>
@@ -113,7 +113,7 @@ export function TicketList({ tickets }: TicketListProps) {
             </dl>
 
             <Link href={`/tickets/${ticket.id}`} className={styles.detailLink}>
-              Ticket detayini ac
+              Detayı Gör
             </Link>
           </article>
         ))}

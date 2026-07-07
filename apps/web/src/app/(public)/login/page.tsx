@@ -27,23 +27,24 @@ export default async function LoginPage() {
     <main className={styles.page}>
       <section className={styles.panel}>
         <div className={styles.intro}>
-          <span className={styles.badge}>SSR Giris</span>
-          <h1>Teknik personel web paneline giris yapin</h1>
+          <span className={styles.badge}>Güvenli Giriş</span>
+          <h1>Tepebaşı BT Destek web paneline giriş yapın</h1>
           <p>
-            Bu ekran Supabase oturumu ile calisir. Web yonetim paneli yalnizca
-            teknik personel ve yonetici rollerine aciktir.
+            Bu ekran belediye Bilgi İşlem birimi için hazırlanan demo web paneline
+            güvenli giriş sağlar. Panel yalnızca teknik personel ve yönetici
+            rollerine açıktır.
           </p>
         </div>
 
         <LoginForm />
 
         <p className={styles.helper}>
-          Personel rolundeki gecerli hesaplar giris yapabilir; ancak web paneli
-          yerine erisim reddi ekrani gorur.
+          Bu prototipte personel rolündeki hesaplar giriş yapabilir; ancak yetkili
+          web paneli yerine erişim bilgilendirme ekranı görür.
         </p>
 
         <Link href="/" className={styles.backLink}>
-          Ana sayfaya don
+          Ana sayfaya dön
         </Link>
       </section>
     </main>

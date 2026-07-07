@@ -1,30 +1,30 @@
 import type { TicketCategory, TicketPriority, TicketStatus } from "@/types/domain";
 
 export const ticketStatusLabels: Record<TicketStatus, string> = {
-  open: "Acik",
-  assigned: "Atandi",
-  in_progress: "Islemde",
-  waiting_user: "Kullanici Bekleniyor",
-  resolved: "Cozuldu",
-  closed: "Kapandi",
-  cancelled: "Iptal Edildi",
+  open: "Açık",
+  assigned: "Atandı",
+  in_progress: "İşlemde",
+  waiting_user: "Kullanıcı Bekleniyor",
+  resolved: "Çözüldü",
+  closed: "Kapatıldı",
+  cancelled: "İptal Edildi",
 };
 
 export const ticketPriorityLabels: Record<TicketPriority, string> = {
-  low: "Dusuk",
+  low: "Düşük",
   normal: "Normal",
-  high: "Yuksek",
+  high: "Yüksek",
   urgent: "Acil",
 };
 
 export const ticketCategoryLabels: Record<TicketCategory, string> = {
-  hardware: "Donanim",
-  software: "Yazilim",
-  network: "Ag",
-  printer_scanner: "Yazici / Tarayici",
-  email_account: "E-posta / Hesap",
-  access_request: "Erisim Talebi",
-  other: "Diger",
+  hardware: "Donanım",
+  software: "Yazılım",
+  network: "Ağ",
+  printer_scanner: "Yazıcı/Tarayıcı",
+  email_account: "E-posta/Hesap",
+  access_request: "Erişim Talebi",
+  other: "Diğer",
 };
 
 export const ticketStatusOptions: TicketStatus[] = [

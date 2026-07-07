@@ -1,6 +1,6 @@
 .page {
   display: grid;
-  gap: 1rem;
+  gap: 1.15rem;
 }
 
 .toolbar,
@@ -17,26 +17,30 @@
   justify-content: space-between;
   gap: 0.75rem;
   flex-wrap: wrap;
-  padding: 1rem 1.2rem;
+  padding: 1.25rem;
+  background-color: var(--surface-alt);
 }
 
 .backLink {
   color: var(--accent);
+  font-size: 0.98rem;
   font-weight: 700;
 }
 
 .card {
-  display: grid;
-  justify-items: center;
-  gap: 1.25rem;
-  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.75rem;
   text-align: center;
+  background-color: var(--surface);
 }
 
 .eyebrow {
   display: inline-flex;
   color: var(--accent);
-  font-size: 0.78rem;
+  font-size: 0.82rem;
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -59,11 +63,12 @@
 
 .notice {
   width: min(100%, 38rem);
-  padding: 0.95rem 1rem;
-  border: 1px solid rgba(11, 94, 215, 0.16);
+  padding: 1rem 1.1rem;
+  border: 1px solid rgba(33, 88, 183, 0.16);
   border-radius: var(--radius-md);
-  background-color: rgba(11, 94, 215, 0.06);
+  background-color: var(--surface-accent);
   color: var(--text-primary);
+  font-size: 1rem;
   font-weight: 600;
   line-height: 1.65;
 }
@@ -75,11 +80,11 @@
 }
 
 .qrFrame {
-  padding: 1.2rem;
+  padding: 1.35rem;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  background-color: #ffffff;
-  box-shadow: inset 0 0 0 0.35rem rgba(11, 94, 215, 0.04);
+  background-color: var(--surface-alt);
+  box-shadow: inset 0 0 0 0.35rem rgba(33, 88, 183, 0.04);
 }
 
 .qrFrame :global(svg) {
@@ -101,7 +106,7 @@
 }
 
 .detailList dt {
-  font-size: 0.78rem;
+  font-size: 0.86rem;
   font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -109,6 +114,7 @@
 
 .detailList dd {
   color: var(--text-primary);
+  font-size: 1rem;
   font-weight: 600;
   line-height: 1.7;
   word-break: break-word;

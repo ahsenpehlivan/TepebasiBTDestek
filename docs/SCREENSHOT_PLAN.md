@@ -12,31 +12,31 @@ Bu plan, staj sunumu ve staj raporu icin alinacak ekran goruntulerinin kapsamini
 
 | Ekran | Onerilen Dosya Adi | Rapor Bolumu | Kanitladigi Ozellik |
 | --- | --- | --- | --- |
-| Dashboard genel gorunumu | `01-dashboard-overview.png` | Web yonetim paneli | Role guard sonrasi gercek count kartlari ve panel girisi |
-| Login ekrani | `02-login-screen.png` | Kimlik dogrulama | SSR login giris formu ve demo kullanim siniri |
+| Dashboard genel gorunumu | `01-dashboard-overview.png` | Web yonetim paneli | Role guard sonrası gerçek count kartları ve panel girişi |
+| Login ekrani | `02-login-screen.png` | Kimlik dogrulama | SSR login giriş formu ve demo kullanım siniri |
 | Access denied ekrani | `03-access-denied.png` | Yetkilendirme | Employee hesabinin web panelden engellenmesi |
 | Ticket listesi filtreli gorunum | `04-ticket-list-filtered.png` | Ticket yonetimi | Server-side filtreleme ve responsive liste/kart yapisi |
-| Ticket detay ve ic not | `05-ticket-detail-internal-comment.png` | Ticket detay akisi | Public/internal comment ayrimi ve durum gecmisi |
-| Device listesi filtreli gorunum | `06-device-list-filtered.png` | Cihaz envanteri | Device filtreleri, durum etiketleri ve aktif/pasif ayrimi |
-| Device detay ekrani | `07-device-detail.png` | Cihaz detay akisi | Teknik bilgiler, guvenli QR ozeti ve bakim gecmisi |
+| Ticket detay ve iç not | `05-ticket-detail-internal-comment.png` | Ticket detay akisi | Public/internal comment ayrimi ve durum gecmisi |
+| Device listesi filtreli gorunum | `06-device-list-filtered.png` | Cihaz envanteri | Device filtreleri, durum etiketleri ve aktif/pasif ayrımı |
+| Device detay ekrani | `07-device-detail.png` | Cihaz detay akisi | Teknik bilgiler, guvenli QR ozeti ve bakım geçmişi |
 | Device duzenleme formu | `08-device-edit-form.png` | Cihaz form akislari | Zorunlu alanlar, yardim metinleri ve form tutarliligi |
 | QR preview ekrani | `09-device-qr-preview.png` | QR akisi | Sunuma uygun QR gorunumu ve demo uyari metni |
-| Maintenance record bolumu | `10-device-maintenance.png` | Bakim kayitlari | Bakim listesi ve kayit ekleme alani |
+| Maintenance record bolumu | `10-device-maintenance.png` | Bakım kayıtları | Bakım geçmişi ve kayıt ekleme alanı |
 | Test veya smoke test kaniti | `11-test-results.png` | Dogrulama ve testler | Lint, build, smoke test veya route dogrulama ciktilari |
 
 ## Onerilen Sunum Sirasi
 
 | Sira | Onerilen Dosya Adi | Demo Adimi | Kanitladigi Ozellik |
 | --- | --- | --- | --- |
-| 1 | `02-login-screen.png` | Login | SSR auth giris ekrani |
-| 2 | `01-dashboard-overview.png` | Dashboard | Gercek count kartlari ve panel girisi |
+| 1 | `02-login-screen.png` | Login | SSR auth giriş ekrani |
+| 2 | `01-dashboard-overview.png` | Dashboard | Gerçek count kartları ve panel girişi |
 | 3 | `04-ticket-list-filtered.png` | Ticket listesi ve filtre | Server-side filtreleme |
 | 4 | `05-ticket-detail-internal-comment.png` | Ticket detay, atama, durum ve internal not | Ticket yasam dongusu ve yorum ayrimi |
 | 5 | `06-device-list-filtered.png` | Device listesi | Envanter filtreleme ve durum gorunumu |
-| 6 | `07-device-detail.png` | Device detay | Cihazi kullanan personel ile teknik atama ayrimi |
+| 6 | `07-device-detail.png` | Device detay | Cihazı kullanan personel ile teknik atama ayrımı |
 | 7 | `08-device-edit-form.png` | Device duzenleme | Form ve zimmetli personel kavrami |
 | 8 | `09-device-qr-preview.png` | QR preview | Guvenli QR yaklasimi |
-| 9 | `10-device-maintenance.png` | Maintenance record | Bakim gecmisi ve cihaz takibi |
+| 9 | `10-device-maintenance.png` | Maintenance record | Bakım geçmişi ve cihaz takibi |
 | 10 | `03-access-denied.png` | Access denied | Employee panel kisiti |
 | 11 | `11-test-results.png` | RLS/test kaniti | Lint, build ve test dogrulamasi |
 
@@ -47,3 +47,10 @@ Bu plan, staj sunumu ve staj raporu icin alinacak ekran goruntulerinin kapsamini
 - QR preview ekraninda yazdirma butonu ve demo uyarisi birlikte gorunecek sekilde cekim alin.
 - Test sonucu ekran goruntulerinde secret veya `.env.local` icerigi yer almamalidir.
 - `docs/MVP_DEMO_SCENARIO.md` icindeki sira ile uyumlu kalin.
+
+## Erisilebilir Tasarim Notu
+
+- Ekran goruntulerinde buyuk butonlar, ferah form alanlari ve rahat okunur yazi boyutlari korunmalidir.
+- Durum ve oncelik etiketleri sadece renk lekesi gibi kalmamali; metinleri de net secilmelidir.
+- Login, access denied ve auth error ekranlari korkutucu veya asiri teknik gorunmemelidir.
+- Dashboard, ticket ve device ekranlarinda fazla beyaz gorunum yerine yumusak section ayrimlari ve kart baslik hiyerarsisi gorunur olmalidir.

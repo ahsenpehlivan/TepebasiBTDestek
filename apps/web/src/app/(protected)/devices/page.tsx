@@ -37,7 +37,7 @@ export default async function DevicesPage({ searchParams }: DevicesPageProps) {
       <PageHeader
         eyebrow="Envanter Paneli"
         title="Cihaz Envanteri"
-        description="Bu sayfa veriyi dogrudan Supabase `devices` tablosundan okur. Liste asset tag sirasiyla gelir ve filtreler server-side sorguya uygulanir."
+        description="Bu sayfa cihaz kayıtlarını doğrudan sistem listesinden okur. Arama ve filtreleme alanları ile envanteri kolayca daraltabilirsiniz."
         actions={
           <Link href="/devices/new" className={styles.primaryLink}>
             Yeni Cihaz Ekle
@@ -50,11 +50,11 @@ export default async function DevicesPage({ searchParams }: DevicesPageProps) {
           <div>
             <h2>Arama ve filtreleme</h2>
             <p>
-              Asset tag, marka veya model ile arama yapabilir; cihaz tipi, durum ve
-              departman bazinda envanteri daraltabilirsiniz.
+              Demirbaş kodu, marka veya model ile arama yapabilir; cihaz türü, durum
+              ve birime göre envanteri daraltabilirsiniz.
             </p>
           </div>
-          <span className={styles.limitHint}>Liste limiti: ilk {limit} kayit</span>
+          <span className={styles.limitHint}>Gösterilen kayıt: ilk {limit} cihaz</span>
         </div>
 
         <DeviceFilterForm departments={departments} filters={filters} />
@@ -63,20 +63,20 @@ export default async function DevicesPage({ searchParams }: DevicesPageProps) {
       {hasError ? (
         <StateCard
           tone="error"
-          title="Envanter listesi su anda yuklenemedi"
-          description="Cihaz sorgusu basarisiz oldu. Supabase baglanti ayarlarini ve veritabani erisimini kontrol ettikten sonra sayfayi yenileyin."
+          title="Cihaz listesi şu anda açılamadı"
+          description="Veri geçici olarak okunamadı. Biraz sonra sayfayı yenileyerek tekrar deneyin."
         />
       ) : devices.length === 0 ? (
         <StateCard
           title={
             hasActiveFilters
-              ? "Secilen filtrelerle eslesen cihaz bulunamadi."
-              : "Henuz cihaz envanteri kaydi bulunmuyor."
+              ? "Seçilen filtrelerle eşleşen cihaz bulunamadı."
+              : "Henüz cihaz envanteri kaydı bulunmuyor."
           }
           description={
             hasActiveFilters
               ? "Filtreleri temizleyip envanteri yeniden deneyin."
-              : "Demo cihaz seed kayitlari veya technician/admin tarafindan acilan yeni envanter kayitlari burada listelenecektir."
+              : "Demo cihaz kayıtları veya yeni eklenen envanter kayıtları burada listelenecektir."
           }
         />
       ) : (

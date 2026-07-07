@@ -25,10 +25,13 @@ export function PanelShell({ profile, children }: PanelShellProps) {
       <header className={styles.header}>
         <div className={styles.headerInner}>
           <div className={styles.brandBlock}>
-            <span className={styles.eyebrow}>Tepebasi BT Destek</span>
+            <span className={styles.eyebrow}>Tepebaşı BT Destek</span>
             <Link href="/" className={styles.title}>
-              Yonetici ve Teknik Personel Paneli
+              Belediye Bilgi İşlem Paneli
             </Link>
+            <p className={styles.subtitle}>
+              Teknik ekip ve yönetici kullanımı için sade web paneli
+            </p>
           </div>
 
           <PanelNav items={navigationItems} />

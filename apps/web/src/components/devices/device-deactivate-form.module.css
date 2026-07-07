@@ -1,18 +1,22 @@
 .card {
-  display: grid;
-  gap: 0.8rem;
-  padding: 1.2rem;
-  border: 1px solid rgba(194, 65, 65, 0.18);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  background-color: rgba(194, 65, 65, 0.05);
+  background-color: var(--surface);
+  box-shadow: var(--shadow-sm);
 }
 
 .card h3 {
   color: var(--text-primary);
+  font-size: 1.08rem;
 }
 
 .card p {
   color: var(--text-secondary);
+  font-size: 1rem;
   line-height: 1.7;
 }
 
@@ -29,52 +33,66 @@
 
 .fieldHint {
   color: var(--text-secondary);
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   font-weight: 500;
   line-height: 1.5;
 }
 
-.field input {
+.field input,
+.field select,
+.field textarea {
   width: 100%;
-  padding: 0.8rem 0.9rem;
-  border: 1px solid rgba(194, 65, 65, 0.22);
+  min-height: 48px;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  background-color: #fffafa;
+  background-color: var(--surface);
   color: var(--text-primary);
   font: inherit;
 }
 
+.field textarea {
+  min-height: 8rem;
+}
+
 .dangerButton {
-  min-height: 2.9rem;
-  border: 0;
-  border-radius: var(--radius-pill);
+  min-height: 48px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
   background-color: var(--danger);
-  color: #ffffff;
+  color: var(--text-on-primary);
   font: inherit;
-  font-weight: 700;
+  font-size: 0.95rem;
+  font-weight: 600;
   cursor: pointer;
+}
+
+.dangerButton:hover,
+.dangerButton:focus-visible {
+  background-color: #991b1b;
 }
 
 .dangerButton:disabled {
   cursor: not-allowed;
-  opacity: 0.75;
+  opacity: 0.7;
 }
 
 .errorMessage,
 .successMessage {
-  padding: 0.8rem 0.95rem;
+  padding: 1rem;
   border-radius: var(--radius-md);
-  line-height: 1.55;
+  line-height: 1.5;
+  font-size: 0.95rem;
 }
 
 .errorMessage {
-  border: 1px solid rgba(194, 65, 65, 0.2);
-  background-color: rgba(194, 65, 65, 0.08);
+  border: 1px solid var(--danger);
+  background-color: var(--danger-bg);
   color: var(--danger);
 }
 
 .successMessage {
-  border: 1px solid rgba(45, 138, 75, 0.16);
-  background-color: rgba(45, 138, 75, 0.08);
+  border: 1px solid var(--success);
+  background-color: var(--success-bg);
   color: var(--success);
 }

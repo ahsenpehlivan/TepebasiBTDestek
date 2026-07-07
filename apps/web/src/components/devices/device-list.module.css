@@ -1,5 +1,5 @@
 .tableCard {
-  display: block;
+  padding: 1.5rem;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   background-color: var(--surface);
@@ -18,18 +18,20 @@
 
 .table th,
 .table td {
-  padding: 0.95rem 1rem;
+  padding: 1rem 1rem;
   border-bottom: 1px solid var(--border);
   text-align: left;
   vertical-align: top;
+  font-size: 0.98rem;
 }
 
 .table th {
   color: var(--text-secondary);
-  font-size: 0.78rem;
+  font-size: 0.84rem;
   font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  background-color: var(--surface-muted);
 }
 
 .table tbody tr:last-child td {
@@ -41,18 +43,15 @@
 }
 
 .titleLink,
-.cardTitle,
-.detailLink {
-  color: var(--accent);
+.cardTitle {
+  color: var(--text-primary);
   font-weight: 700;
 }
 
 .titleLink:hover,
 .cardTitle:hover,
-.detailLink:hover,
 .titleLink:focus-visible,
-.cardTitle:focus-visible,
-.detailLink:focus-visible {
+.cardTitle:focus-visible {
   text-decoration: underline;
 }
 
@@ -66,31 +65,30 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 1.95rem;
-  padding: 0.2rem 0.75rem;
+  padding: 0.25rem 0.75rem;
   border-radius: var(--radius-pill);
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   font-weight: 700;
+  white-space: nowrap;
 }
 
 .badge[data-kind="status"][data-value="active"] {
-  background-color: rgba(45, 138, 75, 0.12);
+  background-color: var(--success-bg);
   color: var(--success);
 }
 
-.badge[data-kind="status"][data-value="in_repair"] {
-  background-color: rgba(183, 121, 31, 0.14);
+.badge[data-kind="status"][data-value="maintenance"] {
+  background-color: var(--warning-bg);
   color: var(--warning);
 }
 
-.badge[data-kind="status"][data-value="spare"] {
-  background-color: rgba(11, 94, 215, 0.1);
-  color: var(--accent);
+.badge[data-kind="status"][data-value="retired"] {
+  background-color: var(--surface-muted);
+  color: var(--text-primary);
 }
 
-.badge[data-kind="status"][data-value="retired"],
 .badge[data-kind="status"][data-value="lost"] {
-  background-color: rgba(194, 65, 65, 0.12);
+  background-color: var(--danger-bg);
   color: var(--danger);
 }
 
@@ -109,12 +107,13 @@
 }
 
 .deviceCard {
-  display: grid;
-  gap: 0.9rem;
-  padding: 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+  background-color: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  background-color: var(--surface);
   box-shadow: var(--shadow-sm);
 }
 
@@ -136,18 +135,20 @@
 }
 
 .deviceType {
-  font-size: 0.9rem;
+  font-size: 0.96rem;
   font-weight: 700;
 }
 
-.brandModel {
-  color: var(--text-primary);
-  font-size: 1.05rem;
+.brandModel,
+.cardTitle {
+  font-size: 1.2rem;
+  line-height: 1.4;
   font-weight: 700;
 }
 
 .inactiveNote {
   color: var(--text-secondary);
+  font-size: 0.98rem;
   line-height: 1.6;
 }
 
@@ -162,7 +163,7 @@
 }
 
 .detailList dt {
-  font-size: 0.78rem;
+  font-size: 0.86rem;
   font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -170,11 +171,30 @@
 
 .detailList dd {
   color: var(--text-primary);
+  font-size: 0.98rem;
   font-weight: 600;
 }
 
 .detailLink {
+  display: inline-flex;
   width: fit-content;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.5rem 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background-color: var(--surface);
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.detailLink:hover,
+.detailLink:focus-visible {
+  border-color: var(--border-strong);
+  background-color: var(--surface-subtle);
+  text-decoration: none;
 }
 
 @media (max-width: 900px) {

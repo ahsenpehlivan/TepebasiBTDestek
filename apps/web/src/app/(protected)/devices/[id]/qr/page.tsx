@@ -43,14 +43,14 @@ export default async function DeviceQrPage({ params }: DeviceQrPageProps) {
     <div className={styles.page}>
       <section className={styles.toolbar}>
         <Link href={`/devices/${device.id}`} className={styles.backLink}>
-          Cihaz detayina don
+          Cihaz detayına dön
         </Link>
         <PrintButton />
       </section>
 
       <section className={styles.card}>
         <div className={styles.header}>
-          <span className={styles.eyebrow}>QR Onizleme</span>
+          <span className={styles.eyebrow}>QR Önizleme</span>
           <h1>{device.assetTag}</h1>
           <p>
             {deviceTypeLabels[device.deviceType]} - {device.brand} {device.model}
@@ -58,8 +58,8 @@ export default async function DeviceQrPage({ params }: DeviceQrPageProps) {
         </div>
 
         <div className={styles.notice}>
-          Bu QR yalnizca demo/prototip amaclidir. Icerikte gercek seri numarasi,
-          IP, MAC veya kullanici bilgisi bulunmaz.
+          Bu QR yalnızca demo kullanım içindir. İçerikte gerçek seri numarası, IP,
+          MAC veya personel bilgisi bulunmaz.
         </div>
 
         <div className={styles.qrWrap}>
@@ -71,10 +71,10 @@ export default async function DeviceQrPage({ params }: DeviceQrPageProps) {
 
         <dl className={styles.detailList}>
           <div>
-            <dt>Kullanim</dt>
+            <dt>Kullanım</dt>
             <dd>
-              Sunum veya demo sirasinda cihaz etiketini gostermek ve korumali route
-              mantigini anlatmak icin kullanilir.
+              Sunum veya demo sırasında cihaz etiketini göstermek ve korumalı route
+              mantığını anlatmak için kullanılır.
             </dd>
           </div>
           <div>
@@ -82,14 +82,14 @@ export default async function DeviceQrPage({ params }: DeviceQrPageProps) {
             <dd>{payload}</dd>
           </div>
           <div>
-            <dt>QR Token Ozeti</dt>
+            <dt>QR Token Özeti</dt>
             <dd>{getQrTokenPreview(device.qrToken)}</dd>
           </div>
           <div>
-            <dt>Yazdirma Notu</dt>
+            <dt>Yazdırma Notu</dt>
             <dd>
-              Yazdirma gorunumunde ust arac cubugu gizlenir ve merkezde tek bir QR
-              karti birakilir.
+              Yazdırma görünümünde üst araç çubuğu gizlenir ve merkezde tek bir QR
+              kartı görünür.
             </dd>
           </div>
         </dl>

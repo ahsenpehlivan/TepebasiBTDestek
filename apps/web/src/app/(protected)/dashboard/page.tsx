@@ -25,12 +25,12 @@ export default async function DashboardPage() {
     <div className={styles.page}>
       <section className={styles.hero}>
         <div className={styles.heroCopy}>
-          <span className={styles.eyebrow}>Canli Web Paneli</span>
-          <h1>Hos geldiniz, {authState.profile.fullName}</h1>
+          <span className={styles.eyebrow}>Canlı Yönetim Paneli</span>
+          <h1>Hoş geldiniz, {authState.profile.fullName}</h1>
           <p>
-            Giris yapan kullanicinin rolu, aktiflik durumu ve profil kaydi
-            sunucu tarafinda dogrulanir. Bu alan gercek Supabase oturumu ile
-            acilmistir.
+            Giriş yapan kullanıcının rolü ve panel yetkisi sunucu tarafında
+            doğrulanır. Bu alan gerçek oturum bilgisiyle açılır ve günlük iş
+            takibini sade bir görünümde sunar.
           </p>
         </div>
 
@@ -43,17 +43,17 @@ export default async function DashboardPage() {
             </div>
             <div>
               <dt>E-posta</dt>
-              <dd>{authState.profile.email ?? "Tanimsiz"}</dd>
+              <dd>{authState.profile.email ?? "Tanımsız"}</dd>
             </div>
             <div>
               <dt>Birim</dt>
-              <dd>{authState.profile.departmentName ?? "Henuz atanmadi"}</dd>
+              <dd>{authState.profile.departmentName ?? "Henüz atanmadı"}</dd>
             </div>
           </dl>
         </aside>
       </section>
 
-      <section className={styles.statsGrid} aria-label="Ticket sayaclari">
+      <section className={styles.statsGrid} aria-label="Talep sayaçları">
         {stats.map((item) => (
           <StatusCard key={item.label} item={item} />
         ))}
@@ -62,8 +62,8 @@ export default async function DashboardPage() {
       {hasStatsError ? (
         <StateCard
           tone="error"
-          title="Bazi dashboard verileri alinamadi"
-          description="Sayaclarin bir kismi gecici olarak okunamadi. Panelin kalan bolumleri kullanilmaya devam edebilir; islem oncesi sayfayi yenileyerek veriyi tekrar deneyin."
+          title="Bazı dashboard verileri alınamadı"
+          description="Sayaçların bir kısmı geçici olarak okunamadı. Panelin kalan bölümleri kullanılmaya devam edebilir; işlem öncesi sayfayı yenileyerek veriyi tekrar deneyin."
         />
       ) : null}
 
@@ -71,23 +71,23 @@ export default async function DashboardPage() {
         <article className={styles.primaryCard}>
           <div className={styles.sectionHeader}>
             <div>
-              <span className={styles.sectionEyebrow}>Gercek Veri</span>
-              <h2>Ticket ve cihaz akisina gecin</h2>
+              <span className={styles.sectionEyebrow}>Gerçek Veri</span>
+              <h2>Talep ve cihaz kayıtlarına geçin</h2>
             </div>
           </div>
 
           <p>
-            Sayfa ustundeki sayaclar `tickets` ve `devices` tablolarindan
-            beslenir. Ticket listesi ve cihaz envanteri korumali panel
-            icinden gercek Supabase oturumu ile acilir.
+            Sayfa üstündeki sayaçlar `tickets` ve `devices` tablolarından
+            beslenir. Talep listesi ve cihaz envanteri aynı panel içinden kolayca
+            açılabilir.
           </p>
 
           <div className={styles.actionGroup}>
             <Link href="/tickets" className={styles.primaryAction}>
-              Ticket Listesini Ac
+              Talepleri Gör
             </Link>
             <Link href="/devices" className={styles.secondaryAction}>
-              Cihaz Envanterini Ac
+              Cihazları Gör
             </Link>
           </div>
         </article>
@@ -96,16 +96,16 @@ export default async function DashboardPage() {
           <div className={styles.sectionHeader}>
             <div>
               <span className={styles.sectionEyebrow}>Kapsam Notu</span>
-              <h2>Bu asamada korunan alanlar</h2>
+              <h2>Bu panelde neler hazır?</h2>
             </div>
           </div>
 
           <ul className={styles.scopeList}>
-            <li>SSR login ve logout akisi</li>
-            <li>Profile tablosundan rol cozumleme</li>
-            <li>Technician ve admin icin protected route yapisi</li>
-            <li>Gercek ticket listeleme, detay ve yorum akislari</li>
-            <li>Gercek cihaz listeleme, QR onizleme ve bakim kayitlari</li>
+            <li>SSR login ve logout akışı</li>
+            <li>Profile tablosundan rol çözümleme</li>
+            <li>Teknik personel ve yönetici için korunan route yapısı</li>
+            <li>Gerçek talep listeleme, detay ve yorum akışları</li>
+            <li>Gerçek cihaz listeleme, QR önizleme ve bakım kayıtları</li>
           </ul>
         </article>
       </section>

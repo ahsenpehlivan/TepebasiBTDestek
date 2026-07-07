@@ -46,12 +46,12 @@ export function DeviceMaintenanceForm({
 
   return (
     <article className={styles.card}>
-      <h3>Bakim kaydi ekle</h3>
+      <h3>Bakım kaydı ekle</h3>
       <form ref={formRef} action={formAction} className={styles.form}>
         <input type="hidden" name="deviceId" value={deviceId} />
 
         <label className={styles.field}>
-          <span>Bakim tipi</span>
+          <span>Bakım tipi</span>
           <select name="maintenanceType" defaultValue="inspection">
             {maintenanceTypeOptions.map((maintenanceType) => (
               <option key={maintenanceType} value={maintenanceType}>
@@ -62,24 +62,24 @@ export function DeviceMaintenanceForm({
         </label>
 
         <label className={styles.field}>
-          <span>Bakim aciklamasi</span>
+          <span>Bakım açıklaması</span>
           <textarea
             name="description"
             rows={4}
-            placeholder="Yapilan kontrol, onarim veya guncelleme notunu yazin."
+            placeholder="Yapılan kontrol, onarım veya güncelleme notunu yazın."
             required
           />
           <small className={styles.fieldHint}>
-            Bos birakilamaz. Aciklama teknik ekibin sonradan takip edebilecegi kadar
-            net olmalidir.
+            Boş bırakılamaz. Açıklama teknik ekibin sonradan takip edebileceği kadar
+            net olmalıdır.
           </small>
         </label>
 
         <div className={styles.inlineGrid}>
           <label className={styles.field}>
-            <span>Ilgili ticket</span>
+            <span>İlgili talep</span>
             <select name="relatedTicketId" defaultValue="">
-              <option value="">Ticket baglama</option>
+              <option value="">Talep bağlama</option>
               {relatedTickets.map((ticket) => (
                 <option key={ticket.id} value={ticket.id}>
                   #{ticket.ticketNumber} - {ticket.title}
@@ -95,11 +95,11 @@ export function DeviceMaintenanceForm({
         </div>
 
         <label className={styles.field}>
-          <span>Kullanilan parcilar</span>
+          <span>Kullanılan parçalar</span>
           <input
             type="text"
             name="partsUsed"
-            placeholder="Ornek: Demo toner seti, SSD yukseltmesi"
+            placeholder="Örnek: Demo toner seti, SSD yükseltmesi"
           />
         </label>
 
@@ -114,7 +114,7 @@ export function DeviceMaintenanceForm({
           </p>
         ) : null}
         <button type="submit" className={styles.primaryButton} disabled={pending}>
-          {pending ? "Bakim kaydediliyor..." : "Bakim Kaydini Ekle"}
+          {pending ? "Bakım kaydediliyor..." : "Bakım Kaydını Ekle"}
         </button>
       </form>
     </article>

@@ -12,7 +12,7 @@ Bu turde gerceklesenler:
 - Demo profile kayitlari remote projede rol ve department bazinda kontrol edildi.
 - Web uygulamasi remote public env ile calistirildi.
 - Browser uzerinden login, logout, protected route ve auth hata akislari gercek session ile test edildi.
-- Gecici runtime auth kullanicilari sadece test icin olusturuldu ve test sonunda silindi.
+- Gecici runtime auth kullanicilari sadece test icin oluşturuldu ve test sonunda silindi.
 
 Bu belge, bundan sonraki remote validation tekrarlarinda izlenecek guvenli sirayi tanimlar.
 
@@ -31,8 +31,8 @@ npx supabase status
 
 Asagidaki kosullar saglanmadan `link` veya `db push` yapilmaz:
 
-- `db reset` basarili
-- Seed basarili
+- `db reset` başarılı
+- Seed başarılı
 - Gerekli smoke testler calisti
 
 ## 2. CLI Login ve Link
@@ -49,7 +49,7 @@ npx supabase link --project-ref <project-ref>
 Kurallar:
 
 - Project ref kod icine yazilmaz
-- CLI login yoksa islem durdurulur
+- CLI login yoksa işlem durdurulur
 - Gercek kurum projesi yerine yalnizca gelistirme icin acilmis bos proje kullanilir
 
 ## 3. Remote Migration Gonderimi

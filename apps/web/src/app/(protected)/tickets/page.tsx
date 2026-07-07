@@ -26,9 +26,9 @@ export default async function TicketsPage({ searchParams }: TicketsPageProps) {
   return (
     <div className={styles.page}>
       <PageHeader
-        eyebrow="RLS Tabanli Liste"
+        eyebrow="Talep Listesi"
         title="Teknik Destek Talepleri"
-        description="Bu sayfa veriyi dogrudan Supabase `tickets` tablosundan okur. Filtreler server-side sorguya uygulanir ve kayitlar en yeni olusturulandan eskiye dogru siralanir."
+        description="Bu sayfa talepleri doğrudan sistem kayıtlarından okur. Arama ve filtreleme alanları ile listeyi kolayca daraltabilirsiniz."
       />
 
       <section className={styles.filterCard}>
@@ -36,11 +36,11 @@ export default async function TicketsPage({ searchParams }: TicketsPageProps) {
           <div>
             <h2>Arama ve filtreleme</h2>
             <p>
-              Baslik veya tam ticket numarasi ile arama yapabilir; durum, oncelik ve
-              kategori bazinda listeyi daraltabilirsiniz.
+              Talep başlığı veya talep numarası ile arama yapabilir; durum,
+              öncelik ve kategoriye göre listeyi daraltabilirsiniz.
             </p>
           </div>
-          <span className={styles.limitHint}>Liste limiti: ilk {limit} kayit</span>
+          <span className={styles.limitHint}>Gösterilen kayıt: ilk {limit} talep</span>
         </div>
 
         <TicketFilterForm filters={filters} />
@@ -49,20 +49,20 @@ export default async function TicketsPage({ searchParams }: TicketsPageProps) {
       {hasError ? (
         <StateCard
           tone="error"
-          title="Liste su anda yuklenemedi"
-          description="Ticket sorgusu basarisiz oldu. Supabase baglanti ayarlarini ve veritabani erisimini kontrol ettikten sonra sayfayi yenileyin."
+          title="Talep listesi şu anda açılamadı"
+          description="Veri geçici olarak okunamadı. Biraz sonra sayfayı yenileyerek tekrar deneyin."
         />
       ) : tickets.length === 0 ? (
         <StateCard
           title={
             hasActiveFilters
-              ? "Secilen filtrelerle eslesen ticket bulunamadi."
-              : "Henuz teknik destek talebi bulunmuyor."
+              ? "Seçilen filtrelerle eşleşen talep bulunamadı."
+              : "Henüz teknik destek talebi bulunmuyor."
           }
           description={
             hasActiveFilters
               ? "Filtreleri temizleyip listeyi yeniden deneyin."
-              : "Kontrollu demo ticket verileri uygulandiginda kayitlar burada listelenecektir."
+              : "Demo talep kayıtları oluştuğunda burada listelenecektir."
           }
         />
       ) : (

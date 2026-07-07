@@ -40,10 +40,10 @@ export function DeviceDeactivateForm({
 
   return (
     <article className={styles.card}>
-      <h3>Cihazi pasife al</h3>
+      <h3>Cihazı pasife al</h3>
       <p>
-        Hard delete uygulanmaz. Bu islem cihaz kaydini pasif ve `retired`
-        durumuna alir.
+        Hard delete uygulanmaz. Bu işlem cihaz kaydını pasif ve `retired`
+        durumuna alır.
       </p>
 
       <form action={formAction} className={styles.form}>
@@ -58,8 +58,8 @@ export function DeviceDeactivateForm({
             disabled={disabled}
           />
           <small className={styles.fieldHint}>
-            Yanlislikla pasife alma riskini azaltmak icin onay metnini eksiksiz
-            yazin.
+            Yanlışlıkla pasife alma riskini azaltmak için onay metnini eksiksiz
+            yazın.
           </small>
         </label>
 
@@ -79,7 +79,7 @@ export function DeviceDeactivateForm({
           className={styles.dangerButton}
           disabled={disabled || pending}
         >
-          {pending ? "Pasife aliniyor..." : "Pasife Al"}
+          {pending ? "Pasife alınıyor..." : "Pasife Al"}
         </button>
       </form>
     </article>

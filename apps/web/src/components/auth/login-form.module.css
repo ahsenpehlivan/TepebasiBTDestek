@@ -1,11 +1,13 @@
 .form {
-  display: grid;
-  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
 }
 
 .field {
-  display: grid;
-  gap: 0.45rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
   color: var(--text-primary);
   font-weight: 600;
 }
@@ -15,35 +17,38 @@
 }
 
 .field input {
-  min-height: 3rem;
-  padding: 0.8rem 0.95rem;
+  min-height: 48px;
+  padding: 0.75rem 1rem;
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  background-color: #fbfcfe;
+  background-color: var(--surface);
   color: var(--text-primary);
   font: inherit;
+  font-weight: 400;
 }
 
 .field input:focus-visible {
-  outline: 2px solid rgba(11, 94, 215, 0.2);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
   border-color: var(--accent);
 }
 
 .submit {
-  min-height: 3rem;
+  min-height: 48px;
   border: 0;
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-md);
   background-color: var(--accent);
-  color: #ffffff;
+  color: var(--text-on-primary);
   font: inherit;
+  font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
+  margin-top: 0.5rem;
 }
 
 .submit:hover,
 .submit:focus-visible {
-  background-color: #094fb7;
+  background-color: var(--accent-strong);
 }
 
 .submit:disabled {
@@ -53,14 +58,17 @@
 
 .helper {
   color: var(--text-secondary);
+  font-size: 0.98rem;
   line-height: 1.65;
 }
 
 .error {
-  padding: 0.9rem 1rem;
-  border: 1px solid rgba(194, 65, 65, 0.2);
+  padding: 1rem;
+  border: 1px solid var(--danger);
   border-radius: var(--radius-md);
-  background-color: rgba(194, 65, 65, 0.08);
+  background-color: var(--danger-bg);
   color: var(--danger);
-  line-height: 1.55;
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.5;
 }

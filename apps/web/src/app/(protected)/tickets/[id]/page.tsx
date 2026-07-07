@@ -56,11 +56,11 @@ export default async function TicketDetailPage({
     return (
       <StateCard
         tone="error"
-        title="Ticket detayi su anda yuklenemedi"
-        description="Ticket detayi okunurken bir sorun olustu. Supabase erisimini kontrol edip sayfayi yenileyin."
+        title="Talep detayı şu anda açılamadı"
+        description="Talep kaydı geçici olarak okunamadı. Biraz sonra sayfayı yenileyerek tekrar deneyin."
         action={
           <Link href="/tickets" className={styles.backLink}>
-            Ticket listesine don
+            Talep listesine dön
           </Link>
         }
       />
@@ -75,12 +75,12 @@ export default async function TicketDetailPage({
     <div className={styles.page}>
       <section className={styles.heroCard}>
         <Link href="/tickets" className={styles.backLink}>
-          Ticket listesine don
+          Talep listesine dön
         </Link>
 
         <div className={styles.heroHeader}>
           <div>
-            <span className={styles.eyebrow}>Ticket Detayi</span>
+            <span className={styles.eyebrow}>Talep Detayı</span>
             <h1>
               #{ticket.ticketNumber} - {ticket.title}
             </h1>
@@ -89,21 +89,21 @@ export default async function TicketDetailPage({
 
           <div className={styles.badgeRow}>
             <DetailBadge label="Durum" value={ticket.status} kind="status" />
-            <DetailBadge label="Oncelik" value={ticket.priority} kind="priority" />
+            <DetailBadge label="Öncelik" value={ticket.priority} kind="priority" />
           </div>
         </div>
       </section>
 
       <section className={styles.grid}>
         <article className={styles.card}>
-          <h2>Ticket Ozeti</h2>
+          <h2>Talep Özeti</h2>
           <dl className={styles.detailList}>
             <div>
               <dt>Kategori</dt>
               <dd>{getTicketCategoryLabel(ticket.category)}</dd>
             </div>
             <div>
-              <dt>Olusturan</dt>
+              <dt>Oluşturan</dt>
               <dd>{ticket.createdByName ?? "Belirsiz"}</dd>
             </div>
             <div>
@@ -112,18 +112,18 @@ export default async function TicketDetailPage({
             </div>
             <div>
               <dt>Atanan Teknik Personel</dt>
-              <dd>{ticket.assignedToName ?? "Atanmamis"}</dd>
+              <dd>{ticket.assignedToName ?? "Atanmamış"}</dd>
             </div>
             <div>
-              <dt>Olusturulma</dt>
+              <dt>Oluşturulma</dt>
               <dd>{formatTicketDateTime(ticket.createdAt)}</dd>
             </div>
             <div>
-              <dt>Son Guncelleme</dt>
+              <dt>Son Güncelleme</dt>
               <dd>{formatTicketDateTime(ticket.updatedAt)}</dd>
             </div>
             <div>
-              <dt>Atama Zamani</dt>
+              <dt>Atama Zamanı</dt>
               <dd>{ticket.assignedAt ? formatTicketDateTime(ticket.assignedAt) : "Yok"}</dd>
             </div>
             <div>
@@ -131,24 +131,24 @@ export default async function TicketDetailPage({
               <dd>{ticket.dueAt ? formatTicketDateTime(ticket.dueAt) : "Belirtilmedi"}</dd>
             </div>
             <div>
-              <dt>Cozum Zamani</dt>
+              <dt>Çözüm Zamanı</dt>
               <dd>
                 {ticket.resolvedAt ? formatTicketDateTime(ticket.resolvedAt) : "Yok"}
               </dd>
             </div>
             <div>
-              <dt>Kapanis Zamani</dt>
+              <dt>Kapanış Zamanı</dt>
               <dd>{ticket.closedAt ? formatTicketDateTime(ticket.closedAt) : "Yok"}</dd>
             </div>
           </dl>
         </article>
 
         <article className={styles.card}>
-          <h2>Cihaz Ozeti</h2>
+          <h2>Cihaz Özeti</h2>
           {ticket.device ? (
             <dl className={styles.detailList}>
               <div>
-                <dt>Envanter Etiketi</dt>
+                <dt>Demirbaş Kodu</dt>
                 <dd>{ticket.device.assetTag}</dd>
               </div>
               <div>
@@ -158,7 +158,7 @@ export default async function TicketDetailPage({
                 </dd>
               </div>
               <div>
-                <dt>Cihaz Tipi</dt>
+                <dt>Cihaz Türü</dt>
                 <dd>{deviceTypeLabels[ticket.device.deviceType]}</dd>
               </div>
               <div>
@@ -172,7 +172,7 @@ export default async function TicketDetailPage({
             </dl>
           ) : (
             <p className={styles.helperText}>
-              Bu ticket icin iliskili cihaz kaydi bulunmuyor.
+              Bu talep için ilişkili cihaz kaydı bulunmuyor.
             </p>
           )}
         </article>
@@ -189,18 +189,18 @@ export default async function TicketDetailPage({
         <article className={styles.card}>
           <h2>Yorumlar</h2>
           {comments.length === 0 ? (
-            <p className={styles.helperText}>Bu ticket icin henuz yorum bulunmuyor.</p>
+            <p className={styles.helperText}>Bu talep için henüz yorum bulunmuyor.</p>
           ) : (
             <div className={styles.stack}>
               {comments.map((comment) => (
                 <article key={comment.id} className={styles.commentCard}>
                   <div className={styles.commentHeader}>
-                    <strong>{comment.authorName ?? "Belirsiz Kullanici"}</strong>
+                    <strong>{comment.authorName ?? "Belirsiz Kullanıcı"}</strong>
                     <span
                       className={styles.commentBadge}
                       data-internal={comment.isInternal ? "true" : "false"}
                     >
-                      {comment.isInternal ? "Ic Not" : "Genel Yorum"}
+                      {comment.isInternal ? "İç Not" : "Genel Yorum"}
                     </span>
                   </div>
                   <p>{comment.content}</p>
@@ -212,9 +212,9 @@ export default async function TicketDetailPage({
         </article>
 
         <article className={styles.card}>
-          <h2>Durum Gecmisi</h2>
+          <h2>Durum Geçmişi</h2>
           {history.length === 0 ? (
-            <p className={styles.helperText}>Durum gecmisi kaydi bulunamadi.</p>
+            <p className={styles.helperText}>Durum geçmişi kaydı bulunamadı.</p>
           ) : (
             <ol className={styles.historyList}>
               {history.map((item) => (
@@ -223,9 +223,9 @@ export default async function TicketDetailPage({
                   <span>
                     {item.oldStatus
                       ? `${ticketStatusLabels[item.oldStatus]} -> ${ticketStatusLabels[item.newStatus]}`
-                      : "Ilk ticket olusturma"}
+                      : "İlk talep oluşturma"}
                   </span>
-                  <span>{item.changedByName ?? "Belirsiz Kullanici"}</span>
+                  <span>{item.changedByName ?? "Belirsiz Kullanıcı"}</span>
                   <time>{formatTicketDateTime(item.createdAt)}</time>
                   {item.note ? <p>{item.note}</p> : null}
                 </li>

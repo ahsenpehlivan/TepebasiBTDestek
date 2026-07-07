@@ -61,11 +61,11 @@ export default async function DeviceDetailPage({
     return (
       <StateCard
         tone="error"
-        title="Cihaz detayi su anda yuklenemedi"
-        description="Cihaz kaydi okunurken bir sorun olustu. Supabase erisimini kontrol edip sayfayi yenileyin."
+        title="Cihaz detayı şu anda açılamadı"
+        description="Cihaz kaydı geçici olarak okunamadı. Biraz sonra sayfayı yenileyerek tekrar deneyin."
         action={
           <Link href="/devices" className={styles.backLink}>
-            Cihaz listesine don
+            Cihaz listesine dön
           </Link>
         }
       />
@@ -81,30 +81,30 @@ export default async function DeviceDetailPage({
       <section className={styles.heroCard}>
         <div className={styles.topBar}>
           <Link href="/devices" className={styles.backLink}>
-            Cihaz listesine don
+            Cihaz listesine dön
           </Link>
 
           <div className={styles.heroActions}>
             <Link href={`/devices/${device.id}/edit`} className={styles.secondaryLink}>
-              Duzenle
+              Düzenle
             </Link>
             <Link href={`/devices/${device.id}/qr`} className={styles.primaryLink}>
-              QR Onizleme
+              QR Önizleme
             </Link>
           </div>
         </div>
 
         <div className={styles.heroHeader}>
           <div>
-            <span className={styles.eyebrow}>Cihaz Detayi</span>
+            <span className={styles.eyebrow}>Cihaz Detayı</span>
             <h1>{device.assetTag}</h1>
             <p>
               {deviceTypeLabels[device.deviceType]} - {device.brand} {device.model}
             </p>
             {!device.isActive ? (
               <p className={styles.retiredNote}>
-                Bu cihaz kaydi pasif durumdadir. Yeni kullanim veya aktif teslim
-                senaryosu icin uygun degildir.
+                Bu cihaz kaydı pasif durumdadır. Yeni kullanım veya aktif teslim
+                senaryosu için uygun değildir.
               </p>
             ) : null}
           </div>
@@ -126,18 +126,18 @@ export default async function DeviceDetailPage({
 
       <section className={styles.grid}>
         <article className={styles.card}>
-          <h2>Cihaz Ozeti</h2>
+              <h2>Cihaz Özeti</h2>
           <dl className={styles.detailList}>
             <div>
-              <dt>Asset Tag</dt>
+              <dt>Demirbaş Kodu</dt>
               <dd>{device.assetTag}</dd>
             </div>
             <div>
-              <dt>QR Token Ozeti</dt>
+              <dt>QR Token Özeti</dt>
               <dd>{getQrTokenPreview(device.qrToken)}</dd>
             </div>
             <div>
-              <dt>Cihaz Tipi</dt>
+              <dt>Cihaz Türü</dt>
               <dd>{deviceTypeLabels[device.deviceType]}</dd>
             </div>
             <div>
@@ -147,7 +147,7 @@ export default async function DeviceDetailPage({
               </dd>
             </div>
             <div>
-              <dt>Seri Numarasi</dt>
+              <dt>Seri Numarası</dt>
               <dd>{getMaskedSerialNumber(device.serialNumber)}</dd>
             </div>
             <div>
@@ -155,15 +155,15 @@ export default async function DeviceDetailPage({
               <dd>{deviceStatusLabels[device.status]}</dd>
             </div>
             <div>
-              <dt>Departman</dt>
-              <dd>{device.departmentName ?? "Atanmadi"}</dd>
+              <dt>Birim</dt>
+              <dd>{device.departmentName ?? "Atanmadı"}</dd>
             </div>
             <div>
-              <dt>Cihazi Kullanan Personel</dt>
-              <dd>{device.assignedUserName ?? "Atanmadi"}</dd>
+              <dt>Zimmetli Personel</dt>
+              <dd>{device.assignedUserName ?? "Atanmadı"}</dd>
             </div>
             <div>
-              <dt>Satin Alma Tarihi</dt>
+              <dt>Satın Alma Tarihi</dt>
               <dd>
                 {device.purchaseDate
                   ? formatDeviceDate(device.purchaseDate)
@@ -171,7 +171,7 @@ export default async function DeviceDetailPage({
               </dd>
             </div>
             <div>
-              <dt>Garanti Bitis Tarihi</dt>
+              <dt>Garanti Bitiş Tarihi</dt>
               <dd>
                 {device.warrantyEndDate
                   ? formatDeviceDate(device.warrantyEndDate)
@@ -179,30 +179,30 @@ export default async function DeviceDetailPage({
               </dd>
             </div>
             <div>
-              <dt>Isletim Sistemi</dt>
+              <dt>İşletim Sistemi</dt>
               <dd>{device.operatingSystem ?? "Belirtilmedi"}</dd>
             </div>
             <div>
-              <dt>Olusturan</dt>
+              <dt>Oluşturan</dt>
               <dd>{device.createdByName ?? "Belirsiz"}</dd>
             </div>
             <div>
-              <dt>Olusturma</dt>
+              <dt>Oluşturma</dt>
               <dd>{formatDeviceDateTime(device.createdAt)}</dd>
             </div>
             <div>
-              <dt>Son Guncelleme</dt>
+              <dt>Son Güncelleme</dt>
               <dd>{formatDeviceDateTime(device.updatedAt)}</dd>
             </div>
           </dl>
         </article>
 
         <article className={styles.card}>
-          <h2>Guvenli QR Yaklasimi</h2>
+          <h2>Güvenli QR Yaklaşımı</h2>
           <p className={styles.helperText}>
-            Bu detay ekraninda ham QR token tam haliyle gosterilmez. QR sayfasinda
-            uretilen payload yalnizca korumali cihaz route&apos;una yonelik opak token
-            bilgisini icerir; seri numarasi, IP, MAC veya kullanici adi tasinmaz.
+            Bu detay ekranında ham QR token tam haliyle gösterilmez. QR sayfasında
+            üretilen payload yalnızca korumalı cihaz route&apos;una yönelik opak token
+            bilgisini içerir; seri numarası, IP, MAC veya kullanıcı adı taşınmaz.
           </p>
           <dl className={styles.detailList}>
             <div>
@@ -210,15 +210,15 @@ export default async function DeviceDetailPage({
               <dd>TBT-DEVICE:&lt;opaque-token&gt;</dd>
             </div>
             <div>
-              <dt>Kullanan Personel Notu</dt>
+              <dt>Zimmetli Personel Notu</dt>
               <dd>
-                Cihaz uzerindeki personel bilgisi, ticket kaydinda gorev alan teknik
-                personelden ayridir.
+                Cihaz üzerindeki personel bilgisi, talep kaydında görev alan teknik
+                personelden ayrıdır.
               </dd>
             </div>
             <div>
-              <dt>Kayit Durumu</dt>
-              <dd>{device.isActive ? "Aktif cihaz kaydi" : "Pasif cihaz kaydi"}</dd>
+              <dt>Kayıt Durumu</dt>
+              <dd>{device.isActive ? "Aktif cihaz kaydı" : "Pasif cihaz kaydı"}</dd>
             </div>
             <div>
               <dt>Notlar</dt>
@@ -232,14 +232,14 @@ export default async function DeviceDetailPage({
         <article className={styles.card}>
           <div className={styles.sectionHeader}>
             <div>
-              <span className={styles.eyebrow}>Ilgili Ticketlar</span>
-              <h2>Cihazla iliskili kayitlar</h2>
+              <span className={styles.eyebrow}>İlgili Talepler</span>
+              <h2>Cihazla ilişkili talepler</h2>
             </div>
           </div>
 
           {relatedTickets.length === 0 ? (
             <p className={styles.helperText}>
-              Bu cihazla iliskili ticket bulunmuyor.
+              Bu cihazla ilişkili talep bulunmuyor.
             </p>
           ) : (
             <div className={styles.stack}>
@@ -270,14 +270,14 @@ export default async function DeviceDetailPage({
         <article className={styles.card}>
           <div className={styles.sectionHeader}>
             <div>
-              <span className={styles.eyebrow}>Bakim Gecmisi</span>
-              <h2>Kayitli islemler</h2>
+              <span className={styles.eyebrow}>Bakım Geçmişi</span>
+              <h2>Kayıtlı işlemler</h2>
             </div>
           </div>
 
           {maintenanceRecords.length === 0 ? (
             <p className={styles.helperText}>
-              Bu cihaz icin henuz bakim kaydi bulunmuyor.
+              Bu cihaz için henüz bakım kaydı bulunmuyor.
             </p>
           ) : (
             <div className={styles.stack}>
@@ -293,14 +293,14 @@ export default async function DeviceDetailPage({
                     <span>Maliyet: {formatCurrency(record.cost)}</span>
                   </div>
                   {record.partsUsed ? (
-                    <p className={styles.helperText}>Parca / not: {record.partsUsed}</p>
+                    <p className={styles.helperText}>Parça / not: {record.partsUsed}</p>
                   ) : null}
                   {record.relatedTicket ? (
                     <Link
                       href={`/tickets/${record.relatedTicket.id}`}
                       className={styles.ticketLink}
                     >
-                      Ilgili ticket: #{record.relatedTicket.ticketNumber} -{" "}
+                      İlgili talep: #{record.relatedTicket.ticketNumber} -{" "}
                       {record.relatedTicket.title}
                     </Link>
                   ) : null}

@@ -24,28 +24,28 @@ export default async function AccessDeniedPage() {
   }
 
   const title = authState.profile.isActive
-    ? "Web paneli erisimi sinirlandi"
+    ? "Bu panele erişim izniniz bulunmuyor"
     : "Hesap durumu pasif";
 
   const description = authState.profile.isActive
-    ? "Bu web paneli teknik personel ve yoneticiler icin hazirlanmistir."
-    : "Profil kaydiniz pasif oldugu icin yonetim paneline erisim verilemiyor.";
+    ? "Bu web paneli teknik personel ve yönetici kullanımı için hazırlanmıştır. Gerekirse Bilgi İşlem birimiyle iletişime geçin."
+    : "Profil kaydınız pasif durumda olduğu için yönetim paneli açılamıyor. Gerekirse Bilgi İşlem birimiyle iletişime geçin.";
 
   return (
     <main className={styles.page}>
       <section className={styles.card}>
-        <span className={styles.badge}>Erisim Denetimi</span>
+        <span className={styles.badge}>Erişim Bilgisi</span>
         <h1>{title}</h1>
         <p>{description}</p>
 
         <dl className={styles.metaList}>
           <div>
-            <dt>Kullanici Rolu</dt>
+            <dt>Kullanıcı Rolü</dt>
             <dd>{roleLabels[authState.profile.role]}</dd>
           </div>
           <div>
             <dt>E-posta</dt>
-            <dd>{authState.profile.email ?? "Tanimsiz"}</dd>
+            <dd>{authState.profile.email ?? "Tanımsız"}</dd>
           </div>
         </dl>
 

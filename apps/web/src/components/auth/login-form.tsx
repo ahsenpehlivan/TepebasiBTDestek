@@ -34,7 +34,7 @@ export function LoginForm() {
         <input
           type="password"
           name="password"
-          placeholder="Parolanizi girin"
+          placeholder="Parolanızı girin"
           autoComplete="current-password"
           required
         />
@@ -46,17 +46,16 @@ export function LoginForm() {
         </p>
       ) : (
         <p className={styles.helper}>
-          Bu web paneli yalnizca onceden tanimlanmis demo hesaplarla kullanilabilir.
+          Bu demo panel, önceden tanımlanmış test hesapları ile kullanılır.
         </p>
       )}
 
       <button type="submit" className={styles.submit} disabled={pending}>
-        {pending ? "Giris yapiliyor..." : "Giris Yap"}
+        {pending ? "Giriş yapılıyor..." : "Giriş Yap"}
       </button>
 
       <p className={styles.helper}>
-        Kayit olma, sosyal giris ve sifre sifirlama akislari bu prototip kapsaminda
-        degildir.
+        Kayıt olma ve şifre yenileme adımları bu prototip kapsamında yer almaz.
       </p>
     </form>
   );

@@ -11,10 +11,15 @@ export function StatusCard({ item }: StatusCardProps) {
     <article className={styles.card}>
       <div className={styles.header}>
         <h2 className={styles.label}>{item.label}</h2>
-        <span
-          aria-hidden="true"
-          className={`${styles.dot} ${styles[item.tone]}`}
-        />
+        <span className={styles.toneLabel} data-tone={item.tone}>
+          {item.tone === "success"
+            ? "Olumlu"
+            : item.tone === "warning"
+              ? "Dikkat"
+              : item.tone === "accent"
+                ? "Güncel"
+                : "Bilgi"}
+        </span>
       </div>
 
       <strong className={styles.value}>{item.value}</strong>

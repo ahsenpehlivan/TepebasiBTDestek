@@ -122,6 +122,18 @@ Ticket detay ekraninda yalnizca mevcut duruma uygun status secenekleri gosterili
 
 Not: `devices.assigned_user_id` cihazi kullanan veya zimmetli personeli, `tickets.assigned_to` ise talep uzerinde calisan teknik personeli ifade eder.
 
+## Erisilebilir ve Sade Tasarim Kararlari
+
+- Yasli kullanicilar ve ileri duzey bilgisayar kullanmayan personel icin okunabilirlik artirildi.
+- Buyuk butonlar, ferah kart bosluklari ve net Turkce metinler tercih edildi.
+- Fazla beyaz ve duz gorunum azaltildi; acik mavi-gri zeminler ve section tonlari ile ekran ayrimi guclendirildi.
+- Baslik, aciklama, icerik ve aksiyon alanlari arasindaki gorsel hiyerarsi belirginlestirildi.
+- Kart ve buton oranlari standartlastirildi; ayni aksiyon aileleri daha tutarli hale getirildi.
+- Renkler daha sade ve goz yormayacak tonda tutuldu.
+- Yasli kullanicilar icin okunabilirlik ve tiklanabilirlik artirildi.
+- Kritik durumlar yalnizca renkle degil, metin etiketiyle de gosterildi.
+- Mobil ve masaustu duzen birlikte gozden gecirildi.
+
 ## Supabase Durumu
 
 - `npx supabase --version`: `2.109.0`

@@ -61,24 +61,25 @@ export function DeviceEditorForm({
         <div className={styles.headerTop}>
           <div>
             <span className={styles.eyebrow}>
-              {mode === "create" ? "Yeni Cihaz" : "Cihaz Duzenleme"}
+              {mode === "create" ? "Yeni Cihaz" : "Cihaz Düzenleme"}
             </span>
             <h1>
               {mode === "create"
-                ? "Demo cihaz envanteri kaydi olustur"
-                : `${device?.assetTag ?? "Cihaz"} kaydini guncelle`}
+                ? "Cihaz envanteri kaydı oluştur"
+                : `${device?.assetTag ?? "Cihaz"} kaydını güncelle`}
             </h1>
           </div>
           <Link
             href={device ? `/devices/${device.id}` : "/devices"}
             className={styles.headerLink}
           >
-            {device ? "Detay sayfasina don" : "Envantere don"}
+            {device ? "Detay sayfasına dön" : "Envantere dön"}
           </Link>
         </div>
         <p>
-          QR token otomatik uretilir; ham token, seri numarasi, IP veya MAC gibi
-          hassas alanlar kullanicidan manuel beklenmez.
+          Bu form sade ve kontrollü veri girişi için hazırlandı. QR bilgisi otomatik
+          üretilir; seri numarası, IP veya MAC gibi hassas alanlar için uygun veri
+          kullanılmalıdır.
         </p>
       </header>
 
@@ -91,28 +92,27 @@ export function DeviceEditorForm({
         <div className={styles.infoCard}>
           <strong>Zorunlu alanlar</strong>
           <p>
-            Asset tag, cihaz tipi, marka ve model alanlari zorunludur. Tum degerler
-            demo veya prototip amacina uygun olmalidir.
+            Demirbaş kodu, cihaz türü, marka ve model alanları zorunludur.
           </p>
         </div>
 
         <div className={styles.grid}>
           <label className={styles.field}>
-            <span>Asset Tag</span>
+            <span>Demirbaş Kodu</span>
             <input
               type="text"
               name="assetTag"
               defaultValue={device?.assetTag ?? ""}
-              placeholder="DEMO-DEV-001"
+              placeholder="BT-001"
               required
             />
             <small className={styles.fieldHint}>
-              Zorunlu. Tekil ve kolay ayirt edilebilir demo etiketi kullanin.
+              Zorunlu. Tekil ve kolay ayırt edilebilir bir demirbaş kodu kullanın.
             </small>
           </label>
 
           <label className={styles.field}>
-            <span>Cihaz Tipi</span>
+            <span>Cihaz Türü</span>
             <select
               name="deviceType"
               defaultValue={device?.deviceType ?? "desktop"}
@@ -131,7 +131,7 @@ export function DeviceEditorForm({
               type="text"
               name="brand"
               defaultValue={device?.brand ?? ""}
-              placeholder="DemoTech"
+              placeholder="Marka adı"
               required
             />
           </label>
@@ -142,31 +142,28 @@ export function DeviceEditorForm({
               type="text"
               name="model"
               defaultValue={device?.model ?? ""}
-              placeholder="OfficeStation A1"
+              placeholder="Model detayları"
               required
             />
           </label>
 
           <label className={styles.field}>
-            <span>Seri Numarasi</span>
+            <span>Seri Numarası</span>
             <input
               type="text"
               name="serialNumber"
               defaultValue={device?.serialNumber ?? ""}
-              placeholder="DEMO-SN-1001"
+              placeholder="SN-1001"
             />
-            <small className={styles.fieldHint}>
-              Gercek seri numarasi yerine acik demo metni kullanin.
-            </small>
           </label>
 
           <label className={styles.field}>
-            <span>Departman</span>
+            <span>Birim</span>
             <select
               name="departmentId"
               defaultValue={device?.departmentId ?? ""}
             >
-              <option value="">Departman secilmedi</option>
+              <option value="">Birim seçilmedi</option>
               {departments.map((department) => (
                 <option key={department.id} value={department.id}>
                   {department.name}
@@ -176,7 +173,7 @@ export function DeviceEditorForm({
           </label>
 
           <label className={styles.field}>
-            <span>Cihazi Kullanan Personel</span>
+            <span>Zimmetli Personel</span>
             <select
               name="assignedUserId"
               defaultValue={device?.assignedUserId ?? ""}
@@ -189,8 +186,8 @@ export function DeviceEditorForm({
               ))}
             </select>
             <small className={styles.fieldHint}>
-              Bu alan cihazin zimmetli veya cihazi kullanan personelini belirtir.
-              Ticket uzerindeki teknik atama bilgisinden ayridir.
+              Bu alan cihazın zimmetli veya cihazı kullanan personelini belirtir.
+              Talep üzerindeki teknik atama bilgisinden ayrıdır.
             </small>
           </label>
 
@@ -206,7 +203,7 @@ export function DeviceEditorForm({
           </label>
 
           <label className={styles.field}>
-            <span>Satin Alma Tarihi</span>
+            <span>Satın Alma Tarihi</span>
             <input
               type="date"
               name="purchaseDate"
@@ -215,19 +212,19 @@ export function DeviceEditorForm({
           </label>
 
           <label className={styles.field}>
-            <span>Garanti Bitis Tarihi</span>
+            <span>Garanti Bitiş Tarihi</span>
             <input
               type="date"
               name="warrantyEndDate"
               defaultValue={device?.warrantyEndDate ?? ""}
             />
             <small className={styles.fieldHint}>
-              Garanti bitisi satin alma tarihinden once olamaz.
+              Garanti bitişi satın alma tarihinden önce olamaz.
             </small>
           </label>
 
           <label className={styles.field}>
-            <span>Isletim Sistemi</span>
+            <span>İşletim Sistemi</span>
             <input
               type="text"
               name="operatingSystem"
@@ -243,16 +240,16 @@ export function DeviceEditorForm({
             name="notes"
             rows={5}
             defaultValue={device?.notes ?? ""}
-            placeholder="Cihaz durumu, teslim notu veya prototip aciklamasi."
+            placeholder="Cihaz durumu, teslim notu veya ek açıklamalar."
           />
         </label>
 
         <div className={styles.infoCard}>
-          <strong>Kayit aktifligi</strong>
+          <strong>Kayıt aktifliği</strong>
           <p>
             {isActive
-              ? "Bu cihaz aktif durumda kaydedilecektir. Pasife alma islemi icin detay ekranindaki onayli akisi kullanin."
-              : "Bu cihaz kaydi su anda pasif. Tekrar aktiflestirme bu asamada form uzerinden acilmadi."}
+              ? "Bu cihaz aktif durumda kaydedilecektir. Pasife alma işlemi için detay ekranındaki onaylı akışı kullanın."
+              : "Bu cihaz kaydı şu anda pasif. Tekrar aktifleştirme bu aşamada form üzerinden açılmadı."}
           </p>
         </div>
 
@@ -271,17 +268,17 @@ export function DeviceEditorForm({
           <button type="submit" className={styles.primaryButton} disabled={pending}>
             {pending
               ? mode === "create"
-                ? "Kayit olusturuluyor..."
-                : "Kayit guncelleniyor..."
+                ? "Kayıt oluşturuluyor..."
+                : "Kayıt güncelleniyor..."
               : mode === "create"
-                ? "Cihazi Kaydet"
-                : "Degisiklikleri Kaydet"}
+                ? "Cihazı Kaydet"
+                : "Değişiklikleri Kaydet"}
           </button>
           <Link
             href={device ? `/devices/${device.id}` : "/devices"}
             className={styles.secondaryButton}
           >
-            Vazgec
+            Vazgeç
           </Link>
         </div>
       </form>

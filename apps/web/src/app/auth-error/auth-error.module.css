@@ -2,17 +2,23 @@
   display: grid;
   place-items: center;
   min-height: 100vh;
-  padding: 1.5rem;
+  padding: 1.75rem;
+  background:
+    radial-gradient(circle at top, rgba(182, 69, 69, 0.08), transparent 24rem),
+    linear-gradient(180deg, rgba(249, 246, 246, 0.92), rgba(242, 245, 249, 0.96)),
+    var(--background);
 }
 
 .card {
   width: min(100%, 520px);
   display: grid;
-  gap: 1rem;
-  padding: 1.6rem;
+  gap: 1.15rem;
+  padding: clamp(1.45rem, 4vw, 2rem);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  background-color: var(--surface);
+  background:
+    linear-gradient(180deg, rgba(182, 69, 69, 0.09), rgba(255, 255, 255, 0.98) 58%),
+    var(--surface);
   box-shadow: var(--shadow-md);
 }
 
@@ -21,37 +27,41 @@
   width: fit-content;
   align-items: center;
   justify-content: center;
-  min-height: 2rem;
-  padding: 0.35rem 0.75rem;
+  min-height: 2.15rem;
+  padding: 0.4rem 0.85rem;
   border-radius: var(--radius-pill);
-  background-color: rgba(194, 65, 65, 0.08);
-  color: var(--danger);
-  font-size: 0.8rem;
+  background-color: rgba(33, 88, 183, 0.08);
+  color: var(--accent);
+  font-size: 0.86rem;
   font-weight: 700;
 }
 
 .card h1 {
   color: var(--text-primary);
-  font-size: clamp(1.8rem, 4vw, 2.3rem);
+  font-size: clamp(1.9rem, 4vw, 2.4rem);
+  line-height: 1.18;
 }
 
 .card p {
   color: var(--text-secondary);
+  font-size: 1rem;
   line-height: 1.7;
 }
 
 .logoutButton {
-  min-height: 3rem;
+  min-height: 3.2rem;
   border: 0;
   border-radius: var(--radius-pill);
   background-color: var(--accent);
   color: #ffffff;
   font: inherit;
+  font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
+  box-shadow: var(--shadow-xs);
 }
 
 .logoutButton:hover,
 .logoutButton:focus-visible {
-  background-color: #094fb7;
+  background-color: var(--accent-strong);
 }

@@ -95,27 +95,27 @@ export function TicketDetailActions({
     <section className={styles.section}>
       <header className={styles.sectionHeader}>
         <div>
-          <span className={styles.eyebrow}>Teknik Islemler</span>
-          <h2>Atama, durum ve yorum yonetimi</h2>
+          <span className={styles.eyebrow}>Teknik İşlemler</span>
+          <h2>Atama, durum ve yorum yönetimi</h2>
         </div>
         <p>
-          Bu formlar yalnizca technician ve admin kullanicilar icin aciktir. Tum
-          islemler mevcut RLS ve trigger kurallari ile dogrulanir.
+          Bu alanlar yalnızca teknik personel ve yönetici kullanımı içindir. Yapılan
+          işlemler sistem kurallarıyla doğrulanır.
         </p>
       </header>
 
       <div className={styles.workflowHint}>
-        Onerilen islem sirasi: once talebi teknik personele atayin, ardindan
-        durumunu is akisina gore guncelleyin.
+        Önerilen işlem sırası: Önce talebi teknik personele atayın, ardından
+        durumunu iş akışına göre güncelleyin.
       </div>
 
       <div className={styles.grid}>
         <article className={styles.card}>
-          <h3>Ticket atama</h3>
+          <h3>Talebi personele ata</h3>
           <form action={assignFormAction} className={styles.form}>
             <input type="hidden" name="ticketId" value={ticketId} />
             <label className={styles.field}>
-              <span>Atanacak kullanici</span>
+              <span>Atanacak kullanıcı</span>
               <select
                 name="assignedTo"
                 defaultValue={currentAssigneeId ?? assignees[0]?.id ?? ""}
@@ -132,14 +132,14 @@ export function TicketDetailActions({
               className={styles.primaryButton}
               disabled={assignPending || assignees.length === 0}
             >
-              {assignPending ? "Atama kaydediliyor..." : "Atamayi Kaydet"}
+              {assignPending ? "Atama kaydediliyor..." : "Atamayı Kaydet"}
             </button>
             <ActionMessage state={assignState} />
           </form>
         </article>
 
         <article className={styles.card}>
-          <h3>Durum degisikligi</h3>
+          <h3>Durum değişikliği</h3>
           <form action={statusFormAction} className={styles.form}>
             <input type="hidden" name="ticketId" value={ticketId} />
             <label className={styles.field}>
@@ -158,18 +158,18 @@ export function TicketDetailActions({
             </label>
             {isFinalStatus ? (
               <p className={styles.helperMessage}>
-                Bu talep son durumda oldugu icin durum degistirilemez.
+                Bu talep son durumda olduğu için durum değiştirilemez.
               </p>
             ) : null}
             {!isFinalStatus && hasBlockedTransitions ? (
               <p className={styles.helperMessage}>
-                Once talebi bir teknik personele atayin. Atama yapilmadan is akisina
-                ait durum gecisleri acilmaz.
+                Önce talebi bir teknik personele atayın. Atama yapılmadan iş akışına
+                ait durum geçişleri açılmaz.
               </p>
             ) : null}
             {!isFinalStatus && allowedStatuses.length === 0 ? (
               <p className={styles.helperMessage}>
-                Bu talep icin su anda ek bir durum gecisi bulunmuyor.
+                Bu talep için şu anda ek bir durum geçişi bulunmuyor.
               </p>
             ) : null}
             <button
@@ -177,14 +177,14 @@ export function TicketDetailActions({
               className={styles.primaryButton}
               disabled={statusPending || isFinalStatus || allowedStatuses.length === 0}
             >
-              {statusPending ? "Durum kaydediliyor..." : "Durumu Guncelle"}
+              {statusPending ? "Durum kaydediliyor..." : "Durumu Güncelle"}
             </button>
             <ActionMessage state={statusState} />
           </form>
         </article>
 
         <article className={`${styles.card} ${styles.commentCard}`}>
-          <h3>Yorum ekle</h3>
+          <h3>Açıklama ekle</h3>
           <form ref={commentFormRef} action={commentFormAction} className={styles.form}>
             <input type="hidden" name="ticketId" value={ticketId} />
             <label className={styles.field}>
@@ -192,14 +192,14 @@ export function TicketDetailActions({
               <textarea
                 name="content"
                 rows={5}
-                placeholder="Teknik durum, kullanici bilgilendirmesi veya cozum notunu yazin."
+                placeholder="Teknik durum, kullanıcı bilgilendirmesi veya çözüm notunu yazın."
                 required
               />
             </label>
 
             <label className={styles.checkbox}>
               <input type="checkbox" name="isInternal" />
-              <span>Ic not olarak ekle</span>
+              <span>İç not olarak ekle</span>
             </label>
 
             <button

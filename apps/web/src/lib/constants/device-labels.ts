@@ -5,32 +5,32 @@ import type {
 } from "@/types/domain";
 
 export const deviceTypeLabels: Record<DeviceType, string> = {
-  desktop: "Masaustu",
-  laptop: "Dizustu",
-  monitor: "Monitor",
-  printer: "Yazici",
-  scanner: "Tarayici",
-  network_device: "Ag Cihazi",
+  desktop: "Masaüstü",
+  laptop: "Dizüstü",
+  monitor: "Monitör",
+  printer: "Yazıcı",
+  scanner: "Tarayıcı",
+  network_device: "Ağ Cihazı",
   tablet: "Tablet",
   phone: "Telefon",
-  other: "Diger",
+  other: "Diğer",
 };
 
 export const deviceStatusLabels: Record<DeviceStatus, string> = {
   active: "Aktif",
-  in_repair: "Bakimda",
+  in_repair: "Bakımda",
   spare: "Yedek",
-  retired: "Pasif",
-  lost: "Kayip",
+  retired: "Kullanım Dışı",
+  lost: "Kayıp",
 };
 
 export const maintenanceTypeLabels: Record<MaintenanceType, string> = {
   inspection: "Kontrol",
-  repair: "Onarim",
-  upgrade: "Yukseltme",
-  component_replacement: "Parca Degisimi",
-  software_installation: "Yazilim Kurulumu",
-  other: "Diger",
+  repair: "Onarım",
+  upgrade: "Yükseltme",
+  component_replacement: "Parça Değişimi",
+  software_installation: "Yazılım Kurulumu",
+  other: "Diğer",
 };
 
 export const deviceTypeOptions: DeviceType[] = [

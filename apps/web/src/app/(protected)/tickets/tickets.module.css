@@ -1,6 +1,6 @@
 .page {
   display: grid;
-  gap: 1rem;
+  gap: 1.15rem;
 }
 
 .headerCard,
@@ -10,19 +10,20 @@
   border-radius: var(--radius-lg);
   background-color: var(--surface);
   box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  padding: 1.5rem;
 }
 
-.headerCard,
-.filterCard,
-.messageCard {
-  padding: 1.35rem;
+.headerCard {
+  display: flex;
+  flex-direction: column;
 }
 
 .eyebrow {
   display: inline-flex;
   margin-bottom: 0.55rem;
   color: var(--accent);
-  font-size: 0.78rem;
+  font-size: 0.82rem;
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -37,12 +38,15 @@
 .headerCard p,
 .messageCard p {
   color: var(--text-secondary);
+  font-size: 1rem;
   line-height: 1.7;
 }
 
 .filterCard {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 1rem;
+  background-color: var(--surface-alt);
 }
 
 .filterHeader {
@@ -56,14 +60,15 @@
 .filterHeader h2 {
   margin-bottom: 0.4rem;
   color: var(--text-primary);
+  font-size: 1.18rem;
 }
 
 .filterHeader p,
 .limitHint {
   color: var(--text-secondary);
+  font-size: 0.98rem;
 }
 
 .limitHint {
-  font-size: 0.9rem;
   font-weight: 700;
 }
