@@ -4,6 +4,8 @@
 
 Web uygulamasi, Next.js 16 ve `@supabase/ssr` kullanarak SSR tabanli auth akisina gecmistir.
 
+Android tarafinda ise 2026-07-08 tarihi itibariyla Supabase Kotlin client ile auth temeli kurulmustur. Ayrintili Android notlari icin `docs/ANDROID_AUTH.md` dosyasini kullanin.
+
 Bu asamada:
 
 - Browser client
@@ -12,6 +14,17 @@ Bu asamada:
 - Login/logout server action'lari
 - Protected layout
 - Profile ve role cozumleme
+
+uygulanmistir.
+
+Android fazinda ek olarak:
+
+- `BuildConfig` uzerinden Android Supabase config okuma
+- `Splash -> Login -> role-based home` navigation akisi
+- `profiles.role` alanindan employee / technician / admin cozumleme
+- `is_active = false` icin `AccessDenied`
+- profile satiri yoksa `AuthError`
+- logout sonrasi temiz back stack
 
 uygulanmistir.
 
@@ -143,6 +156,21 @@ Neden:
 
 Employee girisi sonrasi `access-denied` sayfasi acilir ve logout butonu sunulur.
 
+## Android Role Davranisi
+
+Android tarafinda employee rolu webden farkli olarak mobil baslangic ekranina alinabilir.
+
+Davranis:
+
+- `employee` -> `EmployeeHomeScreen`
+- `technician` -> `TechnicianHomeScreen`
+- `admin` -> `AdminHomeScreen`
+- `is_active = false` -> `AccessDenied`
+- profile satiri yok -> `AuthError`
+- eksik Android config -> `ConfigError`
+
+Bu ayrim, web yonetim paneli ile personel odakli mobil akislarin farkli amaclarini korumak icindir.
+
 ## Runtime Dogrulama Sonuclari
 
 2026-07-06 tarihli gercek browser akisi sonucunda:
@@ -190,7 +218,9 @@ Bu local runtime testleri, `20260706000200_restore_public_api_grants.sql` migrat
 - `@supabase/auth-helpers-nextjs` kullanilmadi
 - `middleware.ts` yerine Next.js 16 uyumlu `src/proxy.ts` kullanildi
 - Service role key istemciye eklenmedi
+- Android tarafinda service role, database password veya secret key kullanilmadi
 - `.env.local` repository'e eklenmedi
+- `apps/android/secrets.properties` Git'e eklenmedi
 - Role guard yalnizca server-side profile sorgusu ile yapildi
 - Ilk demo admin veya technician role assignment islemi icin yalnizca database-owner baglaminda calisan kontrollu bootstrap istisnasi eklendi; normal `authenticated` kullanicilar kendi rollerini yukseltemez
 

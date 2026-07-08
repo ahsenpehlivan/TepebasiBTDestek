@@ -62,6 +62,17 @@ Metadata tarafinda su kurgu isimler kullanilabilir:
 
 Parola bu dokumana yazilmaz.
 
+## Android Auth Hazirligi
+
+Android auth temeli icin:
+
+- `apps/android/secrets.defaults.properties` repository icinde bos bir sablon olarak kalir
+- gercek `SUPABASE_URL` ve `SUPABASE_PUBLISHABLE_KEY` degerleri yalnizca yerel `apps/android/secrets.properties` dosyasina yazilir
+- `apps/android/secrets.properties` Git'e eklenmez
+- demo kullanici parolalari Android source code, README veya dokumanlara yazilmaz
+
+Android tarafinda service role key, database password veya secret key kullanilmaz.
+
 ## Beklenen Trigger Davranisi
 
 Yeni auth kullanicilari olusturuldugunda `handle_new_user()` trigger'inin `public.profiles` tablosunda ilgili satiri olusturmasi beklenir.

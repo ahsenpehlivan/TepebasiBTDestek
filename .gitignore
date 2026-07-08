@@ -18,6 +18,7 @@ coverage/
 .gradle/
 apps/android/.gradle/
 apps/android/local.properties
+apps/android/secrets.properties
 apps/android/**/build/
 *.keystore
 

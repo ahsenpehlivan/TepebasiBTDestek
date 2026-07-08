@@ -6,7 +6,7 @@
 | --- | --- | --- |
 | Web `npm run lint` | gecti | 2026-07-07 tarihinde Android handoff cleanup dogrulamasi sonrasinda yeniden calistirildi |
 | Web `npm run build` | gecti | 2026-07-07 tarihinde erisilebilir sade tasarim polish fazi sonrasinda yeniden calistirildi |
-| Android `gradlew.bat assembleDebug` | gecti | 2026-07-07 tarihinde erisilebilir sade tasarim polish fazi sonrasinda yeniden calistirildi |
+| Android `gradlew.bat assembleDebug` | gecti | 2026-07-08 tarihinde Android auth foundation fazi sonrasinda yeniden calistirildi |
 | `docker version` | gecti | Docker engine erisimi var |
 | `npx supabase --version` | gecti | `2.109.0` |
 | `npx supabase db reset` | gecti | Yeni migration dahil tüm migrationlar ve seed basariyla uygulandi |
@@ -205,3 +205,19 @@ Not: Bu route ve responsive kontrolleri local Supabase'e bagli ayri bir web inst
 | Kart ve buton oranlari standartlasti mi? | gecti | Status/state kartlari ile form, detay ve aksiyon butonlari ortak yukseklik ve padding ailesine yaklastirildi |
 | Ticket ve device ekranlarinda bolum ayrimi guclendi mi? | gecti | Filtre kartlari, liste kartlari, detay ozetleri, yorum/bakım alanlari ve QR preview ayri section tonlariyla ayrildi |
 | 390px / 768px / desktop gorsel tekrar testi | test edilemedi | Bu turde in-app browser otomasyonu tekrar kullanilamadi; kullanici tarafinda manuel gorsel responsive kontrol onerilir |
+
+## Android Auth Foundation Dogrulamalari
+
+| Test | Sonuc | Neden |
+| --- | --- | --- |
+| Android auth dependency ve BuildConfig uretilmesi | gecti | `secrets.defaults.properties`, version catalog, BuildConfig alanlari ve Supabase Kotlin modulleri ile `gradlew.bat assembleDebug` basariyla tamamlandi |
+| ANDROID-AUTH-01 eksik `secrets.properties` veya eksik config | test edilemedi | `apps/android/secrets.properties` dosyasi bulunmuyor ve ConfigError akisi kaynak kodda var; ancak emulator/fiziksel cihaz uzerinde ekran akisi calistirilamadi |
+| ANDROID-AUTH-02 gecersiz e-posta/parola | test edilemedi | Login ekraninda Turkce hata akisleri yazildi; fakat bu izin profilinde adb/emulator erisimi olmadigi icin gercek runtime denemesi yapilamadi |
+| ANDROID-AUTH-03 employee hesabi ile giris | test edilemedi | Employee role yonlendirmesi `EmployeeHomeScreen` olarak kodlandi; manuel cihaz testi yapilamadi |
+| ANDROID-AUTH-04 technician hesabi ile giris | test edilemedi | Technician role yonlendirmesi `TechnicianHomeScreen` olarak kodlandi; manuel cihaz testi yapilamadi |
+| ANDROID-AUTH-05 admin hesabi ile giris | test edilemedi | Admin role yonlendirmesi `AdminHomeScreen` olarak kodlandi; manuel cihaz testi yapilamadi |
+| ANDROID-AUTH-06 pasif profile ile giris | test edilemedi | `is_active = false` icin `AccessDenied` akisi repository ve navigation katmaninda eklendi; cihaz uzerinde calistirilamadi |
+| ANDROID-AUTH-07 profile satiri olmayan auth kullanicisi | test edilemedi | Profil yoksa `AuthError` route'u kodlandi; manuel runtime kaniti alinmadi |
+| ANDROID-AUTH-08 logout | test edilemedi | Logout back stack temizleme akisi navigation katmaninda yazildi; adb/emulator olmadigi icin kullanici akisi denenemedi |
+| ANDROID-AUTH-09 logout sonrasi geri tusu | test edilemedi | Login'e donuste `popUpTo(... inclusive = true)` kullanildi; fiziksel geri tusu davranisi cihazda test edilemedi |
+| ANDROID-AUTH-10 uygulama yeniden acildiginda session ile dogru home | test edilemedi | `auth.awaitInitialization()` ve session restore akisi eklendi; ancak uygulama kapanip acma senaryosu cihaz/emulator yoklugu nedeniyle dogrulanamadi |

@@ -12,31 +12,44 @@ Bu plan, staj sunumu ve staj raporu icin alinacak ekran goruntulerinin kapsamini
 
 | Ekran | Onerilen Dosya Adi | Rapor Bolumu | Kanitladigi Ozellik |
 | --- | --- | --- | --- |
-| Dashboard genel gorunumu | `01-dashboard-overview.png` | Web yonetim paneli | Role guard sonrası gerçek count kartları ve panel girişi |
-| Login ekrani | `02-login-screen.png` | Kimlik dogrulama | SSR login giriş formu ve demo kullanım siniri |
+| Dashboard genel gorunumu | `01-dashboard-overview.png` | Web yonetim paneli | Role guard sonrasi gercek count kartlari ve panel girisi |
+| Login ekrani | `02-login-screen.png` | Kimlik dogrulama | SSR login giris formu ve demo kullanim siniri |
 | Access denied ekrani | `03-access-denied.png` | Yetkilendirme | Employee hesabinin web panelden engellenmesi |
 | Ticket listesi filtreli gorunum | `04-ticket-list-filtered.png` | Ticket yonetimi | Server-side filtreleme ve responsive liste/kart yapisi |
-| Ticket detay ve iç not | `05-ticket-detail-internal-comment.png` | Ticket detay akisi | Public/internal comment ayrimi ve durum gecmisi |
-| Device listesi filtreli gorunum | `06-device-list-filtered.png` | Cihaz envanteri | Device filtreleri, durum etiketleri ve aktif/pasif ayrımı |
-| Device detay ekrani | `07-device-detail.png` | Cihaz detay akisi | Teknik bilgiler, guvenli QR ozeti ve bakım geçmişi |
+| Ticket detay ve ic not | `05-ticket-detail-internal-comment.png` | Ticket detay akisi | Public/internal comment ayrimi ve durum gecmisi |
+| Device listesi filtreli gorunum | `06-device-list-filtered.png` | Cihaz envanteri | Device filtreleri, durum etiketleri ve aktif/pasif ayrimi |
+| Device detay ekrani | `07-device-detail.png` | Cihaz detay akisi | Teknik bilgiler, guvenli QR ozeti ve bakim gecmisi |
 | Device duzenleme formu | `08-device-edit-form.png` | Cihaz form akislari | Zorunlu alanlar, yardim metinleri ve form tutarliligi |
 | QR preview ekrani | `09-device-qr-preview.png` | QR akisi | Sunuma uygun QR gorunumu ve demo uyari metni |
-| Maintenance record bolumu | `10-device-maintenance.png` | Bakım kayıtları | Bakım geçmişi ve kayıt ekleme alanı |
+| Maintenance record bolumu | `10-device-maintenance.png` | Bakim kayitlari | Bakim gecmisi ve kayit ekleme alani |
 | Test veya smoke test kaniti | `11-test-results.png` | Dogrulama ve testler | Lint, build, smoke test veya route dogrulama ciktilari |
+
+## Android Ekranlari
+
+| Ekran | Onerilen Dosya Adi | Rapor Bolumu | Kanitladigi Ozellik |
+| --- | --- | --- | --- |
+| Android login ekrani | `12-android-login.png` | Android auth | Supabase auth giris formu ve demo uyari metni |
+| Android employee home | `13-android-employee-home.png` | Android role yonlendirmesi | Employee rolu icin mobil baslangic ekrani |
+| Android technician home | `14-android-technician-home.png` | Android role yonlendirmesi | Technician rolu icin mobil baslangic ekrani |
+| Android admin home | `15-android-admin-home.png` | Android role yonlendirmesi | Admin rolu icin mobil baslangic ekrani |
+| Android access denied | `16-android-access-denied.png` | Android auth hata akisi | Pasif profile kontrollu erisim engeli |
+| Android auth error | `17-android-auth-error.png` | Android auth hata akisi | Profile satiri olmayan kullanicida kontrollu hata |
+| Android config error | `18-android-config-error.png` | Android config guvenligi | Eksik secrets durumunda anlasilir hata |
+| Android logout sonrasi login | `19-android-logout-login.png` | Android logout | Logout sonrasi login ekranina temiz donus |
 
 ## Onerilen Sunum Sirasi
 
 | Sira | Onerilen Dosya Adi | Demo Adimi | Kanitladigi Ozellik |
 | --- | --- | --- | --- |
-| 1 | `02-login-screen.png` | Login | SSR auth giriş ekrani |
-| 2 | `01-dashboard-overview.png` | Dashboard | Gerçek count kartları ve panel girişi |
+| 1 | `02-login-screen.png` | Login | SSR auth giris ekrani |
+| 2 | `01-dashboard-overview.png` | Dashboard | Gercek count kartlari ve panel girisi |
 | 3 | `04-ticket-list-filtered.png` | Ticket listesi ve filtre | Server-side filtreleme |
 | 4 | `05-ticket-detail-internal-comment.png` | Ticket detay, atama, durum ve internal not | Ticket yasam dongusu ve yorum ayrimi |
 | 5 | `06-device-list-filtered.png` | Device listesi | Envanter filtreleme ve durum gorunumu |
-| 6 | `07-device-detail.png` | Device detay | Cihazı kullanan personel ile teknik atama ayrımı |
+| 6 | `07-device-detail.png` | Device detay | Cihazi kullanan personel ile teknik atama ayrimi |
 | 7 | `08-device-edit-form.png` | Device duzenleme | Form ve zimmetli personel kavrami |
 | 8 | `09-device-qr-preview.png` | QR preview | Guvenli QR yaklasimi |
-| 9 | `10-device-maintenance.png` | Maintenance record | Bakım geçmişi ve cihaz takibi |
+| 9 | `10-device-maintenance.png` | Maintenance record | Bakim gecmisi ve cihaz takibi |
 | 10 | `03-access-denied.png` | Access denied | Employee panel kisiti |
 | 11 | `11-test-results.png` | RLS/test kaniti | Lint, build ve test dogrulamasi |
 
@@ -54,3 +67,4 @@ Bu plan, staj sunumu ve staj raporu icin alinacak ekran goruntulerinin kapsamini
 - Durum ve oncelik etiketleri sadece renk lekesi gibi kalmamali; metinleri de net secilmelidir.
 - Login, access denied ve auth error ekranlari korkutucu veya asiri teknik gorunmemelidir.
 - Dashboard, ticket ve device ekranlarinda fazla beyaz gorunum yerine yumusak section ayrimlari ve kart baslik hiyerarsisi gorunur olmalidir.
+- Android ekran goruntulerinde de gercek Supabase URL, publishable key veya parola gosterilmemelidir.

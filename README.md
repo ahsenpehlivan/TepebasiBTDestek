@@ -19,6 +19,9 @@ Bu repository bir uretim sistemi degildir. Gercek kurum verisi, gercek personel 
 - Kotlin
 - Jetpack Compose
 - Gradle Kotlin DSL
+- Navigation Compose
+- Supabase Kotlin client
+- Kotlin serialization
 
 ### Supabase
 
@@ -74,14 +77,15 @@ Bu repository bir uretim sistemi degildir. Gercek kurum verisi, gercek personel 
 - Gercek session ile ticket, comment, device ve maintenance RLS runtime dogrulamasi
 - Web lint ve production build dogrulamasi
 - Android `assembleDebug` regresyon dogrulamasi
+- Android icin Supabase auth foundation, role/profile cozumleme ve role-based baslangic ekranlari
 - Migration, seed, RLS ve storage SQL dosyalari
 
 ### Henuz Tamamlanmayan veya Bloklu Alanlar
 
 - Ticket create/update ekranlari
-- Android Supabase entegrasyonu
+- Android personel ticket listeleme ve detay ekranlari
+- Android technician queue ekranlari
 - QR, realtime, bildirim ve dosya yukleme akislari
-- Android auth, role/profile cozumleme ve ticket ekranlari
 - AUTH-12 eksik env senaryosunun ayrik browser instance ile tekrar uretimi
 
 ## Gelecek Faz Fikirleri
@@ -178,6 +182,8 @@ cd apps/android
 gradlew.bat assembleDebug
 ```
 
+Android auth icin gercek degerler repository'ye yazilmaz. `apps/android/secrets.defaults.properties` yalnizca bos anahtar isimlerini tutar; gercek `SUPABASE_URL` ve `SUPABASE_PUBLISHABLE_KEY` degerleri yerel `apps/android/secrets.properties` dosyasinda tutulmalidir.
+
 ### Supabase
 
 Docker engine calisiyorsa:
@@ -199,6 +205,7 @@ psql -f supabase/tests/rls_smoke_test.sql
 ## Guvenlik Notlari
 
 - Service role veya secret key istemciye eklenmez.
+- Android tarafinda yalnizca `SUPABASE_URL` ve `SUPABASE_PUBLISHABLE_KEY` BuildConfig uzerinden okunur.
 - `.env.local` Git'e eklenmez.
 - Rol bilgisi client state, cookie metadata veya localStorage uzerinden dogrulanmaz.
 - Web paneli erisimi yalnizca server-side profile ve rol cozumlemesi ile acilir.
@@ -209,6 +216,7 @@ psql -f supabase/tests/rls_smoke_test.sql
 ## Dokumantasyon
 
 - [Architecture](docs/ARCHITECTURE.md)
+- [Android Auth](docs/ANDROID_AUTH.md)
 - [Authentication](docs/AUTHENTICATION.md)
 - [Database](docs/DATABASE.md)
 - [RLS Matrix](docs/RLS_MATRIX.md)
