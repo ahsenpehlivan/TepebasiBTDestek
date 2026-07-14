@@ -165,7 +165,7 @@ fun AppNavHost(
             )
             val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
             val message = (globalSessionState as? SessionState.AccessDenied)?.message
-                ?: "Bu hesaba su anda mobil panel erisimi verilemiyor."
+                ?: "Bu hesaba şu anda mobil panel erişimi verilemiyor."
 
             AccessDeniedScreen(
                 message = message,
@@ -188,7 +188,7 @@ fun AppNavHost(
             )
             val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
             val message = (globalSessionState as? SessionState.Error)?.message
-                ?: "Kimlik dogrulama sonrasi profil bilgisi okunamadi."
+                ?: "Kimlik doğrulama sonrası profil bilgisi okunamadı."
 
             AuthErrorScreen(
                 message = message,
@@ -207,7 +207,7 @@ fun AppNavHost(
 
         composable(AppRoute.ConfigError.route) {
             val message = (globalSessionState as? SessionState.ConfigError)?.message
-                ?: "Supabase yapilandirmasi eksik."
+                ?: "Supabase yapılandırması eksik."
 
             ConfigErrorScreen(
                 message = message,

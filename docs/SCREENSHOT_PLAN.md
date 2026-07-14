@@ -28,14 +28,14 @@ Bu plan, staj sunumu ve staj raporu icin alinacak ekran goruntulerinin kapsamini
 
 | Ekran | Onerilen Dosya Adi | Rapor Bolumu | Kanitladigi Ozellik |
 | --- | --- | --- | --- |
-| Android login ekrani | `12-android-login.png` | Android auth | Supabase auth giris formu ve demo uyari metni |
-| Android employee home | `13-android-employee-home.png` | Android role yonlendirmesi | Employee rolu icin mobil baslangic ekrani |
-| Android technician home | `14-android-technician-home.png` | Android role yonlendirmesi | Technician rolu icin mobil baslangic ekrani |
-| Android admin home | `15-android-admin-home.png` | Android role yonlendirmesi | Admin rolu icin mobil baslangic ekrani |
-| Android access denied | `16-android-access-denied.png` | Android auth hata akisi | Pasif profile kontrollu erisim engeli |
+| Android login ekrani | `12-android-login.png` | Android auth | Supabase auth giriş formu ve demo uyarı metni |
+| Android employee home | `13-android-employee-home.png` | Android role yonlendirmesi | Employee rolu icin mobil başlangıç ekrani |
+| Android technician home | `14-android-technician-home.png` | Android role yonlendirmesi | Technician rolu icin mobil başlangıç ekrani |
+| Android admin home | `15-android-admin-home.png` | Android role yonlendirmesi | Admin rolu icin mobil başlangıç ekrani |
+| Android access denied | `16-android-access-denied.png` | Android auth hata akisi | Pasif profile kontrollu erişim engeli |
 | Android auth error | `17-android-auth-error.png` | Android auth hata akisi | Profile satiri olmayan kullanicida kontrollu hata |
-| Android config error | `18-android-config-error.png` | Android config guvenligi | Eksik secrets durumunda anlasilir hata |
-| Android logout sonrasi login | `19-android-logout-login.png` | Android logout | Logout sonrasi login ekranina temiz donus |
+| Android config error | `18-android-config-error.png` | Android config guvenligi | Eksik secrets durumunda anlasılır hata |
+| Android logout sonrasi login | `19-android-logout-login.png` | Android logout | Logout sonrasi login ekranina temiz dönüş |
 
 ## Onerilen Sunum Sirasi
 

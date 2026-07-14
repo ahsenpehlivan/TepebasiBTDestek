@@ -50,7 +50,7 @@ Not: Demo kullanici parolalari repository icinde tutulmadigi icin browser auth t
 
 | Kod | Senaryo | Beklenen | Sonuc | Neden |
 | --- | --- | --- | --- | --- |
-| AUTH-01 | Gecersiz e-posta/parola ile giriş | Turkce hata, dashboard acilmaz | gecti | `/login` uzerinde Turkce hata goruldu ve dashboard acilmadi |
+| AUTH-01 | Gecersiz e-posta/parola ile giriş | Türkçe hata, dashboard acilmaz | gecti | `/login` uzerinde Türkçe hata goruldu ve dashboard acilmadi |
 | AUTH-02 | Technician hesabiyla giriş | Dashboard acilir | gecti | Gecici remote technician hesabi ile `/dashboard` acildi |
 | AUTH-03 | Admin hesabiyla giriş | Dashboard acilir | gecti | Gecici remote admin hesabi ile `/dashboard` acildi |
 | AUTH-04 | Employee hesabiyla giriş | Access denied ekrani acilir | gecti | Gecici remote employee hesabi `/access-denied` ekranina yonlendirildi |
@@ -211,13 +211,13 @@ Not: Bu route ve responsive kontrolleri local Supabase'e bagli ayri bir web inst
 | Test | Sonuc | Neden |
 | --- | --- | --- |
 | Android auth dependency ve BuildConfig uretilmesi | gecti | `secrets.defaults.properties`, version catalog, BuildConfig alanlari ve Supabase Kotlin modulleri ile `gradlew.bat assembleDebug` basariyla tamamlandi |
-| ANDROID-AUTH-01 eksik `secrets.properties` veya eksik config | test edilemedi | `apps/android/secrets.properties` dosyasi bulunmuyor ve ConfigError akisi kaynak kodda var; ancak emulator/fiziksel cihaz uzerinde ekran akisi calistirilamadi |
-| ANDROID-AUTH-02 gecersiz e-posta/parola | test edilemedi | Login ekraninda Turkce hata akisleri yazildi; fakat bu izin profilinde adb/emulator erisimi olmadigi icin gercek runtime denemesi yapilamadi |
-| ANDROID-AUTH-03 employee hesabi ile giris | test edilemedi | Employee role yonlendirmesi `EmployeeHomeScreen` olarak kodlandi; manuel cihaz testi yapilamadi |
-| ANDROID-AUTH-04 technician hesabi ile giris | test edilemedi | Technician role yonlendirmesi `TechnicianHomeScreen` olarak kodlandi; manuel cihaz testi yapilamadi |
-| ANDROID-AUTH-05 admin hesabi ile giris | test edilemedi | Admin role yonlendirmesi `AdminHomeScreen` olarak kodlandi; manuel cihaz testi yapilamadi |
-| ANDROID-AUTH-06 pasif profile ile giris | test edilemedi | `is_active = false` icin `AccessDenied` akisi repository ve navigation katmaninda eklendi; cihaz uzerinde calistirilamadi |
-| ANDROID-AUTH-07 profile satiri olmayan auth kullanicisi | test edilemedi | Profil yoksa `AuthError` route'u kodlandi; manuel runtime kaniti alinmadi |
-| ANDROID-AUTH-08 logout | test edilemedi | Logout back stack temizleme akisi navigation katmaninda yazildi; adb/emulator olmadigi icin kullanici akisi denenemedi |
-| ANDROID-AUTH-09 logout sonrasi geri tusu | test edilemedi | Login'e donuste `popUpTo(... inclusive = true)` kullanildi; fiziksel geri tusu davranisi cihazda test edilemedi |
-| ANDROID-AUTH-10 uygulama yeniden acildiginda session ile dogru home | test edilemedi | `auth.awaitInitialization()` ve session restore akisi eklendi; ancak uygulama kapanip acma senaryosu cihaz/emulator yoklugu nedeniyle dogrulanamadi |
+| ANDROID-AUTH-01 eksik `secrets.properties` veya eksik config | gecti | Gercek emulator dogrulamasinda kontrollu `Yapılandırma hatası` ekrani goruldu; secret degerler raporlanmadi |
+| ANDROID-AUTH-02 gecersiz e-posta/parola | gecti | Gercek emulator akışında Türkçe hata mesaji goruldu ve home ekranı acilmadi |
+| ANDROID-AUTH-03 employee hesabi ile giris | gecti | Gercek emulator akışında `EmployeeHomeScreen` acildi |
+| ANDROID-AUTH-04 technician hesabi ile giris | gecti | Gercek emulator akışında `TechnicianHomeScreen` acildi |
+| ANDROID-AUTH-05 admin hesabi ile giris | gecti | Gercek emulator akışında `AdminHomeScreen` acildi |
+| ANDROID-AUTH-06 pasif profile ile giris | gecti | Gercek emulator akışında kontrollu `Erişim engeli` ekrani acildi |
+| ANDROID-AUTH-07 profile satiri olmayan auth kullanicisi | gecti | Gercek emulator akışında kontrollu `Kimlik doğrulama hatası` ekrani acildi |
+| ANDROID-AUTH-08 logout | gecti | Logout sonrasi Login ekranına temiz donus dogrulandi |
+| ANDROID-AUTH-09 logout sonrasi geri tusu | gecti | Logout sonrasi fiziksel geri tusu ile protected home ekranina donulmedi |
+| ANDROID-AUTH-10 uygulama yeniden acildiginda session ile dogru home | test edilemedi | Bu kapanış turunda yeni gecici auth kullanicisi olusturma ve auth tablolarina tekrar mudahale etme yasagi altinda, clear-data sonrasi yeniden login icin kullanılabilir demo parola kaynagi bulunamadı; bu nedenle force-stop + reopen kaniti yeniden uretilemedi |

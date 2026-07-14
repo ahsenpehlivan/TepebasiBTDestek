@@ -9,7 +9,7 @@ data class SupabaseConfig(
 ) {
     companion object {
         const val MISSING_CONFIG_MESSAGE =
-            "Supabase yapilandirmasi eksik. Lutfen Android secrets.properties dosyasini kontrol edin."
+            "Supabase yapılandırması eksik. Lütfen Android secrets.properties dosyasını kontrol edin."
 
         fun fromBuildConfig(): AppResult<SupabaseConfig> {
             val url = BuildConfig.SUPABASE_URL.trim()

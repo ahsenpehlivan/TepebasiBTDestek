@@ -37,14 +37,14 @@ class LoginViewModel(
 
         if (normalizedEmail.isBlank()) {
             _uiState.value = currentState.copy(
-                errorMessage = "E-posta alani bos birakilamaz."
+                errorMessage = "E-posta alanı boş bırakılamaz."
             )
             return
         }
 
         if (password.isBlank()) {
             _uiState.value = currentState.copy(
-                errorMessage = "Parola alani bos birakilamaz."
+                errorMessage = "Parola alanı boş bırakılamaz."
             )
             return
         }

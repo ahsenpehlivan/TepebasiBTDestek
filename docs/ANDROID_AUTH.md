@@ -6,7 +6,7 @@ Android uygulamasinda bu fazda yalnizca auth temeli kurulmustur.
 
 Kapsam:
 
-- Supabase Auth ile giris ve cikis omurgasi
+- Supabase Auth ile giriş ve çıkış omurgası
 - `profiles` tablosundan rol ve profil cozumleme
 - Role gore baslangic ekrani yonlendirmesi
 - Employee, technician ve admin rollerinin Android tarafinda ayrilmasi
@@ -38,9 +38,9 @@ Bu fazda ticket listesi, ticket detay, QR tarama, foto yukleme, realtime, notifi
 - `BuildConfig.SUPABASE_URL`
 - `BuildConfig.SUPABASE_PUBLISHABLE_KEY`
 
-Eksik config durumunda uygulama crash etmek yerine su mesaji temel alir:
+Eksik config durumunda uygulama crash etmek yerine şu mesajı temel alır:
 
-`Supabase yapilandirmasi eksik. Lutfen Android secrets.properties dosyasini kontrol edin.`
+`Supabase yapılandırması eksik. Lütfen Android secrets.properties dosyasını kontrol edin.`
 
 ## Auth Mimarisi
 
@@ -69,13 +69,13 @@ Login:
 - E-posta trim ve lowercase normalize edilir.
 - Bos alanlar icin Turkce validation mesaji gosterilir.
 - Ham Supabase hata metni kullaniciya verilmez.
-- Basarili giris sonrasi profile/role cozumlenir ve dogru route acilir.
+- Başarılı giriş sonrası profile/role çözümlemesi yapılır ve doğru route açılır.
 
 Logout:
 
 - Supabase session kapatilir.
-- Back stack temizlenerek `Login` ekranina donulur.
-- Hata olursa Turkce mesaj gosterilir.
+- Back stack temizlenerek `Login` ekranına dönülür.
+- Hata olursa Türkçe mesaj gösterilir.
 
 ## Role-Based Home Ekranlari
 
@@ -99,19 +99,19 @@ bulunur.
 Hedef senaryolar:
 
 - eksik config
-- gecersiz giris
+- geçersiz giriş
 - employee / technician / admin login
 - pasif profile
 - profile satiri olmayan auth kullanicisi
 - logout
-- logout sonrasi geri tusu
-- uygulama yeniden acildiginda mevcut session ile dogru role donus
+- logout sonrası geri tuşu
+- uygulama yeniden açıldığında mevcut session ile doğru role dönüş
 
-Bu turde emulator veya fiziksel cihaz erisimi olmadigi icin runtime cihaz testleri tamamlanamadi. `assembleDebug` ve kaynak kod akislarinin tutarliligi dogrulandi.
+2026-07-08 tarihli emulator doğrulamasında eksik config, geçersiz giriş, employee/technician/admin login, pasif profil, profile satırı olmayan kullanıcı, logout ve logout sonrası geri tuşu akışları gerçek runtime üzerinde doğrulandı. Session restore akışı ise bu kapanış turunda yeniden kanıtlanamadığı için açık kaldı.
 
 ## Bilinen Eksikler
 
-- Gercek cihaz veya emulator uzerinde Android auth senaryolari henuz manuel olarak dogrulanmadi.
+- Session restore akışı bu kapanış turunda yeniden kanıtlanamadı.
 - Ticket listeleme ve detay ekranlari sonraki faza birakildi.
 - Android tarafinda demo kullanici parolalari dokumante edilmedi ve source code'a yazilmadi.
 

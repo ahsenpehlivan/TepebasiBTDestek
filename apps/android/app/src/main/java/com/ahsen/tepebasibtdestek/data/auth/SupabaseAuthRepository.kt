@@ -68,7 +68,7 @@ class SupabaseAuthRepository(
             AppResult.Success(state)
         } catch (_: Exception) {
             AppResult.Failure(
-                "E-posta veya parola hatali. Bilgilerinizi kontrol edip tekrar deneyin."
+                "E-posta veya parola hatalı. Bilgilerinizi kontrol edip tekrar deneyin."
             )
         }
     }
@@ -78,7 +78,7 @@ class SupabaseAuthRepository(
             is AppResult.Success -> result.value
             is AppResult.Failure -> {
                 return AppResult.Failure(
-                    "Oturum kapatilamadi. Uygulama yapilandirmasini kontrol edin."
+                    "Oturum kapatılamadı. Uygulama yapılandırmasını kontrol edin."
                 )
             }
         }
@@ -88,7 +88,7 @@ class SupabaseAuthRepository(
             _sessionState.value = SessionState.Unauthenticated
             AppResult.Success(Unit)
         } catch (_: Exception) {
-            AppResult.Failure("Oturum kapatilamadi. Lutfen tekrar deneyin.")
+            AppResult.Failure("Oturum kapatılamadı. Lütfen tekrar deneyin.")
         }
     }
 
@@ -118,7 +118,7 @@ class SupabaseAuthRepository(
         client.auth.awaitInitialization()
         val currentUser = client.auth.currentSessionOrNull()?.user
             ?: return AppResult.Failure(
-                "Aktif oturum bulunamadi. Lutfen yeniden giris yapin."
+                "Aktif oturum bulunamadı. Lütfen yeniden giriş yapın."
             )
 
         return try {
@@ -142,18 +142,18 @@ class SupabaseAuthRepository(
 
             val profile = profiles.firstOrNull()
                 ?: return AppResult.Failure(
-                    "Kullanici profili bulunamadi. Lutfen yonetici ile iletisime gecin."
+                    "Kullanıcı profili bulunamadı. Lütfen yönetici ile iletişime geçin."
                 )
 
             val mappedProfile = profile.toDomain()
                 ?: return AppResult.Failure(
-                    "Rol bilgisi okunamadi. Lutfen sistem yoneticisi ile iletisime gecin."
+                    "Rol bilgisi okunamadı. Lütfen sistem yöneticisi ile iletişime geçin."
                 )
 
             AppResult.Success(mappedProfile)
         } catch (_: Exception) {
             AppResult.Failure(
-                "Profil bilgisi okunamadi. Baglantinizi kontrol edip tekrar deneyin."
+                "Profil bilgisi okunamadı. Bağlantınızı kontrol edip tekrar deneyin."
             )
         }
     }
@@ -163,7 +163,7 @@ class SupabaseAuthRepository(
             is AppResult.Success -> {
                 if (!profileResult.value.isActive) {
                     SessionState.AccessDenied(
-                        message = "Bu profil pasif durumda oldugu icin mobil panele erisim verilmiyor.",
+                        message = "Bu profil pasif durumda olduğu için mobil panele erişim verilmiyor.",
                         profile = profileResult.value
                     )
                 } else {
