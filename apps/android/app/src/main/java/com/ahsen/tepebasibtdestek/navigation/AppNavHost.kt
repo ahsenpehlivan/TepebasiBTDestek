@@ -17,6 +17,8 @@ import com.ahsen.tepebasibtdestek.core.AppContainer
 import com.ahsen.tepebasibtdestek.domain.auth.SessionState
 import com.ahsen.tepebasibtdestek.feature.auth.LoginScreen
 import com.ahsen.tepebasibtdestek.feature.auth.LoginViewModel
+import com.ahsen.tepebasibtdestek.feature.devices.DeviceListScreen
+import com.ahsen.tepebasibtdestek.feature.devices.DeviceListViewModel
 import com.ahsen.tepebasibtdestek.feature.home.AdminHomeScreen
 import com.ahsen.tepebasibtdestek.feature.home.EmployeeHomeScreen
 import com.ahsen.tepebasibtdestek.feature.home.HomeViewModel
@@ -53,6 +55,7 @@ fun AppNavHost(
         if (globalSessionState == SessionState.Unauthenticated &&
             currentRoute in listOf(
                 AppRoute.EmployeeHome.route,
+                AppRoute.DeviceList.route,
                 AppRoute.MyTickets.route,
                 AppRoute.CreateTicket.route,
                 AppRoute.TechnicianQueue.route,
@@ -131,6 +134,9 @@ fun AppNavHost(
                 onCreateTicketClick = {
                     navController.navigate(AppRoute.CreateTicket.route)
                 },
+                onDevicesClick = {
+                    navController.navigate(AppRoute.DeviceList.route)
+                },
                 onLogoutClick = homeViewModel::signOut
             )
 
@@ -167,6 +173,37 @@ fun AppNavHost(
                 onCreateTicketClick = {
                     navController.navigate(AppRoute.CreateTicket.route)
                 }
+            )
+        }
+
+        composable(AppRoute.DeviceList.route) {
+            val deviceListViewModel: DeviceListViewModel = viewModel(
+                factory = DeviceListViewModel.factory(
+                    authRepository = appContainer.authRepository,
+                    deviceRepository = appContainer.deviceRepository
+                )
+            )
+            val uiState by deviceListViewModel.uiState.collectAsStateWithLifecycle()
+
+            DeviceListScreen(
+                state = uiState,
+                onBackClick = {
+                    if (!navController.popBackStack()) {
+                        val fallbackRoute = when (
+                            (globalSessionState as? SessionState.Authenticated)?.profile?.role
+                        ) {
+                            com.ahsen.tepebasibtdestek.domain.auth.AppRole.Technician ->
+                                AppRoute.TechnicianHome.route
+                            com.ahsen.tepebasibtdestek.domain.auth.AppRole.Admin ->
+                                AppRoute.AdminHome.route
+                            else -> AppRoute.EmployeeHome.route
+                        }
+                        navController.navigate(fallbackRoute) {
+                            launchSingleTop = true
+                        }
+                    }
+                },
+                onRetryClick = deviceListViewModel::refresh
             )
         }
 
@@ -276,6 +313,9 @@ fun AppNavHost(
                 onQueueClick = {
                     navController.navigate(AppRoute.TechnicianQueue.route)
                 },
+                onDeviceListClick = {
+                    navController.navigate(AppRoute.DeviceList.route)
+                },
                 onLogoutClick = homeViewModel::signOut
             )
 
@@ -320,6 +360,9 @@ fun AppNavHost(
 
             AdminHomeScreen(
                 state = uiState,
+                onDeviceListClick = {
+                    navController.navigate(AppRoute.DeviceList.route)
+                },
                 onLogoutClick = homeViewModel::signOut
             )
 

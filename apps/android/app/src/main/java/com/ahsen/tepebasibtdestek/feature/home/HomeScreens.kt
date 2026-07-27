@@ -29,6 +29,7 @@ fun EmployeeHomeScreen(
     state: HomeUiState,
     onMyTicketsClick: () -> Unit,
     onCreateTicketClick: () -> Unit,
+    onDevicesClick: () -> Unit,
     onLogoutClick: () -> Unit
 ) {
     RoleHomeScreen(
@@ -40,6 +41,8 @@ fun EmployeeHomeScreen(
         onPrimaryActionClick = onMyTicketsClick,
         secondaryActionLabel = stringResource(R.string.employee_home_create_ticket_button),
         onSecondaryActionClick = onCreateTicketClick,
+        tertiaryActionLabel = stringResource(R.string.employee_home_devices_button),
+        onTertiaryActionClick = onDevicesClick,
         logoutLoading = state.isLogoutLoading,
         logoutErrorMessage = state.logoutErrorMessage,
         onLogoutClick = onLogoutClick
@@ -50,6 +53,7 @@ fun EmployeeHomeScreen(
 fun TechnicianHomeScreen(
     state: HomeUiState,
     onQueueClick: () -> Unit,
+    onDeviceListClick: () -> Unit,
     onLogoutClick: () -> Unit
 ) {
     RoleHomeScreen(
@@ -59,6 +63,8 @@ fun TechnicianHomeScreen(
         secondaryDescription = stringResource(R.string.technician_home_secondary_description),
         primaryActionLabel = stringResource(R.string.technician_home_queue_button),
         onPrimaryActionClick = onQueueClick,
+        secondaryActionLabel = stringResource(R.string.technician_home_devices_button),
+        onSecondaryActionClick = onDeviceListClick,
         logoutLoading = state.isLogoutLoading,
         logoutErrorMessage = state.logoutErrorMessage,
         onLogoutClick = onLogoutClick
@@ -68,6 +74,7 @@ fun TechnicianHomeScreen(
 @Composable
 fun AdminHomeScreen(
     state: HomeUiState,
+    onDeviceListClick: () -> Unit,
     onLogoutClick: () -> Unit
 ) {
     RoleHomeScreen(
@@ -75,8 +82,8 @@ fun AdminHomeScreen(
         title = stringResource(R.string.admin_home_title),
         description = stringResource(R.string.admin_home_description),
         secondaryDescription = stringResource(R.string.admin_home_secondary_description),
-        primaryActionLabel = null,
-        onPrimaryActionClick = null,
+        primaryActionLabel = stringResource(R.string.admin_home_devices_button),
+        onPrimaryActionClick = onDeviceListClick,
         logoutLoading = state.isLogoutLoading,
         logoutErrorMessage = state.logoutErrorMessage,
         onLogoutClick = onLogoutClick
@@ -93,6 +100,8 @@ private fun RoleHomeScreen(
     onPrimaryActionClick: (() -> Unit)?,
     secondaryActionLabel: String? = null,
     onSecondaryActionClick: (() -> Unit)? = null,
+    tertiaryActionLabel: String? = null,
+    onTertiaryActionClick: (() -> Unit)? = null,
     logoutLoading: Boolean,
     logoutErrorMessage: String?,
     onLogoutClick: () -> Unit
@@ -176,6 +185,15 @@ private fun RoleHomeScreen(
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(text = secondaryActionLabel)
+                        }
+                    }
+
+                    if (!tertiaryActionLabel.isNullOrBlank() && onTertiaryActionClick != null) {
+                        OutlinedButton(
+                            onClick = onTertiaryActionClick,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(text = tertiaryActionLabel)
                         }
                     }
 

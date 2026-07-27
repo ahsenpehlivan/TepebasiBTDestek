@@ -59,6 +59,9 @@ Not:
 - Android ticket yorum iskeleti icin planlanan ek ekran goruntusu:
   - `25-android-ticket-comments.png` -> `TicketDetail` icinde yorum listesi, `Genel Yorum` / `Ic Not` badge'leri ve yorum ekleme formu
   - Bu ekran goruntusu henuz alinmadi; cunku runtime'da employee veya technician session ile detail ekranina ilerlenip canli yorum gonderimi kanitlanamadi
+- Android cihaz listesi iskeleti icin planlanan ek ekran goruntusu:
+  - `26-android-device-list.png` -> Employee veya technician icin `Cihazlar` ekrani ve cihaz kartlari
+  - Bu ekran goruntusu henuz alinmadi; cunku runtime'da `DeviceList` ekranina employee veya technician session ile canli ilerleme kaniti alinmadi
 
 | Sira | Onerilen Dosya Adi | Demo Adimi | Kanitladigi Ozellik |
 | --- | --- | --- | --- |

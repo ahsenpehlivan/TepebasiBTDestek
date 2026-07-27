@@ -1,0 +1,178 @@
+package com.ahsen.tepebasibtdestek.data.device
+
+import com.ahsen.tepebasibtdestek.core.result.AppResult
+import com.ahsen.tepebasibtdestek.data.remote.supabase.SupabaseClientProvider
+import com.ahsen.tepebasibtdestek.domain.device.DeviceStatus
+import com.ahsen.tepebasibtdestek.domain.device.DeviceSummary
+import com.ahsen.tepebasibtdestek.domain.device.DeviceType
+import io.github.jan.supabase.postgrest.postgrest
+import io.github.jan.supabase.postgrest.query.Columns
+import io.github.jan.supabase.postgrest.query.Order
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+private const val DEFAULT_DEVICE_LOAD_ERROR_MESSAGE =
+    "Cihazlar yüklenemedi. Lütfen tekrar deneyin."
+
+class SupabaseDeviceRepository(
+    private val clientProvider: SupabaseClientProvider
+) : DeviceRepository {
+    override suspend fun loadDevices(): Result<List<DeviceSummary>> {
+        val client = when (val result = clientProvider.getClient()) {
+            is AppResult.Success -> result.value
+            is AppResult.Failure -> {
+                return Result.failure(IllegalStateException(DEFAULT_DEVICE_LOAD_ERROR_MESSAGE))
+            }
+        }
+
+        return try {
+            val deviceRows = client.postgrest
+                .from("devices")
+                .select(
+                    columns = Columns.list(
+                        "id",
+                        "asset_tag",
+                        "device_type",
+                        "brand",
+                        "model",
+                        "status",
+                        "department_id",
+                        "assigned_user_id",
+                        "is_active"
+                    )
+                ) {
+                    order(column = "is_active", order = Order.DESCENDING)
+                    order(column = "asset_tag", order = Order.ASCENDING)
+                }
+                .decodeList<DeviceRowDto>()
+
+            val departmentNames = loadDepartmentNames(
+                departmentIds = deviceRows.mapNotNull { it.departmentId }.distinct()
+            )
+            val assignedUserNames = loadProfileNames(
+                profileIds = deviceRows.mapNotNull { it.assignedUserId }.distinct()
+            )
+
+            Result.success(
+                deviceRows.mapNotNull { row ->
+                    row.toSummary(
+                        departmentName = row.departmentId?.let(departmentNames::get),
+                        assignedUserName = row.assignedUserId?.let(assignedUserNames::get)
+                    )
+                }
+            )
+        } catch (_: Exception) {
+            Result.failure(IllegalStateException(DEFAULT_DEVICE_LOAD_ERROR_MESSAGE))
+        }
+    }
+
+    private suspend fun loadDepartmentNames(
+        departmentIds: List<String>
+    ): Map<String, String> {
+        if (departmentIds.isEmpty()) {
+            return emptyMap()
+        }
+
+        val client = when (val result = clientProvider.getClient()) {
+            is AppResult.Success -> result.value
+            is AppResult.Failure -> return emptyMap()
+        }
+
+        return try {
+            client.postgrest
+                .from("departments")
+                .select(columns = Columns.list("id", "name")) {
+                    filter {
+                        isIn("id", departmentIds)
+                    }
+                }
+                .decodeList<DepartmentNameDto>()
+                .associate { department -> department.id to department.name.trim() }
+        } catch (_: Exception) {
+            emptyMap()
+        }
+    }
+
+    private suspend fun loadProfileNames(
+        profileIds: List<String>
+    ): Map<String, String> {
+        if (profileIds.isEmpty()) {
+            return emptyMap()
+        }
+
+        val client = when (val result = clientProvider.getClient()) {
+            is AppResult.Success -> result.value
+            is AppResult.Failure -> return emptyMap()
+        }
+
+        return try {
+            client.postgrest
+                .from("profiles")
+                .select(columns = Columns.list("id", "full_name")) {
+                    filter {
+                        isIn("id", profileIds)
+                    }
+                }
+                .decodeList<ProfileNameDto>()
+                .mapNotNull { profile ->
+                    val fullName = profile.fullName?.trim()?.takeIf { it.isNotEmpty() }
+                        ?: return@mapNotNull null
+                    profile.id to fullName
+                }
+                .toMap()
+        } catch (_: Exception) {
+            emptyMap()
+        }
+    }
+}
+
+private fun DeviceRowDto.toSummary(
+    departmentName: String?,
+    assignedUserName: String?
+): DeviceSummary? {
+    val mappedType = DeviceType.fromRawValue(deviceType) ?: return null
+    val mappedStatus = DeviceStatus.fromRawValue(status) ?: return null
+
+    return DeviceSummary(
+        id = id,
+        assetTag = assetTag.trim(),
+        type = mappedType,
+        brand = brand.trim().takeIf { it.isNotEmpty() },
+        model = model.trim().takeIf { it.isNotEmpty() },
+        status = mappedStatus,
+        departmentName = departmentName,
+        assignedUserName = assignedUserName,
+        isActive = isActive
+    )
+}
+
+@Serializable
+private data class DeviceRowDto(
+    val id: String,
+    @SerialName("asset_tag")
+    val assetTag: String,
+    @SerialName("device_type")
+    val deviceType: String,
+    val brand: String,
+    val model: String,
+    val status: String,
+    @SerialName("department_id")
+    val departmentId: String? = null,
+    @SerialName("assigned_user_id")
+    val assignedUserId: String? = null,
+    @SerialName("is_active")
+    val isActive: Boolean = true
+)
+
+@Serializable
+private data class DepartmentNameDto(
+    val id: String,
+    val name: String
+)
+
+@Serializable
+private data class ProfileNameDto(
+    val id: String,
+    @SerialName("full_name")
+    val fullName: String? = null
+)

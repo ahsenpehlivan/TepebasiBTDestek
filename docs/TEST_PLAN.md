@@ -281,6 +281,19 @@ Not: Bu route ve responsive kontrolleri local Supabase'e bagli ayri bir web inst
 | ANDROID-TICKET-COMMENT-06 minimum emulator acilisi | gecti | Guncel APK emulator'e kurulup uygulama foreground'a getirilecek sekilde minimum runtime kontrol planlandi; bu fazda hedef uygulamanin login ekranina kadar acildigini yeniden dogrulamaktir |
 | ANDROID-TICKET-COMMENT-07 runtime comment gonderimi | test edilemedi | Bu fazda employee veya technician runtime oturumu ile `TicketDetail` ekranina ilerlenip canli yorum gonderme kaniti alinmadi; bu nedenle yorum submit sonucu build ve kaynak kod seviyesiyle sinirli tutuldu |
 
+## Android Device List Iskeleti Dogrulamalari
+
+| Test | Sonuc | Neden |
+| --- | --- | --- |
+| ANDROID-DEVICE-LIST-01 device schema ve web mantigi incelendi mi? | gecti | `devices` tablosu, `asset_tag`, `device_type`, `brand`, `model`, `status`, `department_id`, `assigned_user_id`, `is_active` alanlari ile web cihaz liste akisi ve device label mantigi incelendi |
+| ANDROID-DEVICE-LIST-02 RLS gorunurlugu repository ile uyumlu mu? | gecti | `users_can_read_accessible_devices` policy'sinin `can_access_device(id)` uzerinden employee icin yalnizca aktif ve kendisine atanmis cihazlari, technician/admin icin daha genis cihaz gorunurlugunu korudugu dogrulandi |
+| ANDROID-DEVICE-LIST-03 device domain modelleri eklendi mi? | gecti | `DeviceSummary`, `DeviceType` ve `DeviceStatus` modelleri eklendi; veritabani degerleri Ingilizce tutulup UI label'lari Turkceye map edildi |
+| ANDROID-DEVICE-LIST-04 repository `loadDevices()` eklendi mi? | gecti | `DeviceRepository` ve `SupabaseDeviceRepository` eklendi; sorgu minimum alanlari seciyor, `is_active desc` ve `asset_tag asc` ile siraliyor ve kontrollu Turkce hata donuyor |
+| ANDROID-DEVICE-LIST-05 `DeviceListScreen` ve home baglantilari kaynak kodda bagli mi? | gecti | `DeviceListScreen`, `DeviceListViewModel`, `DeviceListUiState` ve `DeviceUi` eklendi; employee, technician ve admin home ekranlarindan `DeviceList` route'una navigation baglandi |
+| ANDROID-DEVICE-LIST-06 Turkce karakter taramasi | gecti | Yeni metinlerde `Cihazlar`, `Cihazlarimi Gor`, `Cihaz Listesini Ac`, `Demirbas Kodu`, `Cihaz Turu` gibi ASCII varyantlari kalmadi; yeni stringler `strings.xml` icine tasindi |
+| ANDROID-DEVICE-LIST-07 minimum emulator acilisi | gecti | Bu fazda hedef guncel APK'nin derlenmesi, emulator'e kurulmasi ve uygulamanin login ekranina kadar acildiginin yeniden dogrulanmasidir |
+| ANDROID-DEVICE-LIST-08 runtime device list | test edilemedi | Bu fazda employee veya technician session ile `DeviceList` ekranina canli ilerleme kaniti alinmadi; bu nedenle device list runtime sonucu acikca `test edilemedi` olarak korunur |
+
 ## Android Auth Foundation Dogrulamalari
 
 | Test | Sonuc | Neden |
