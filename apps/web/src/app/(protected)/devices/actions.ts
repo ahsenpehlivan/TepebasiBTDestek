@@ -80,7 +80,7 @@ async function requirePanelOperator() {
       supabase,
       authState,
       error: errorState(
-        "Bu islem yalnizca technician veya admin kullanicilar tarafindan yapilabilir.",
+        "Bu işlem yalnızca technician veya admin kullanıcılar tarafından yapılabilir.",
       ),
     };
   }
@@ -133,7 +133,7 @@ function validateDeviceMutation(formData: FormData) {
   if (!deviceTypeOptions.includes(deviceType)) {
     return {
       payload: null,
-      error: "Gecerli bir cihaz tipi secilmelidir.",
+      error: "Geçerli bir cihaz tipi seçilmelidir.",
     };
   }
 
@@ -154,7 +154,7 @@ function validateDeviceMutation(formData: FormData) {
   if (!deviceStatusOptions.includes(requestedStatus)) {
     return {
       payload: null,
-      error: "Gecerli bir cihaz durumu secilmelidir.",
+      error: "Geçerli bir cihaz durumu seçilmelidir.",
     };
   }
 
@@ -168,7 +168,7 @@ function validateDeviceMutation(formData: FormData) {
   if (purchaseDate && warrantyEndDate && warrantyEndDate < purchaseDate) {
     return {
       payload: null,
-      error: "Garanti bitis tarihi satin alma tarihinden once olamaz.",
+      error: "Garanti bitiş tarihi satın alma tarihinden önce olamaz.",
     };
   }
 
@@ -198,30 +198,30 @@ function validateDeviceMutation(formData: FormData) {
 
 function mapDeviceMutationError(message: string) {
   if (message.includes("devices_asset_tag_key")) {
-    return "Bu asset tag zaten kayitli. Lutfen baska bir envanter etiketi girin.";
+    return "Bu asset tag zaten kayıtlı. Lütfen başka bir envanter etiketi girin.";
   }
 
   if (message.includes("devices_serial_number_key")) {
-    return "Bu seri numarasi zaten kullaniliyor. Demo icin farkli bir deger deneyin.";
+    return "Bu seri numarası zaten kullanılıyor. Demo için farklı bir değer deneyin.";
   }
 
   if (message.includes("devices_warranty_after_purchase")) {
-    return "Garanti bitis tarihi satin alma tarihinden once olamaz.";
+    return "Garanti bitiş tarihi satın alma tarihinden önce olamaz.";
   }
 
-  return "Cihaz kaydi tamamlanamadi. Alanlari kontrol edip tekrar deneyin.";
+  return "Cihaz kaydı tamamlanamadı. Alanları kontrol edip tekrar deneyin.";
 }
 
 function mapMaintenanceMutationError(message: string) {
   if (message.includes("cost")) {
-    return "Bakim maliyeti negatif olamaz.";
+    return "Bakım maliyeti negatif olamaz.";
   }
 
   if (message.includes("description")) {
-    return "Bakim aciklamasi en az 3 karakter olmalidir.";
+    return "Bakım açıklaması en az 3 karakter olmalıdır.";
   }
 
-  return "Bakim kaydi eklenemedi. Yetki ve alan bilgilerini kontrol edip tekrar deneyin.";
+  return "Bakım kaydı eklenemedi. Yetki ve alan bilgilerini kontrol edip tekrar deneyin.";
 }
 
 function revalidateDevicePaths(deviceId?: string) {
@@ -257,7 +257,7 @@ export async function createDeviceAction(
 
   if (!profile) {
     return errorState(
-      "Bu islem yalnizca technician veya admin kullanicilar tarafindan yapilabilir.",
+      "Bu işlem yalnızca technician veya admin kullanıcılar tarafından yapılabilir.",
     );
   }
 
@@ -280,7 +280,7 @@ export async function createDeviceAction(
 
   if (lookupError || !createdDevice) {
     return errorState(
-      "Cihaz kaydi olustu ancak detay adresi okunamadi. Liste ekranini yenileyip kaydi kontrol edin.",
+      "Cihaz kaydı oluştu ancak detay adresi okunamadı. Liste ekranını yenileyip kaydı kontrol edin.",
     );
   }
 
@@ -296,7 +296,7 @@ export async function updateDeviceAction(
   const deviceId = readFormValue(formData.get("deviceId"));
 
   if (!deviceId) {
-    return errorState("Guncellenecek cihaz kaydi bulunamadi.");
+    return errorState("Güncellenecek cihaz kaydı bulunamadı.");
   }
 
   const context = await requirePanelOperator();
@@ -360,7 +360,7 @@ export async function deactivateDeviceAction(
     .eq("id", deviceId);
 
   if (error) {
-    return errorState("Cihaz pasife alinamadi. Kaydi kontrol edip tekrar deneyin.");
+    return errorState("Cihaz pasife alınamadı. Kaydı kontrol edip tekrar deneyin.");
   }
 
   revalidateDevicePaths(deviceId);
@@ -382,23 +382,23 @@ export async function createDeviceMaintenanceAction(
   const partsUsed = readOptionalValue(formData.get("partsUsed"));
 
   if (!deviceId) {
-    return errorState("Bakim kaydi icin cihaz bilgisi eksik.");
+    return errorState("Bakım kaydı için cihaz bilgisi eksik.");
   }
 
   if (!maintenanceTypeOptions.includes(maintenanceType)) {
-    return errorState("Gecerli bir bakim tipi secilmelidir.");
+    return errorState("Geçerli bir bakım tipi seçilmelidir.");
   }
 
   if (description.length < 3) {
-    return errorState("Bakim aciklamasi en az 3 karakter olmalidir.");
+    return errorState("Bakım açıklaması en az 3 karakter olmalıdır.");
   }
 
   if (cost !== null && Number.isNaN(cost)) {
-    return errorState("Bakim maliyeti sayisal bir deger olmalidir.");
+    return errorState("Bakım maliyeti sayısal bir değer olmalıdır.");
   }
 
   if ((cost ?? 0) < 0) {
-    return errorState("Bakim maliyeti negatif olamaz.");
+    return errorState("Bakım maliyeti negatif olamaz.");
   }
 
   const context = await requirePanelOperator();
@@ -412,7 +412,7 @@ export async function createDeviceMaintenanceAction(
 
   if (!profile) {
     return errorState(
-      "Bu islem yalnizca technician veya admin kullanicilar tarafindan yapilabilir.",
+      "Bu işlem yalnızca technician veya admin kullanıcılar tarafından yapılabilir.",
     );
   }
 
@@ -431,5 +431,5 @@ export async function createDeviceMaintenanceAction(
   }
 
   revalidateDevicePaths(deviceId);
-  return successState("Bakim kaydi eklendi.");
+  return successState("Bakım kaydı eklendi.");
 }

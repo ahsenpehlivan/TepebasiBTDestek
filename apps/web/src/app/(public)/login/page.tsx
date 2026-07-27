@@ -39,8 +39,8 @@ export default async function LoginPage() {
         <LoginForm />
 
         <p className={styles.helper}>
-          Bu prototipte personel rolündeki hesaplar giriş yapabilir; ancak yetkili
-          web paneli yerine erişim bilgilendirme ekranı görür.
+          Personel rolündeki hesaplar giriş yapabilir; ancak yetki durumuna göre
+          erişim bilgilendirme ekranı görür.
         </p>
 
         <Link href="/" className={styles.backLink}>

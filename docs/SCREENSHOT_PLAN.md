@@ -31,14 +31,14 @@ Bu plan, staj sunumu ve final teslimi için alınacak ekran görüntülerinin ka
 | 2 | Employee home | `12-android-employee-home.png` | Alınabilir, runtime doğrulandı |
 | 3 | Technician home | `13-android-technician-home.png` | Alınabilir, runtime doğrulandı |
 | 4 | Admin home | `14-android-admin-home.png` | Alınabilir, runtime doğrulandı |
-| 5 | Taleplerim ekranı | `15-android-my-tickets.png` | Screenshot alınamadı veya foundation seviyesinde |
-| 6 | Talep detayı ekranı | `16-android-ticket-detail.png` | Screenshot alınamadı veya foundation seviyesinde |
-| 7 | Yeni talep oluştur ekranı | `17-android-create-ticket.png` | Screenshot alınamadı veya foundation seviyesinde |
-| 8 | Cihazlar ekranı | `18-android-device-list.png` | Screenshot alınamadı veya foundation seviyesinde |
-| 9 | Cihaz detayı ekranı | `19-android-device-detail.png` | Screenshot alınamadı veya foundation seviyesinde |
-| 10 | QR önizleme ekranı | `20-android-device-qr-preview.png` | Screenshot alınamadı veya foundation seviyesinde |
+| 5 | Taleplerim ekranı | `15-android-my-tickets.png` | Henüz ekran görüntüsü alınmadı, temel yapı hazır |
+| 6 | Talep detayı ekranı | `16-android-ticket-detail.png` | Henüz ekran görüntüsü alınmadı, temel yapı hazır |
+| 7 | Yeni talep oluştur ekranı | `17-android-create-ticket.png` | Henüz ekran görüntüsü alınmadı, temel yapı hazır |
+| 8 | Cihazlar ekranı | `18-android-device-list.png` | Henüz ekran görüntüsü alınmadı, temel yapı hazır |
+| 9 | Cihaz detayı ekranı | `19-android-device-detail.png` | Henüz ekran görüntüsü alınmadı, temel yapı hazır |
+| 10 | QR önizleme ekranı | `20-android-device-qr-preview.png` | Henüz ekran görüntüsü alınmadı, temel yapı hazır |
 
-Android ticket ve device ekranları bu kapanış turunda canlı employee veya technician oturumuyla güvenilir biçimde açılamadığı için, bu ekranlar raporda dürüstçe `screenshot alınamadı` veya `foundation seviyesinde` notuyla sunulmalıdır.
+Android ticket ve device ekranları bu kapanış turunda canlı employee veya technician oturumuyla güvenilir biçimde açılamadığı için, bu ekranlar raporda dürüstçe `henüz ekran görüntüsü alınmadı` veya `temel yapı hazır` notuyla sunulmalıdır.
 
 ## Önerilen Sunum Sırası
 
@@ -53,7 +53,7 @@ Android ticket ve device ekranları bu kapanış turunda canlı employee veya te
 | 7 | Web QR preview |
 | 8 | Android login |
 | 9 | Android role-based home ekranları |
-| 10 | Android foundation olarak kalan ticket ve device ekran açıklaması |
+| 10 | Android tarafında temel olarak hazırlanan ticket ve device ekran açıklaması |
 | 11 | Test sonuç ekranı |
 
 ## Final Teslim Kontrolü
@@ -61,5 +61,5 @@ Android ticket ve device ekranları bu kapanış turunda canlı employee veya te
 - Ekran görüntülerinde Türkçe karakterlerin doğru göründüğü tekrar kontrol edilmelidir.
 - Web tarafında gerçek tamamlanmış MVP akışı öncelikli olarak gösterilmelidir.
 - Android tarafında yalnızca gerçekten runtime’da doğrulanan auth ekranları kesin kanıt olarak kullanılmalıdır.
-- Android foundation ekranları kullanılacaksa, sunum veya raporda açıkça `foundation hazır, canlı runtime doğrulaması eksik` notu düşülmelidir.
+- Android için henüz ekran görüntüsü alınmamış alanlar varsa, sunum veya raporda bunun temel yapı düzeyinde hazırlandığı açıkça belirtilmelidir.
 - Görseller `docs/MVP_DEMO_SCENARIO.md` akışıyla uyumlu sırada seçilmelidir.

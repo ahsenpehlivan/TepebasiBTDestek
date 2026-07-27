@@ -14,9 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Tepebasi BT Destek",
+  title: "Tepebaşı BT Destek",
   description:
-    "Teknik destek ve cihaz envanteri yonetimi icin hazirlanan rol kontrollu web paneli prototipi.",
+    "Teknik destek ve cihaz envanteri yönetimi için hazırlanan rol kontrollü web paneli.",
 };
 
 export default function RootLayout({

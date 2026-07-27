@@ -7,7 +7,7 @@ Bu senaryo, staj tesliminde mevcut MVP'nin neyi tamamladığını açık ve güv
 Ana odak:
 
 - web yönetim panelinin uçtan uca tamamlanan akışları
-- Android tarafında foundation olarak hazırlanan akışlar
+- Android tarafında temel olarak hazırlanan akışlar
 - Supabase ve RLS güvenlik yaklaşımı
 
 ## Final Demo Akışı
@@ -22,7 +22,19 @@ Ana odak:
 8. QR preview ekranını göster.
 9. Android login ekranını göster.
 10. Android role-based home ekranlarını göster.
-11. Android ticket ve device modüllerinin foundation olarak hazırlandığını açıkla.
+11. Android ticket ve device modüllerinin temel olarak hazırlandığını açıkla.
+
+## Demo Giriş Hesapları
+
+Bu hesaplar yalnızca demo ve test amacıyla kullanılır. Gerçek kurum personeli hesabı değildir.
+
+| Rol | E-posta | Şifre | Kullanım Amacı |
+| --- | --- | --- | --- |
+| Personel | `employee.demo@example.com` | Mentor demosu için doldurulacak | Personel giriş senaryosu ve erişim davranışı |
+| Teknik Personel | `technician.demo@example.com` | Mentor demosu için doldurulacak | Web panel, talep kuyruğu ve işlem akışları |
+| Yönetici | `admin.demo@example.com` | Mentor demosu için doldurulacak | Yönetici görünümü ve panel erişimi |
+
+Not: Demo parolaları güvenlik nedeniyle repository içinde tutulmaz. Giriş bilgileri mentor demosu öncesinde kontrollü biçimde paylaşılmalıdır.
 
 ## Sunumda Kullanılacak Kısa Anlatım
 
@@ -39,11 +51,11 @@ Web tarafında canlı ve anlatılabilir ana akış şudur:
 
 Android tarafında canlı feature demo yerine dürüst ve sade anlatım önerilir:
 
-- auth foundation tamamlandı
+- kimlik doğrulama temeli tamamlandı
 - employee, technician ve admin home ekranları doğrulandı
-- ticket modülleri foundation seviyesinde hazırlandı
-- device modülleri foundation seviyesinde hazırlandı
-- maintenance ve QR preview foundation seviyesinde hazırlandı
+- ticket modülleri için temel ekran yapısı hazırlandı
+- device modülleri için temel ekran yapısı hazırlandı
+- maintenance ve QR preview için temel yapı hazırlandı
 
 Sunumda şu not açıkça söylenmelidir:
 

@@ -5,12 +5,12 @@ import styles from "./ticket-detail.module.css";
 export default function TicketNotFound() {
   return (
     <section className={styles.messageCard}>
-      <h1>Talep bulunamadi</h1>
+      <h1>Talep bulunamadı</h1>
       <p>
-        Bu talep kaydina erisim izniniz olmayabilir veya kayit artik mevcut olmayabilir.
+        Bu talep kaydına erişim izniniz olmayabilir veya kayıt artık mevcut olmayabilir.
       </p>
       <Link href="/tickets" className={styles.backLink}>
-        Talep listesine don
+        Talep listesine dön
       </Link>
     </section>
   );

@@ -6,8 +6,8 @@ export default function DevicesLoading() {
     <div className={styles.page}>
       <StateCard
         tone="loading"
-        title="Cihaz envanteri yukleniyor..."
-        description="Server-side cihaz sorgusu hazirlaniyor. Lutfen bekleyin."
+        title="Cihaz envanteri yükleniyor..."
+        description="Server-side cihaz sorgusu hazırlanıyor. Lütfen bekleyin."
       />
     </div>
   );

@@ -53,10 +53,6 @@ export function LoginForm() {
       <button type="submit" className={styles.submit} disabled={pending}>
         {pending ? "Giriş yapılıyor..." : "Giriş Yap"}
       </button>
-
-      <p className={styles.helper}>
-        Kayıt olma ve şifre yenileme adımları bu prototip kapsamında yer almaz.
-      </p>
     </form>
   );
 }

@@ -22,7 +22,7 @@ export async function loginAction(
 
   if (!email || !password) {
     return {
-      error: "E-posta ve parola alanlari zorunludur.",
+      error: "E-posta ve parola alanları zorunludur.",
     };
   }
 
@@ -34,7 +34,7 @@ export async function loginAction(
 
   if (error) {
     return {
-      error: "E-posta veya parola hatali. Lutfen demo hesap bilgilerini kontrol edin.",
+      error: "E-posta veya parola hatalı. Lütfen demo hesap bilgilerini kontrol edin.",
     };
   }
 
@@ -50,7 +50,7 @@ export async function loginAction(
 
   if (!authState.profile) {
     return {
-      error: "Oturum dogrulandi ancak profil bilgisi cozumlenemedi. Lutfen tekrar deneyin.",
+      error: "Oturum doğrulandı ancak profil bilgisi çözümlenemedi. Lütfen tekrar deneyin.",
     };
   }
 

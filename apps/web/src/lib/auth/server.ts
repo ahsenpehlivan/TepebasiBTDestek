@@ -76,7 +76,7 @@ export async function getAuthState(
 
   if (profileError) {
     throw new Error(
-      "Kullanici profili yuklenemedi. Supabase profil kaydini ve RLS kurallarini kontrol edin.",
+      "Kullanıcı profili yüklenemedi. Supabase profil kaydını ve RLS kurallarını kontrol edin.",
     );
   }
 

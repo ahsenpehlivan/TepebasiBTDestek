@@ -1,80 +1,76 @@
 # FINAL DELIVERY SUMMARY
 
-## 1. Proje adı
+## Proje adı
 
 Tepebaşı BT Destek
 
-## 2. Proje amacı
+## Proje amacı
 
-Bu proje, belediye personelinin teknik destek taleplerini daha düzenli yönetebilmesi ve cihaz envanterini takip edebilmesi için hazırlanan çok platformlu bir MVP prototipidir.
+Bu proje, belediye içindeki teknik destek taleplerini daha düzenli takip edebilmek ve cihaz envanterini aynı yapı içinde yönetebilmek için hazırlanan bir MVP prototipidir.
 
-## 3. Kullanılan teknolojiler
+## Kullanılan teknolojiler
 
-- Web: Next.js, TypeScript, ESLint, CSS Modules
-- Android: Kotlin, Jetpack Compose, Navigation Compose
-- Backend: Supabase, PostgreSQL, Row Level Security, Storage
+- Next.js
+- TypeScript
+- Kotlin
+- Jetpack Compose
+- Supabase
+- PostgreSQL
+- Row Level Security
 
-## 4. Web panel kapsamı
+## Web panel kapsamı
 
-- Supabase auth
-- Role guard
-- Dashboard
-- Talep listesi ve talep detay ekranı
-- Talep yorum, durum ve atama akışı
-- Cihaz listesi ve cihaz detay ekranı
-- Cihaz oluşturma ve düzenleme akışı
-- Bakım kayıtları bölümü
-- QR preview ekranı
+- giriş ve çıkış akışı
+- rol bazlı erişim kontrolü
+- dashboard
+- talep listesi ve talep detay ekranı
+- yorum, durum ve atama akışı
+- cihaz listesi ve cihaz detay ekranı
+- cihaz oluşturma ve düzenleme akışı
+- bakım kayıtları bölümü
+- QR önizleme ekranı
 
-## 5. Android uygulama kapsamı
+## Android uygulama kapsamı
 
-- Supabase auth foundation
-- Role-based home ekranları
-- Employee ticket list/detail/create foundation
-- Technician ticket queue foundation
-- Technician status update foundation
-- Ticket comment foundation
-- Device list/detail foundation
-- Device maintenance history foundation
-- Device QR preview foundation
+- kimlik doğrulama temeli
+- role-based home ekranları
+- ticket modülleri için temel ekran altyapısı
+- device modülleri için temel ekran altyapısı
+- bakım geçmişi ve QR önizleme için temel altyapı
 
-Not: Android auth runtime doğrulaması güçlüdür. Ticket ve device ekranlarının önemli bir bölümü foundation seviyesinde hazır olsa da hepsi canlı oturumla uçtan uca doğrulanmamıştır.
+Not: Android auth akışları doğrulandı. Ticket ve device tarafında ise temel ekran, repository ve navigation altyapısı hazırlandı.
 
-## 6. Supabase ve RLS güvenlik yaklaşımı
+## Supabase ve RLS güvenlik yaklaşımı
 
-- Service role istemciye verilmez.
-- Web ve Android publishable key + kullanıcı session yaklaşımıyla çalışır.
-- Ana tablolarda RLS etkindir.
-- Rol kararları `profiles` tablosu üzerinden çözülür.
-- Employee kullanıcılar kendi rollerini yükseltemez.
-- QR içerikleri yalnızca güvenli token mantığıyla gösterilir.
+- kullanıcı doğrulaması Supabase Auth ile sağlandı
+- veri erişimi RLS ile sınırlandırıldı
+- rol kararları veritabanı tarafında korundu
+- istemci tarafına yüksek yetkili anahtar verilmedi
 
-## 7. Test ve doğrulama özeti
+## Test ve doğrulama özeti
 
-- Yerel migration zinciri ve seed doğrulandı.
-- Schema smoke test geçti.
-- RLS smoke test geçti.
-- Web `npm run lint` geçti.
-- Web `npm run build` geçti.
-- Android `assembleDebug` geçti.
-- Android auth için login/logout ve role-based home akışları gerçek emülatör üzerinde doğrulandı.
+- yerel migration ve seed zinciri doğrulandı
+- schema smoke test geçti
+- RLS smoke test geçti
+- web lint geçti
+- web build geçti
+- Android debug build geçti
+- Android auth için temel runtime doğrulamaları yapıldı
 
-## 8. Bilinen eksikler
+## Bilinen eksikler
 
-- Android ticket ekranlarının tümü canlı employee oturumuyla doğrulanamadı.
-- Android device ekranlarının tümü canlı employee veya technician oturumuyla doğrulanamadı.
-- Android session restore kanıtı bu kapanış turunda yeniden alınamadı.
+- Android ticket ekranlarının tamamı canlı oturumla doğrulanmadı
+- Android device ekranlarının tamamı canlı oturumla doğrulanmadı
 
-## 9. Sonraki geliştirme önerileri
+## Sonraki geliştirme önerileri
 
-- Android ticket ve device modülleri için canlı runtime doğrulamalarını tamamlamak
-- Final ekran görüntülerini toplamak
-- Sunum ve staj raporu anlatımını ekran görüntüleriyle güçlendirmek
+- Android ticket ve device ekranlarının runtime doğrulamalarını tamamlamak
+- final ekran görüntülerini toplamak
+- sunum ve staj raporu anlatımını ekran görüntüleriyle desteklemek
 
-## 10. Staj kazanımları
+## Staj kazanımları
 
-- Rol bazlı erişim kontrolü ve RLS tasarımı
-- Supabase tabanlı auth ve veri erişim mimarisi
-- Web ve Android arasında ortak alan modeli düşünme
-- Build, smoke test ve teslim odaklı dokümantasyon disiplini
-- MVP kapsamını kontrollü biçimde sınırlandırma ve dürüst raporlama
+- rol bazlı erişim tasarımı
+- Supabase tabanlı auth ve veri modeli kurgusu
+- web ve mobil tarafı aynı veri yapısında düşünme
+- build, test ve dokümantasyon disiplinini birlikte yürütme

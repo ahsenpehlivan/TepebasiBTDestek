@@ -6,8 +6,8 @@ export default function TicketsLoading() {
     <div className={styles.page}>
       <StateCard
         tone="loading"
-        title="Talep listesi yukleniyor..."
-        description="Sunucu tarafindaki sorgu tamamlaninca son kayitlar gosterilecektir."
+        title="Talep listesi yükleniyor..."
+        description="Sunucu tarafındaki sorgu tamamlanınca son kayıtlar gösterilecektir."
       />
     </div>
   );

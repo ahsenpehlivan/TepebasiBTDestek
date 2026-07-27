@@ -40,10 +40,10 @@ function mapTicketMutationError(message: string) {
   }
 
   if (message.includes("Employees cannot update tickets directly")) {
-    return "Bu islem yalnizca technician veya admin kullanicilar icin aciktir.";
+    return "Bu işlem yalnızca technician veya admin kullanıcılar için açıktır.";
   }
 
-  return "Islem tamamlanamadi. Ticket yetkilerini ve zorunlu alanlari kontrol edip tekrar deneyin.";
+  return "İşlem tamamlanamadı. Ticket yetkilerini ve zorunlu alanları kontrol edip tekrar deneyin.";
 }
 
 async function requirePanelOperator() {
@@ -55,7 +55,7 @@ async function requirePanelOperator() {
       supabase,
       authState,
       error: initialErrorState(
-        "Bu islem yalnizca technician veya admin kullanicilar tarafindan yapilabilir.",
+        "Bu işlem yalnızca technician veya admin kullanıcılar tarafından yapılabilir.",
       ),
     };
   }
@@ -98,7 +98,7 @@ export async function assignTicketAction(
     .maybeSingle<{ id: string; status: TicketStatus; assigned_to: string | null }>();
 
   if (ticketError || !ticket) {
-    return initialErrorState("Ticket kaydi bulunamadi veya bu kayda erisim izni yok.");
+    return initialErrorState("Ticket kaydı bulunamadı veya bu kayda erişim izni yok.");
   }
 
   const nextStatus = ticket.status === "open" ? "assigned" : ticket.status;
@@ -126,7 +126,7 @@ export async function updateTicketStatusAction(
   const nextStatus = readFormValue(formData.get("status")) as TicketStatus;
 
   if (!ticketId || !ticketStatusOptions.includes(nextStatus)) {
-    return initialErrorState("Gecerli bir ticket durumu secilmelidir.");
+    return initialErrorState("Geçerli bir ticket durumu seçilmelidir.");
   }
 
   const context = await requirePanelOperator();
@@ -143,7 +143,7 @@ export async function updateTicketStatusAction(
     .maybeSingle<{ id: string; status: TicketStatus; assigned_to: string | null }>();
 
   if (ticketError || !ticket) {
-    return initialErrorState("Ticket kaydi bulunamadi veya bu kayda erisim izni yok.");
+    return initialErrorState("Ticket kaydı bulunamadı veya bu kayda erişim izni yok.");
   }
 
   if (
@@ -179,7 +179,7 @@ export async function createTicketCommentAction(
   const isInternal = formData.get("isInternal") === "on";
 
   if (!ticketId || !content) {
-    return initialErrorState("Yorum metni bos birakilamaz.");
+    return initialErrorState("Yorum metni boş bırakılamaz.");
   }
 
   const context = await requirePanelOperator();
@@ -193,7 +193,7 @@ export async function createTicketCommentAction(
 
   if (!profile) {
     return initialErrorState(
-      "Bu islem yalnizca technician veya admin kullanicilar tarafindan yapilabilir.",
+      "Bu işlem yalnızca technician veya admin kullanıcılar tarafından yapılabilir.",
     );
   }
 
@@ -206,12 +206,12 @@ export async function createTicketCommentAction(
 
   if (error) {
     return initialErrorState(
-      "Yorum eklenemedi. Erisim iznini ve yorum icerigini kontrol edip tekrar deneyin.",
+      "Yorum eklenemedi. Erişim iznini ve yorum içeriğini kontrol edip tekrar deneyin.",
     );
   }
 
   revalidateTicketPaths(ticketId);
   return initialSuccessState(
-    isInternal ? "Ic not eklendi." : "Genel yorum eklendi.",
+    isInternal ? "İç not eklendi." : "Genel yorum eklendi.",
   );
 }
