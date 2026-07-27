@@ -154,4 +154,11 @@
     <string name="device_dates_empty_message">Bu cihaz için tarih bilgisi bulunmuyor.</string>
     <string name="device_notes_empty_message">Bu cihaz için not bulunmuyor.</string>
     <string name="device_unassigned_value">Atanmadı</string>
+    <string name="device_maintenance_section_title">Bakım Kayıtları</string>
+    <string name="device_maintenance_description_label">Bakım açıklaması:</string>
+    <string name="device_maintenance_performed_by_label">Bakımı yapan:</string>
+    <string name="device_maintenance_date_label">Bakım tarihi:</string>
+    <string name="device_maintenance_cost_label">Maliyet:</string>
+    <string name="device_maintenance_empty_message">Bu cihaz için bakım kaydı bulunmuyor.</string>
+    <string name="device_maintenance_error_message">Bakım kayıtları yüklenemedi. Lütfen tekrar deneyin.</string>
 </resources>

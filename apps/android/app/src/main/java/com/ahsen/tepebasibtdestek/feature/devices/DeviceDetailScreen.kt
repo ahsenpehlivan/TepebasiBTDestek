@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.ahsen.tepebasibtdestek.R
 import com.ahsen.tepebasibtdestek.core.ui.CenteredStatusCard
 import com.ahsen.tepebasibtdestek.core.ui.ScreenScaffold
+import com.ahsen.tepebasibtdestek.domain.device.DeviceMaintenanceRecord
 
 @Composable
 fun DeviceDetailScreen(
@@ -67,7 +68,8 @@ fun DeviceDetailScreen(
         state.detail != null -> {
             DeviceDetailContent(
                 state = state,
-                onBackClick = onBackClick
+                onBackClick = onBackClick,
+                onRetryClick = onRetryClick
             )
         }
     }
@@ -76,7 +78,8 @@ fun DeviceDetailScreen(
 @Composable
 private fun DeviceDetailContent(
     state: DeviceDetailUiState,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onRetryClick: () -> Unit
 ) {
     val detail = state.detail ?: return
 
@@ -193,6 +196,93 @@ private fun DeviceDetailContent(
                         ?: stringResource(R.string.device_notes_empty_message),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            DeviceSectionCard(title = stringResource(R.string.device_maintenance_section_title)) {
+                when {
+                    state.maintenanceLoading -> {
+                        Text(
+                            text = stringResource(R.string.common_loading),
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+
+                    !state.maintenanceErrorMessage.isNullOrBlank() -> {
+                        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                            Text(
+                                text = state.maintenanceErrorMessage,
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.error
+                            )
+                            OutlinedButton(onClick = onRetryClick) {
+                                Text(text = stringResource(R.string.common_retry))
+                            }
+                        }
+                    }
+
+                    state.maintenanceRecords.isEmpty() -> {
+                        Text(
+                            text = stringResource(R.string.device_maintenance_empty_message),
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+
+                    else -> {
+                        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                            state.maintenanceRecords.forEach { record ->
+                                DeviceMaintenanceCard(record = record)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun DeviceMaintenanceCard(
+    record: DeviceMaintenanceRecord
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLowest
+        )
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            DeviceDetailLine(
+                label = stringResource(R.string.device_maintenance_description_label),
+                value = record.description
+            )
+
+            record.performedAt?.let { performedAt ->
+                DeviceDetailLine(
+                    label = stringResource(R.string.device_maintenance_date_label),
+                    value = formatDeviceDateTimeValue(performedAt)
+                )
+            }
+
+            record.performedByName?.let { performedByName ->
+                DeviceDetailLine(
+                    label = stringResource(R.string.device_maintenance_performed_by_label),
+                    value = performedByName
+                )
+            }
+
+            record.cost?.let { cost ->
+                DeviceDetailLine(
+                    label = stringResource(R.string.device_maintenance_cost_label),
+                    value = cost
                 )
             }
         }

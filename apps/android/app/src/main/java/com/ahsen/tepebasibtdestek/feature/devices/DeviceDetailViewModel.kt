@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.ahsen.tepebasibtdestek.data.device.DeviceRepository
 import com.ahsen.tepebasibtdestek.domain.auth.AuthRepository
 import com.ahsen.tepebasibtdestek.domain.auth.SessionState
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,6 +18,8 @@ private const val DEVICE_DETAIL_SESSION_ERROR_MESSAGE =
     "Oturum bilgisi doğrulanamadı. Lütfen yeniden giriş yapın."
 private const val DEVICE_DETAIL_INVALID_ID_MESSAGE =
     "Cihaz kimliği geçersiz görünüyor."
+private const val DEVICE_MAINTENANCE_ERROR_MESSAGE =
+    "Bakım kayıtları yüklenemedi. Lütfen tekrar deneyin."
 
 class DeviceDetailViewModel(
     private val deviceId: String,
@@ -52,20 +55,46 @@ class DeviceDetailViewModel(
 
             _uiState.value = _uiState.value.copy(
                 isLoading = true,
-                errorMessage = null
+                errorMessage = null,
+                maintenanceLoading = true,
+                maintenanceErrorMessage = null
             )
 
-            deviceRepository.loadDeviceDetail(deviceId)
+            val detailDeferred = async { deviceRepository.loadDeviceDetail(deviceId) }
+            val maintenanceDeferred = async { deviceRepository.loadMaintenanceRecords(deviceId) }
+
+            val detailResult = detailDeferred.await()
+            val maintenanceResult = maintenanceDeferred.await()
+
+            detailResult
                 .onSuccess { detail ->
-                    _uiState.value = DeviceDetailUiState(
+                    _uiState.value = _uiState.value.copy(
                         isLoading = false,
-                        detail = detail
+                        detail = detail,
+                        errorMessage = null
                     )
                 }
                 .onFailure { error ->
                     _uiState.value = DeviceDetailUiState(
                         isLoading = false,
                         errorMessage = error.message ?: DEVICE_DETAIL_ERROR_MESSAGE
+                    )
+                    return@launch
+                }
+
+            maintenanceResult
+                .onSuccess { records ->
+                    _uiState.value = _uiState.value.copy(
+                        maintenanceLoading = false,
+                        maintenanceRecords = records,
+                        maintenanceErrorMessage = null
+                    )
+                }
+                .onFailure { error ->
+                    _uiState.value = _uiState.value.copy(
+                        maintenanceLoading = false,
+                        maintenanceRecords = emptyList(),
+                        maintenanceErrorMessage = error.message ?: DEVICE_MAINTENANCE_ERROR_MESSAGE
                     )
                 }
         }

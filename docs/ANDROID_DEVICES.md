@@ -2,20 +2,18 @@
 
 ## Ozet
 
-Bu dokuman Android tarafindaki cihaz listesi ve cihaz detay iskeletini ozetler.
-Bu fazda read-only cihaz listeleme ve read-only cihaz detay akisi ele alinmistir.
+Bu dokuman Android tarafindaki cihaz listesi, cihaz detay ve read-only bakim kayitlari iskeletini ozetler.
+Bu fazda cihaz detay ekranina bakim kayitlari goruntuleme bolumu eklendi.
 
 Kapsam:
 
-- `DeviceSummary`, `DeviceType` ve `DeviceStatus` domain modelleri
-- `DeviceDetail` modeli
+- `DeviceSummary`, `DeviceType`, `DeviceStatus`, `DeviceDetail` ve `DeviceMaintenanceRecord` domain modelleri
 - `DeviceRepository` ve `SupabaseDeviceRepository`
 - `DeviceListScreen`, `DeviceListViewModel`, `DeviceListUiState` ve `DeviceUi`
 - `DeviceDetailScreen`, `DeviceDetailViewModel` ve `DeviceDetailUiState`
 - Employee, technician ve admin home ekranlarindan `DeviceList` route'una gecis
 - `DeviceList` kartindan `DeviceDetail/{deviceId}` route'una gecis
-- RLS'ye guvenen sade cihaz listeleme sorgusu
-- RLS'ye guvenen sade cihaz detay sorgusu
+- RLS'ye guvenen sade cihaz listeleme, cihaz detay ve bakim kaydi sorgulari
 - Loading, liste, empty ve error ekran durumlari
 - Turkce UI etiketleri ve durum badge'leri
 
@@ -61,6 +59,7 @@ Repository arayuzu:
 ```kotlin
 suspend fun loadDevices(): Result<List<DeviceSummary>>
 suspend fun loadDeviceDetail(deviceId: String): Result<DeviceDetail>
+suspend fun loadMaintenanceRecords(deviceId: String): Result<List<DeviceMaintenanceRecord>>
 ```
 
 Davranis:
@@ -74,6 +73,9 @@ Davranis:
 - ham Supabase hatasi yerine kontrollu Turkce hata donulur
 - detail sorgusu minimum olarak kimlik, durum, zimmet, tarih ve not alanlarini okur
 - cihaz detail erisimi yoksa kontrollu hata donulur; uygulama cokmez
+- `device_maintenance_records` tablosu `device_id`, `description`, `performed_by`, `performed_at` ve `cost` alanlariyla newest-first okunur
+- bakim kayitlarinda performer adi `profiles.full_name` yardimci sorgusuyla zenginlestirilir
+- bakim bolumu hata verirse detail ekraninin tamami degil, yalnizca ilgili kart kontrollu hata gosterir
 
 ## ViewModel ve UI Akisi
 
@@ -107,12 +109,16 @@ Kartta gosterilen alanlar:
 - Zimmet Bilgisi
 - Tarihler
 - Notlar
+- Bakim Kayitlari
 
 Detay ekraninda:
 
 - QR token gosterilmez
 - Seri numarasi maskeli verilir
 - not yoksa `Bu cihaz icin not bulunmuyor.` mesaji gosterilir
+- bakim kaydi yoksa `Bu cihaz icin bakim kaydi bulunmuyor.` mesaji gosterilir
+- bakim kayitlari `performed_at desc` sirasiyla listelenir
+- maliyet `0` ise kullaniciya ayri bir maliyet satiri gosterilmez
 
 ## RLS Yaklasimi
 
@@ -129,8 +135,9 @@ Yaklasim:
 
 - Runtime'da cihaz listesi veya cihaz detayina employee ya da technician session ile manuel ilerleme kaniti bu fazda alinmadi
 - Filtreleme veya arama eklenmedi
-- Bakim kayitlari ve QR akisi Android detail ekranina dahil edilmedi
+- Bakim kayitlari runtime'da canli session ile dogrulanmadi
+- QR akisi Android detail ekranina dahil edilmedi
 
 ## Sonraki Asama
 
-- Android cihaz bakim kayitlari goruntuleme iskeleti
+- Android cihaz QR preview iskeleti

@@ -25,6 +25,7 @@ import com.ahsen.tepebasibtdestek.R
 import com.ahsen.tepebasibtdestek.domain.device.DeviceStatus
 import com.ahsen.tepebasibtdestek.domain.device.DeviceSummary
 import com.ahsen.tepebasibtdestek.domain.device.DeviceType
+import java.time.LocalDate
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -195,9 +196,20 @@ fun maskSerialNumber(serialNumber: String): String {
 
 fun formatDeviceDateValue(value: String): String {
     return runCatching {
-        val parsed = OffsetDateTime.parse(value)
-        parsed.format(
+        OffsetDateTime.parse(value).format(
             DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.forLanguageTag("tr-TR"))
+        )
+    }.recoverCatching {
+        LocalDate.parse(value).format(
+            DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.forLanguageTag("tr-TR"))
+        )
+    }.getOrElse { value }
+}
+
+fun formatDeviceDateTimeValue(value: String): String {
+    return runCatching {
+        OffsetDateTime.parse(value).format(
+            DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm", Locale.forLanguageTag("tr-TR"))
         )
     }.getOrElse { value }
 }

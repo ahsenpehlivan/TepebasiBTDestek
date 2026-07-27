@@ -3,6 +3,7 @@ package com.ahsen.tepebasibtdestek.data.device
 import com.ahsen.tepebasibtdestek.core.result.AppResult
 import com.ahsen.tepebasibtdestek.data.remote.supabase.SupabaseClientProvider
 import com.ahsen.tepebasibtdestek.domain.device.DeviceDetail
+import com.ahsen.tepebasibtdestek.domain.device.DeviceMaintenanceRecord
 import com.ahsen.tepebasibtdestek.domain.device.DeviceStatus
 import com.ahsen.tepebasibtdestek.domain.device.DeviceSummary
 import com.ahsen.tepebasibtdestek.domain.device.DeviceType
@@ -12,11 +13,16 @@ import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Order
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import java.text.NumberFormat
+import java.util.Currency
+import java.util.Locale
 
 private const val DEFAULT_DEVICE_LOAD_ERROR_MESSAGE =
     "Cihazlar yüklenemedi. Lütfen tekrar deneyin."
 private const val DEFAULT_DEVICE_DETAIL_ERROR_MESSAGE =
     "Cihaz bilgileri yüklenemedi. Lütfen tekrar deneyin."
+private const val DEFAULT_DEVICE_MAINTENANCE_ERROR_MESSAGE =
+    "Bakım kayıtları yüklenemedi. Lütfen tekrar deneyin."
 private const val DEVICE_NOT_FOUND_MESSAGE =
     "Cihaz bulunamadı veya bu cihaza erişim izniniz yok."
 
@@ -132,6 +138,59 @@ class SupabaseDeviceRepository(
         }
     }
 
+    override suspend fun loadMaintenanceRecords(
+        deviceId: String
+    ): Result<List<DeviceMaintenanceRecord>> {
+        if (deviceId.isBlank()) {
+            return Result.failure(IllegalStateException(DEFAULT_DEVICE_MAINTENANCE_ERROR_MESSAGE))
+        }
+
+        val client = when (val result = clientProvider.getClient()) {
+            is AppResult.Success -> result.value
+            is AppResult.Failure -> {
+                return Result.failure(
+                    IllegalStateException(DEFAULT_DEVICE_MAINTENANCE_ERROR_MESSAGE)
+                )
+            }
+        }
+
+        return try {
+            val maintenanceRows = client.postgrest
+                .from("device_maintenance_records")
+                .select(
+                    columns = Columns.list(
+                        "id",
+                        "device_id",
+                        "description",
+                        "performed_by",
+                        "performed_at",
+                        "cost"
+                    )
+                ) {
+                    filter {
+                        eq("device_id", deviceId)
+                    }
+                    order(column = "performed_at", order = Order.DESCENDING)
+                }
+                .decodeList<DeviceMaintenanceRowDto>()
+
+            val performerNames = loadProfileNames(
+                client = client,
+                profileIds = maintenanceRows.map { it.performedBy }.distinct()
+            )
+
+            Result.success(
+                maintenanceRows.map { row ->
+                    row.toMaintenanceRecord(
+                        performedByName = performerNames[row.performedBy]
+                    )
+                }
+            )
+        } catch (_: Exception) {
+            Result.failure(IllegalStateException(DEFAULT_DEVICE_MAINTENANCE_ERROR_MESSAGE))
+        }
+    }
+
     private suspend fun loadDepartmentNames(
         client: SupabaseClient,
         departmentIds: List<String>
@@ -228,6 +287,21 @@ private fun DeviceDetailRowDto.toDetail(
     )
 }
 
+private fun DeviceMaintenanceRowDto.toMaintenanceRecord(
+    performedByName: String?
+): DeviceMaintenanceRecord {
+    return DeviceMaintenanceRecord(
+        id = id,
+        deviceId = deviceId,
+        description = description.trim(),
+        performedAt = performedAt,
+        performedByName = performedByName,
+        cost = cost
+            ?.takeIf { it > 0.0 }
+            ?.let(::formatMaintenanceCost)
+    )
+}
+
 @Serializable
 private data class DeviceRowDto(
     val id: String,
@@ -272,6 +346,19 @@ private data class DeviceDetailRowDto(
 )
 
 @Serializable
+private data class DeviceMaintenanceRowDto(
+    val id: String,
+    @SerialName("device_id")
+    val deviceId: String,
+    val description: String,
+    @SerialName("performed_by")
+    val performedBy: String,
+    @SerialName("performed_at")
+    val performedAt: String? = null,
+    val cost: Double? = null
+)
+
+@Serializable
 private data class DepartmentNameDto(
     val id: String,
     val name: String
@@ -283,3 +370,11 @@ private data class ProfileNameDto(
     @SerialName("full_name")
     val fullName: String? = null
 )
+
+private fun formatMaintenanceCost(value: Double): String {
+    return NumberFormat.getCurrencyInstance(Locale.forLanguageTag("tr-TR")).apply {
+        currency = Currency.getInstance("TRY")
+        minimumFractionDigits = 2
+        maximumFractionDigits = 2
+    }.format(value)
+}

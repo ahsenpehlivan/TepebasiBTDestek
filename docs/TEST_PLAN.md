@@ -307,6 +307,19 @@ Not: Bu route ve responsive kontrolleri local Supabase'e bagli ayri bir web inst
 | ANDROID-DEVICE-DETAIL-07 minimum emulator acilisi | gecti | Bu fazda hedef guncel APK'nin derlenmesi, emulator'e kurulmasi ve uygulamanin login ekranina kadar acildiginin yeniden dogrulanmasidir |
 | ANDROID-DEVICE-DETAIL-08 runtime device detail | test edilemedi | Bu fazda employee veya technician session ile `DeviceList` ekranindan `DeviceDetail` ekranina canli ilerleme kaniti alinmadi; bu nedenle runtime detail sonucu acikca `test edilemedi` olarak korunur |
 
+## Android Device Maintenance Iskeleti Dogrulamalari
+
+| Test | Sonuc | Neden |
+| --- | --- | --- |
+| ANDROID-DEVICE-MAINT-01 maintenance schema ve web mantigi incelendi mi? | gecti | `device_maintenance_records` tablosundaki `device_id`, `description`, `performed_by`, `performed_at` ve `cost` alanlari ile web cihaz detay ekranindaki bakim gecmisi gosterimi incelendi |
+| ANDROID-DEVICE-MAINT-02 `DeviceMaintenanceRecord` modeli eklendi mi? | gecti | Android tarafina `id`, `deviceId`, `description`, `performedAt`, `performedByName` ve opsiyonel `cost` alanlariyla read-only maintenance modeli eklendi |
+| ANDROID-DEVICE-MAINT-03 repository `loadMaintenanceRecords(deviceId)` eklendi mi? | gecti | `DeviceRepository` arayuzune maintenance fonksiyonu eklendi; `SupabaseDeviceRepository` maintenance kayitlarini newest-first okuyan ve kontrollu Turkce hata donduren RLS-uyumlu sorgu ile genisletildi |
+| ANDROID-DEVICE-MAINT-04 `DeviceDetailViewModel` maintenance state'i baglandi mi? | gecti | `maintenanceLoading`, `maintenanceRecords` ve `maintenanceErrorMessage` alanlari eklendi; bakim kayitlari detail ile birlikte yuklenirken hata halinde tum ekran degil yalnizca bakim bolumu etkilenir |
+| ANDROID-DEVICE-MAINT-05 `DeviceDetailScreen` icine bakim bolumu eklendi mi? | gecti | `Bakim Kayitlari` bolumu, empty durum, kontrollu hata mesaji ve retry aksiyonu ile read-only kart yapisinda baglandi |
+| ANDROID-DEVICE-MAINT-06 Turkce karakter taramasi | gecti | Yeni maintenance metinlerinde `Bakim`, `Kayitlari`, `Aciklama`, `Yapan`, `Yuklenemedi` gibi ASCII varyantlari birakilmadi; yeni stringler `strings.xml` icine tasindi |
+| ANDROID-DEVICE-MAINT-07 minimum emulator acilisi | gecti | Bu fazda hedef guncel APK'nin derlenmesi, emulator'e kurulmasi ve uygulamanin login ekranina kadar acildiginin yeniden dogrulanmasidir |
+| ANDROID-DEVICE-MAINT-08 runtime maintenance bolumu | test edilemedi | Bu fazda employee veya technician session ile `DeviceDetail` ekranina canli ilerleme ve bakim kayitlari listesi kaniti alinmadi; runtime sonucu acikca `test edilemedi` olarak korunur |
+
 ## Android Auth Foundation Dogrulamalari
 
 | Test | Sonuc | Neden |
