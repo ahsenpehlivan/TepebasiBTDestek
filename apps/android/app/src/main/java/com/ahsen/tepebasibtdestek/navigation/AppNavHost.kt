@@ -17,6 +17,8 @@ import com.ahsen.tepebasibtdestek.core.AppContainer
 import com.ahsen.tepebasibtdestek.domain.auth.SessionState
 import com.ahsen.tepebasibtdestek.feature.auth.LoginScreen
 import com.ahsen.tepebasibtdestek.feature.auth.LoginViewModel
+import com.ahsen.tepebasibtdestek.feature.devices.DeviceDetailScreen
+import com.ahsen.tepebasibtdestek.feature.devices.DeviceDetailViewModel
 import com.ahsen.tepebasibtdestek.feature.devices.DeviceListScreen
 import com.ahsen.tepebasibtdestek.feature.devices.DeviceListViewModel
 import com.ahsen.tepebasibtdestek.feature.home.AdminHomeScreen
@@ -56,6 +58,7 @@ fun AppNavHost(
             currentRoute in listOf(
                 AppRoute.EmployeeHome.route,
                 AppRoute.DeviceList.route,
+                AppRoute.DeviceDetail.route,
                 AppRoute.MyTickets.route,
                 AppRoute.CreateTicket.route,
                 AppRoute.TechnicianQueue.route,
@@ -203,7 +206,43 @@ fun AppNavHost(
                         }
                     }
                 },
-                onRetryClick = deviceListViewModel::refresh
+                onRetryClick = deviceListViewModel::refresh,
+                onDeviceClick = { deviceId ->
+                    navController.navigate(AppRoute.DeviceDetail.createRoute(deviceId))
+                }
+            )
+        }
+
+        composable(
+            route = AppRoute.DeviceDetail.route,
+            arguments = listOf(
+                navArgument(AppRoute.DeviceDetail.deviceIdArg) {
+                    type = NavType.StringType
+                }
+            )
+        ) { backStackEntry ->
+            val deviceId = backStackEntry.arguments
+                ?.getString(AppRoute.DeviceDetail.deviceIdArg)
+                .orEmpty()
+            val detailViewModel: DeviceDetailViewModel = viewModel(
+                factory = DeviceDetailViewModel.factory(
+                    deviceId = deviceId,
+                    authRepository = appContainer.authRepository,
+                    deviceRepository = appContainer.deviceRepository
+                )
+            )
+            val uiState by detailViewModel.uiState.collectAsStateWithLifecycle()
+
+            DeviceDetailScreen(
+                state = uiState,
+                onBackClick = {
+                    if (!navController.popBackStack()) {
+                        navController.navigate(AppRoute.DeviceList.route) {
+                            launchSingleTop = true
+                        }
+                    }
+                },
+                onRetryClick = detailViewModel::refresh
             )
         }
 

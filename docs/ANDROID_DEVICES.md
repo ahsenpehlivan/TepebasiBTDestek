@@ -2,22 +2,25 @@
 
 ## Ozet
 
-Bu dokuman Android tarafindaki cihaz listesi iskeletini ozetler.
-Bu fazda yalnizca read-only cihaz listeleme akisi ele alinmistir.
+Bu dokuman Android tarafindaki cihaz listesi ve cihaz detay iskeletini ozetler.
+Bu fazda read-only cihaz listeleme ve read-only cihaz detay akisi ele alinmistir.
 
 Kapsam:
 
 - `DeviceSummary`, `DeviceType` ve `DeviceStatus` domain modelleri
+- `DeviceDetail` modeli
 - `DeviceRepository` ve `SupabaseDeviceRepository`
 - `DeviceListScreen`, `DeviceListViewModel`, `DeviceListUiState` ve `DeviceUi`
+- `DeviceDetailScreen`, `DeviceDetailViewModel` ve `DeviceDetailUiState`
 - Employee, technician ve admin home ekranlarindan `DeviceList` route'una gecis
+- `DeviceList` kartindan `DeviceDetail/{deviceId}` route'una gecis
 - RLS'ye guvenen sade cihaz listeleme sorgusu
+- RLS'ye guvenen sade cihaz detay sorgusu
 - Loading, liste, empty ve error ekran durumlari
 - Turkce UI etiketleri ve durum badge'leri
 
 Bu fazda sunlar eklenmedi:
 
-- cihaz detay ekrani
 - cihaz olusturma veya duzenleme
 - cihaz pasife alma
 - bakim kaydi ekleme
@@ -37,6 +40,10 @@ Incelenen temel alanlar:
 - `department_id`
 - `assigned_user_id`
 - `is_active`
+- `serial_number`
+- `purchase_date`
+- `warranty_end_date`
+- `notes`
 
 Notlar:
 
@@ -44,6 +51,8 @@ Notlar:
 - `assigned_user_id` cihazi kullanan veya zimmetli gorunen personeli ifade eder
 - `tickets.assigned_to` ile karistirilmaz
 - Veritabani enum degerleri Ingilizce kalir; Android UI katmani Turkce label gosterir
+- Web tarafindaki gibi ham `qr_token` Android detay ekraninda gosterilmez
+- Seri numarasi detail ekraninda kontrollu maskeli gosterilir
 
 ## Repository Yaklasimi
 
@@ -51,6 +60,7 @@ Repository arayuzu:
 
 ```kotlin
 suspend fun loadDevices(): Result<List<DeviceSummary>>
+suspend fun loadDeviceDetail(deviceId: String): Result<DeviceDetail>
 ```
 
 Davranis:
@@ -62,6 +72,8 @@ Davranis:
 - kayitlar once `is_active desc`, sonra `asset_tag asc` ile siralanir
 - departman ve kullanici adlari ayri yardimci sorgularla zenginlestirilir
 - ham Supabase hatasi yerine kontrollu Turkce hata donulur
+- detail sorgusu minimum olarak kimlik, durum, zimmet, tarih ve not alanlarini okur
+- cihaz detail erisimi yoksa kontrollu hata donulur; uygulama cokmez
 
 ## ViewModel ve UI Akisi
 
@@ -88,8 +100,19 @@ Kartta gosterilen alanlar:
 - Departman
 - Cihazi Kullanan Personel
 
-Bu fazda kart tiklamasi bilincli olarak pasiftir.
-UI icinde `Cihaz detayi sonraki asamada eklenecek.` notu gosterilir.
+`DeviceDetailScreen` bolumleri:
+
+- Cihaz Kimligi
+- Durum
+- Zimmet Bilgisi
+- Tarihler
+- Notlar
+
+Detay ekraninda:
+
+- QR token gosterilmez
+- Seri numarasi maskeli verilir
+- not yoksa `Bu cihaz icin not bulunmuyor.` mesaji gosterilir
 
 ## RLS Yaklasimi
 
@@ -104,10 +127,10 @@ Yaklasim:
 
 ## Bilinen Eksikler
 
-- Device detail route'u henuz yok
-- Runtime'da cihaz listesine employee veya technician session ile manuel ilerleme kaniti bu fazda alinmadi
+- Runtime'da cihaz listesi veya cihaz detayina employee ya da technician session ile manuel ilerleme kaniti bu fazda alinmadi
 - Filtreleme veya arama eklenmedi
+- Bakim kayitlari ve QR akisi Android detail ekranina dahil edilmedi
 
 ## Sonraki Asama
 
-- Android cihaz detay ekrani iskeleti
+- Android cihaz bakim kayitlari goruntuleme iskeleti

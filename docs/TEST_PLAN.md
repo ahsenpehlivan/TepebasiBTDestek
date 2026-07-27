@@ -294,6 +294,19 @@ Not: Bu route ve responsive kontrolleri local Supabase'e bagli ayri bir web inst
 | ANDROID-DEVICE-LIST-07 minimum emulator acilisi | gecti | Bu fazda hedef guncel APK'nin derlenmesi, emulator'e kurulmasi ve uygulamanin login ekranina kadar acildiginin yeniden dogrulanmasidir |
 | ANDROID-DEVICE-LIST-08 runtime device list | test edilemedi | Bu fazda employee veya technician session ile `DeviceList` ekranina canli ilerleme kaniti alinmadi; bu nedenle device list runtime sonucu acikca `test edilemedi` olarak korunur |
 
+## Android Device Detail Iskeleti Dogrulamalari
+
+| Test | Sonuc | Neden |
+| --- | --- | --- |
+| ANDROID-DEVICE-DETAIL-01 device detail schema ve web mantigi incelendi mi? | gecti | Web cihaz detail ekraninda kullanilan `asset_tag`, `device_type`, `brand`, `model`, `serial_number`, `status`, `department`, `assigned user`, `purchase_date`, `warranty_end_date` ve `notes` alanlari incelendi; QR token'in Android detail ekraninda gosterilmeyecegi karari netlestirildi |
+| ANDROID-DEVICE-DETAIL-02 `DeviceDetail` modeli eklendi mi? | gecti | `DeviceDetail` modeli `assetTag`, `type`, `brand`, `model`, `serialNumber`, `status`, `departmentName`, `assignedUserName`, `purchaseDate`, `warrantyEndDate`, `notes` ve `isActive` alanlariyla eklendi |
+| ANDROID-DEVICE-DETAIL-03 repository `loadDeviceDetail(deviceId)` eklendi mi? | gecti | `DeviceRepository` arayuzune detail fonksiyonu eklendi; `SupabaseDeviceRepository` minimum gerekli alanlari okuyup kontrollu Turkce hata donen detail akisi ile genisletildi |
+| ANDROID-DEVICE-DETAIL-04 `DeviceDetailScreen` ve ViewModel baglandi mi? | gecti | `DeviceDetailScreen`, `DeviceDetailViewModel` ve `DeviceDetailUiState` eklendi; loading/error ve read-only detail bolumleri baglandi |
+| ANDROID-DEVICE-DETAIL-05 `DeviceList -> DeviceDetail` navigation baglandi mi? | gecti | Device kartlari tiklanabilir hale getirildi; yeni `DeviceDetail/{deviceId}` route'u eklendi ve geri akisi `DeviceList` ekranina donecek sekilde baglandi |
+| ANDROID-DEVICE-DETAIL-06 Turkce karakter taramasi | gecti | Yeni detail metinlerinde `Cihaz Detayi`, `Kimligi`, `Demirbas`, `Satin`, `Geri don` gibi ASCII varyantlari kalmadi; yeni stringler `strings.xml` icine eklendi |
+| ANDROID-DEVICE-DETAIL-07 minimum emulator acilisi | gecti | Bu fazda hedef guncel APK'nin derlenmesi, emulator'e kurulmasi ve uygulamanin login ekranina kadar acildiginin yeniden dogrulanmasidir |
+| ANDROID-DEVICE-DETAIL-08 runtime device detail | test edilemedi | Bu fazda employee veya technician session ile `DeviceList` ekranindan `DeviceDetail` ekranina canli ilerleme kaniti alinmadi; bu nedenle runtime detail sonucu acikca `test edilemedi` olarak korunur |
+
 ## Android Auth Foundation Dogrulamalari
 
 | Test | Sonuc | Neden |

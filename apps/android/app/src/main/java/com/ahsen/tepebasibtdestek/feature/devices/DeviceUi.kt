@@ -1,5 +1,6 @@
 package com.ahsen.tepebasibtdestek.feature.devices
 
+import androidx.compose.foundation.clickable
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,6 +25,9 @@ import com.ahsen.tepebasibtdestek.R
 import com.ahsen.tepebasibtdestek.domain.device.DeviceStatus
 import com.ahsen.tepebasibtdestek.domain.device.DeviceSummary
 import com.ahsen.tepebasibtdestek.domain.device.DeviceType
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @StringRes
 fun DeviceType.labelResId(): Int = when (this) {
@@ -64,9 +68,14 @@ fun DeviceStatus.contentColor(colorScheme: ColorScheme): Color = when (this) {
 }
 
 @Composable
-internal fun DeviceSummaryCard(device: DeviceSummary) {
+internal fun DeviceSummaryCard(
+    device: DeviceSummary,
+    onClick: () -> Unit
+) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
@@ -156,14 +165,41 @@ internal fun DeviceSummaryCard(device: DeviceSummary) {
                     value = device.assignedUserName
                 )
             }
-
-            Text(
-                text = stringResource(R.string.device_list_placeholder_note),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
         }
     }
+}
+
+fun buildBrandModelLabel(
+    brand: String?,
+    model: String?
+): String {
+    return listOfNotNull(
+        brand?.takeIf { it.isNotBlank() },
+        model?.takeIf { it.isNotBlank() }
+    ).joinToString(" / ").ifBlank {
+        "Belirtilmedi"
+    }
+}
+
+fun maskSerialNumber(serialNumber: String): String {
+    if (serialNumber.startsWith("DEMO-")) {
+        return serialNumber
+    }
+
+    if (serialNumber.length <= 6) {
+        return serialNumber.take(2) + "***"
+    }
+
+    return serialNumber.take(3) + "***" + serialNumber.takeLast(3)
+}
+
+fun formatDeviceDateValue(value: String): String {
+    return runCatching {
+        val parsed = OffsetDateTime.parse(value)
+        parsed.format(
+            DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.forLanguageTag("tr-TR"))
+        )
+    }.getOrElse { value }
 }
 
 @Composable

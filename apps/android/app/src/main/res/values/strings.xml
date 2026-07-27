@@ -139,4 +139,19 @@
     <string name="device_status_spare">Yedek</string>
     <string name="device_status_retired">Kullanım Dışı</string>
     <string name="device_status_lost">Kayıp</string>
+    <string name="device_detail_eyebrow">Cihaz Detayı</string>
+    <string name="device_detail_title">Cihaz Detayı</string>
+    <string name="device_detail_identity_section">Cihaz Kimliği</string>
+    <string name="device_detail_status_section">Durum</string>
+    <string name="device_detail_assignment_section">Zimmet Bilgisi</string>
+    <string name="device_detail_dates_section">Tarihler</string>
+    <string name="device_detail_notes_section">Notlar</string>
+    <string name="device_detail_status_label">Durum:</string>
+    <string name="device_detail_record_label">Kayıt:</string>
+    <string name="device_serial_number_label">Seri No:</string>
+    <string name="device_purchase_date_label">Satın alma tarihi:</string>
+    <string name="device_warranty_end_date_label">Garanti bitiş tarihi:</string>
+    <string name="device_dates_empty_message">Bu cihaz için tarih bilgisi bulunmuyor.</string>
+    <string name="device_notes_empty_message">Bu cihaz için not bulunmuyor.</string>
+    <string name="device_unassigned_value">Atanmadı</string>
 </resources>

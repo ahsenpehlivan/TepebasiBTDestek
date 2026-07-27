@@ -62,6 +62,9 @@ Not:
 - Android cihaz listesi iskeleti icin planlanan ek ekran goruntusu:
   - `26-android-device-list.png` -> Employee veya technician icin `Cihazlar` ekrani ve cihaz kartlari
   - Bu ekran goruntusu henuz alinmadi; cunku runtime'da `DeviceList` ekranina employee veya technician session ile canli ilerleme kaniti alinmadi
+- Android cihaz detay iskeleti icin planlanan ek ekran goruntusu:
+  - `27-android-device-detail.png` -> `DeviceDetail` ekraninda cihaz kimligi, durum, zimmet ve notlar bolumleri
+  - Bu ekran goruntusu henuz alinmadi; cunku runtime'da `DeviceList` ekranindan `DeviceDetail` ekranina employee veya technician session ile canli ilerleme kaniti alinmadi
 
 | Sira | Onerilen Dosya Adi | Demo Adimi | Kanitladigi Ozellik |
 | --- | --- | --- | --- |

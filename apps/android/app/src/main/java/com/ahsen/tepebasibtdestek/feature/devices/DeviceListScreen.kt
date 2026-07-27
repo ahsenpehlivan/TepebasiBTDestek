@@ -24,7 +24,8 @@ import com.ahsen.tepebasibtdestek.core.ui.ScreenScaffold
 fun DeviceListScreen(
     state: DeviceListUiState,
     onBackClick: () -> Unit,
-    onRetryClick: () -> Unit
+    onRetryClick: () -> Unit,
+    onDeviceClick: (String) -> Unit
 ) {
     when {
         state.isLoading -> {
@@ -110,7 +111,10 @@ fun DeviceListScreen(
                         items = state.devices,
                         key = { device -> device.id }
                     ) { device ->
-                        DeviceSummaryCard(device = device)
+                        DeviceSummaryCard(
+                            device = device,
+                            onClick = { onDeviceClick(device.id) }
+                        )
                     }
                 }
             }

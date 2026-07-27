@@ -2,9 +2,11 @@ package com.ahsen.tepebasibtdestek.data.device
 
 import com.ahsen.tepebasibtdestek.core.result.AppResult
 import com.ahsen.tepebasibtdestek.data.remote.supabase.SupabaseClientProvider
+import com.ahsen.tepebasibtdestek.domain.device.DeviceDetail
 import com.ahsen.tepebasibtdestek.domain.device.DeviceStatus
 import com.ahsen.tepebasibtdestek.domain.device.DeviceSummary
 import com.ahsen.tepebasibtdestek.domain.device.DeviceType
+import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Order
@@ -13,6 +15,10 @@ import kotlinx.serialization.Serializable
 
 private const val DEFAULT_DEVICE_LOAD_ERROR_MESSAGE =
     "Cihazlar yüklenemedi. Lütfen tekrar deneyin."
+private const val DEFAULT_DEVICE_DETAIL_ERROR_MESSAGE =
+    "Cihaz bilgileri yüklenemedi. Lütfen tekrar deneyin."
+private const val DEVICE_NOT_FOUND_MESSAGE =
+    "Cihaz bulunamadı veya bu cihaza erişim izniniz yok."
 
 class SupabaseDeviceRepository(
     private val clientProvider: SupabaseClientProvider
@@ -47,9 +53,11 @@ class SupabaseDeviceRepository(
                 .decodeList<DeviceRowDto>()
 
             val departmentNames = loadDepartmentNames(
+                client = client,
                 departmentIds = deviceRows.mapNotNull { it.departmentId }.distinct()
             )
             val assignedUserNames = loadProfileNames(
+                client = client,
                 profileIds = deviceRows.mapNotNull { it.assignedUserId }.distinct()
             )
 
@@ -66,16 +74,70 @@ class SupabaseDeviceRepository(
         }
     }
 
-    private suspend fun loadDepartmentNames(
-        departmentIds: List<String>
-    ): Map<String, String> {
-        if (departmentIds.isEmpty()) {
-            return emptyMap()
+    override suspend fun loadDeviceDetail(deviceId: String): Result<DeviceDetail> {
+        if (deviceId.isBlank()) {
+            return Result.failure(IllegalStateException(DEVICE_NOT_FOUND_MESSAGE))
         }
 
         val client = when (val result = clientProvider.getClient()) {
             is AppResult.Success -> result.value
-            is AppResult.Failure -> return emptyMap()
+            is AppResult.Failure -> {
+                return Result.failure(IllegalStateException(DEFAULT_DEVICE_DETAIL_ERROR_MESSAGE))
+            }
+        }
+
+        return try {
+            val row = client.postgrest
+                .from("devices")
+                .select(
+                    columns = Columns.list(
+                        "id",
+                        "asset_tag",
+                        "device_type",
+                        "brand",
+                        "model",
+                        "serial_number",
+                        "status",
+                        "department_id",
+                        "assigned_user_id",
+                        "purchase_date",
+                        "warranty_end_date",
+                        "notes",
+                        "is_active"
+                    )
+                ) {
+                    filter {
+                        eq("id", deviceId)
+                    }
+                }
+                .decodeList<DeviceDetailRowDto>()
+                .firstOrNull()
+                ?: return Result.failure(IllegalStateException(DEVICE_NOT_FOUND_MESSAGE))
+
+            val departmentName = row.departmentId?.let { id ->
+                loadDepartmentNames(client = client, departmentIds = listOf(id))[id]
+            }
+            val assignedUserName = row.assignedUserId?.let { id ->
+                loadProfileNames(client = client, profileIds = listOf(id))[id]
+            }
+
+            val detail = row.toDetail(
+                departmentName = departmentName,
+                assignedUserName = assignedUserName
+            ) ?: return Result.failure(IllegalStateException(DEFAULT_DEVICE_DETAIL_ERROR_MESSAGE))
+
+            Result.success(detail)
+        } catch (_: Exception) {
+            Result.failure(IllegalStateException(DEFAULT_DEVICE_DETAIL_ERROR_MESSAGE))
+        }
+    }
+
+    private suspend fun loadDepartmentNames(
+        client: SupabaseClient,
+        departmentIds: List<String>
+    ): Map<String, String> {
+        if (departmentIds.isEmpty()) {
+            return emptyMap()
         }
 
         return try {
@@ -94,15 +156,11 @@ class SupabaseDeviceRepository(
     }
 
     private suspend fun loadProfileNames(
+        client: SupabaseClient,
         profileIds: List<String>
     ): Map<String, String> {
         if (profileIds.isEmpty()) {
             return emptyMap()
-        }
-
-        val client = when (val result = clientProvider.getClient()) {
-            is AppResult.Success -> result.value
-            is AppResult.Failure -> return emptyMap()
         }
 
         return try {
@@ -146,6 +204,30 @@ private fun DeviceRowDto.toSummary(
     )
 }
 
+private fun DeviceDetailRowDto.toDetail(
+    departmentName: String?,
+    assignedUserName: String?
+): DeviceDetail? {
+    val mappedType = DeviceType.fromRawValue(deviceType) ?: return null
+    val mappedStatus = DeviceStatus.fromRawValue(status) ?: return null
+
+    return DeviceDetail(
+        id = id,
+        assetTag = assetTag.trim(),
+        type = mappedType,
+        brand = brand.trim().takeIf { it.isNotEmpty() },
+        model = model.trim().takeIf { it.isNotEmpty() },
+        serialNumber = serialNumber?.trim()?.takeIf { it.isNotEmpty() },
+        status = mappedStatus,
+        departmentName = departmentName,
+        assignedUserName = assignedUserName,
+        purchaseDate = purchaseDate,
+        warrantyEndDate = warrantyEndDate,
+        notes = notes?.trim()?.takeIf { it.isNotEmpty() },
+        isActive = isActive
+    )
+}
+
 @Serializable
 private data class DeviceRowDto(
     val id: String,
@@ -160,6 +242,31 @@ private data class DeviceRowDto(
     val departmentId: String? = null,
     @SerialName("assigned_user_id")
     val assignedUserId: String? = null,
+    @SerialName("is_active")
+    val isActive: Boolean = true
+)
+
+@Serializable
+private data class DeviceDetailRowDto(
+    val id: String,
+    @SerialName("asset_tag")
+    val assetTag: String,
+    @SerialName("device_type")
+    val deviceType: String,
+    val brand: String,
+    val model: String,
+    @SerialName("serial_number")
+    val serialNumber: String? = null,
+    val status: String,
+    @SerialName("department_id")
+    val departmentId: String? = null,
+    @SerialName("assigned_user_id")
+    val assignedUserId: String? = null,
+    @SerialName("purchase_date")
+    val purchaseDate: String? = null,
+    @SerialName("warranty_end_date")
+    val warrantyEndDate: String? = null,
+    val notes: String? = null,
     @SerialName("is_active")
     val isActive: Boolean = true
 )
