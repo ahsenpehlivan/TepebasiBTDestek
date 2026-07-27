@@ -23,6 +23,8 @@ private const val DEFAULT_TECHNICIAN_QUEUE_ERROR_MESSAGE =
     "İş kuyruğu yüklenemedi. Lütfen tekrar deneyin."
 private const val DEFAULT_TICKET_DETAIL_ERROR_MESSAGE =
     "Talep detayı yüklenemedi. Lütfen tekrar deneyin."
+private const val DEFAULT_TICKET_STATUS_UPDATE_ERROR_MESSAGE =
+    "Talep durumu güncellenemedi. Lütfen tekrar deneyin."
 private const val DEFAULT_TICKET_CREATE_ERROR_MESSAGE =
     "Talep oluşturulamadı. Lütfen tekrar deneyin."
 private const val TICKET_NOT_FOUND_MESSAGE =
@@ -106,6 +108,35 @@ class SupabaseTicketRepository(
             Result.success(detail)
         } catch (_: Exception) {
             Result.failure(IllegalStateException(DEFAULT_TICKET_DETAIL_ERROR_MESSAGE))
+        }
+    }
+
+    override suspend fun updateTicketStatus(ticketId: String, status: TicketStatus): Result<Unit> {
+        if (ticketId.isBlank()) {
+            return Result.failure(IllegalStateException(DEFAULT_TICKET_STATUS_UPDATE_ERROR_MESSAGE))
+        }
+
+        val client = when (val result = clientProvider.getClient()) {
+            is AppResult.Success -> result.value
+            is AppResult.Failure -> {
+                return Result.failure(IllegalStateException(DEFAULT_TICKET_STATUS_UPDATE_ERROR_MESSAGE))
+            }
+        }
+
+        return try {
+            client.postgrest
+                .from("tickets")
+                .update(
+                    value = TicketStatusUpdatePayload(status = status.rawValue)
+                ) {
+                    filter {
+                        eq("id", ticketId)
+                    }
+                }
+
+            Result.success(Unit)
+        } catch (_: Exception) {
+            Result.failure(IllegalStateException(DEFAULT_TICKET_STATUS_UPDATE_ERROR_MESSAGE))
         }
     }
 
@@ -396,6 +427,7 @@ private fun TicketRowDto.toDetail(
         createdAt = createdAt,
         updatedAt = updatedAt ?: createdAt,
         deviceLabel = deviceLabel,
+        assignedToId = assignedTo,
         assignedToName = assignedToName,
         comments = comments
     )
@@ -492,6 +524,11 @@ private data class CreateTicketPayload(
     val departmentId: String,
     @SerialName("device_id")
     val deviceId: String? = null
+)
+
+@Serializable
+private data class TicketStatusUpdatePayload(
+    val status: String
 )
 
 @Serializable

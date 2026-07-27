@@ -256,6 +256,19 @@ Not: Bu route ve responsive kontrolleri local Supabase'e bagli ayri bir web inst
 | ANDROID-TECH-QUEUE-06 emulator kurulumu ve uygulama acilisi | gecti | Guncel APK emulator'e yeniden kuruldu; `monkey` ile uygulama foreground'a getirildi ve `uiautomator dump` icinde `Mobil giris`, `E-posta`, `Parola` ve `Giris Yap` metinleri goruldu |
 | ANDROID-TECH-QUEUE-07 queue ekraninin runtime'da manuel gorulmesi | test edilemedi | Bu hizli ilerleme fazinda technician runtime login ve queue liste kaniti zorunlu tutulmadi; minimum dogrulama build, install, app acilisi ve navigation baglantisi seviyesinde tamamlandi |
 
+## Android Technician Status Update Temeli Dogrulamalari
+
+| Test | Sonuc | Neden |
+| --- | --- | --- |
+| ANDROID-TICKET-STATUS-01 web/schema status mantigi incelendi mi? | gecti | Web `updateTicketStatusAction`, `ticketStatusTransitionMap` ve migration icindeki `validate_ticket_status_transition()` ile `handle_ticket_write()` mantigi incelendi; `assigned_to`, `assigned_at`, `resolved_at`, `closed_at` ve `updated_at` alanlarinin trigger/default tarafinda yonetildigi, Android'in yalnizca `status` gondermesinin guvenli oldugu dogrulandi |
+| ANDROID-TICKET-STATUS-02 repository `updateTicketStatus(ticketId, status)` eklendi mi? | gecti | `TicketRepository` arayuzune status update fonksiyonu eklendi; `SupabaseTicketRepository` yalnizca `status` alaniyla update yapan, publishable key ve RLS uzerinden calisan kontrollu hata mesajli iskeletle guncellendi |
+| ANDROID-TICKET-STATUS-03 `TicketDetail` technician aksiyon paneli baglandi mi? | gecti | `TicketDetailScreen` icine `Talep Islemleri` bolumu eklendi; technician/admin icin `Isleme Al`, `Kullanici Bekleniyor` ve `Cozuldu` aksiyonlari mevcut status'e gore gosterilecek sekilde baglandi; employee detail ekraninda bu panel gorunmez |
+| ANDROID-TICKET-STATUS-04 ViewModel status update state'i eklendi mi? | gecti | `TicketDetailUiState` icine `viewerRole`, `availableStatusActions`, `isUpdatingStatus`, `statusSuccessMessage` ve `statusErrorMessage` alanlari eklendi; `TicketDetailViewModel` update sirasinda ayni anda tek islem kuralini koruyup basari sonrasi detail refresh yapacak sekilde guncellendi |
+| ANDROID-TICKET-STATUS-05 `TechnicianQueue -> TicketDetail -> status update` baglantisi korunuyor mu? | gecti | Queue kartlari detail route'una gitmeye devam ediyor; status update aksiyonu bilincli olarak yalnizca `TicketDetail` icinde tutuldu |
+| ANDROID-TICKET-STATUS-06 Turkce karakter taramasi | gecti | Kaynak taramasinda yeni status action metinlerinde `Isleme Al`, `Kullanici Bekleniyor`, `Cozuldu`, `Guncelleniyor` veya `Geri don` gibi yanlis ASCII Turkce varyantlari bulunmadi |
+| ANDROID-TICKET-STATUS-07 emulator kurulumu ve uygulama acilisi | gecti | Guncel APK emulator'e kuruldu; `adb shell monkey` sonrasi `MainActivity` resumed olarak goruldu ve `uiautomator dump` icinde `Mobil giris`, `E-posta`, `Parola` ve `Giris Yap` metinleri goruldu |
+| ANDROID-TICKET-STATUS-08 runtime status update | test edilemedi | Bu hizli ilerleme fazinda technician runtime login ve gercek ticket status guncelleme kaniti zorunlu tutulmadi; minimum dogrulama build, app acilisi ve kaynak kod baglantisi seviyesinde tamamlandi |
+
 ## Android Auth Foundation Dogrulamalari
 
 | Test | Sonuc | Neden |

@@ -243,12 +243,22 @@ fun AppNavHost(
                 state = uiState,
                 onBackClick = {
                     if (!navController.popBackStack()) {
-                        navController.navigate(AppRoute.MyTickets.route) {
+                        val fallbackRoute = when (
+                            (globalSessionState as? SessionState.Authenticated)?.profile?.role
+                        ) {
+                            com.ahsen.tepebasibtdestek.domain.auth.AppRole.Technician ->
+                                AppRoute.TechnicianHome.route
+                            com.ahsen.tepebasibtdestek.domain.auth.AppRole.Admin ->
+                                AppRoute.AdminHome.route
+                            else -> AppRoute.MyTickets.route
+                        }
+                        navController.navigate(fallbackRoute) {
                             launchSingleTop = true
                         }
                     }
                 },
-                onRetryClick = detailViewModel::refresh
+                onRetryClick = detailViewModel::refresh,
+                onUpdateStatus = detailViewModel::updateStatus
             )
         }
 

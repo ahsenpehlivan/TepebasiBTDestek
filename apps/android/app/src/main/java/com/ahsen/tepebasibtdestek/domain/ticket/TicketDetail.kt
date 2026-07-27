@@ -11,6 +11,7 @@ data class TicketDetail(
     val createdAt: String,
     val updatedAt: String,
     val deviceLabel: String? = null,
+    val assignedToId: String? = null,
     val assignedToName: String? = null,
     val comments: List<TicketComment> = emptyList()
 )

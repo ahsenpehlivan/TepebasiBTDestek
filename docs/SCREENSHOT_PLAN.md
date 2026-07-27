@@ -53,6 +53,9 @@ Not:
 - Android technician queue temeli icin planlanan ek ekran goruntusu:
   - `23-android-technician-queue.png` -> Technician icin `Is Kuyrugum` ekrani
   - Bu ekran goruntusu de henuz alinmadi; cunku bu fazda minimum dogrulama yeterli tutuldu ve queue ekranina technician runtime login ile manuel ilerlenmedi
+- Android technician status update temeli icin planlanan ek ekran goruntusu:
+  - `24-android-ticket-status-actions.png` -> Technician icin `Talep Islemleri` butonlari gorunen `TicketDetail` ekrani
+  - Bu ekran goruntusu de henuz alinmadi; cunku bu fazda technician runtime login ile detail ekraninda canli status update kaniti alinmadi
 
 | Sira | Onerilen Dosya Adi | Demo Adimi | Kanitladigi Ozellik |
 | --- | --- | --- | --- |

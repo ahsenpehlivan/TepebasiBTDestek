@@ -41,6 +41,17 @@ fun TicketStatus.labelResId(): Int = when (this) {
 }
 
 @StringRes
+fun TicketStatus.actionLabelResId(): Int = when (this) {
+    TicketStatus.InProgress -> R.string.ticket_status_action_in_progress
+    TicketStatus.WaitingUser -> R.string.ticket_status_action_waiting_user
+    TicketStatus.Resolved -> R.string.ticket_status_action_resolved
+    TicketStatus.Open -> R.string.ticket_status_open
+    TicketStatus.Assigned -> R.string.ticket_status_assigned
+    TicketStatus.Closed -> R.string.ticket_status_closed
+    TicketStatus.Cancelled -> R.string.ticket_status_cancelled
+}
+
+@StringRes
 fun TicketPriority.labelResId(): Int = when (this) {
     TicketPriority.Low -> R.string.ticket_priority_low
     TicketPriority.Normal -> R.string.ticket_priority_normal

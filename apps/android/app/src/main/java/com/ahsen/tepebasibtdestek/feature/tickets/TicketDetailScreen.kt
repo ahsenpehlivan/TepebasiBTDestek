@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -19,20 +20,22 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.res.stringResource
 import com.ahsen.tepebasibtdestek.R
 import com.ahsen.tepebasibtdestek.core.ui.CenteredStatusCard
 import com.ahsen.tepebasibtdestek.core.ui.ScreenScaffold
 import com.ahsen.tepebasibtdestek.domain.ticket.TicketComment
 import com.ahsen.tepebasibtdestek.domain.ticket.TicketDetail
+import com.ahsen.tepebasibtdestek.domain.ticket.TicketStatus
 
 @Composable
 fun TicketDetailScreen(
     state: TicketDetailUiState,
     onBackClick: () -> Unit,
-    onRetryClick: () -> Unit
+    onRetryClick: () -> Unit,
+    onUpdateStatus: (TicketStatus) -> Unit
 ) {
     when {
         state.isLoading -> {
@@ -69,8 +72,9 @@ fun TicketDetailScreen(
 
         state.ticketDetail != null -> {
             TicketDetailContent(
-                ticketDetail = state.ticketDetail,
-                onBackClick = onBackClick
+                state = state,
+                onBackClick = onBackClick,
+                onUpdateStatus = onUpdateStatus
             )
         }
     }
@@ -78,9 +82,12 @@ fun TicketDetailScreen(
 
 @Composable
 private fun TicketDetailContent(
-    ticketDetail: TicketDetail,
-    onBackClick: () -> Unit
+    state: TicketDetailUiState,
+    onBackClick: () -> Unit,
+    onUpdateStatus: (TicketStatus) -> Unit
 ) {
+    val ticketDetail = state.ticketDetail ?: return
+
     ScreenScaffold { contentPadding: PaddingValues ->
         Column(
             modifier = Modifier
@@ -121,6 +128,13 @@ private fun TicketDetailContent(
                 DetailValueLine(
                     label = stringResource(R.string.ticket_category_label),
                     value = stringResource(ticketDetail.category.labelResId())
+                )
+            }
+
+            if (state.canManageStatus) {
+                TicketStatusActionCard(
+                    state = state,
+                    onUpdateStatus = onUpdateStatus
                 )
             }
 
@@ -181,8 +195,62 @@ private fun TicketDetailContent(
 }
 
 @Composable
+private fun TicketStatusActionCard(
+    state: TicketDetailUiState,
+    onUpdateStatus: (TicketStatus) -> Unit
+) {
+    TicketSectionCard(title = stringResource(R.string.ticket_status_actions_title)) {
+        if (state.isUpdatingStatus) {
+            Text(
+                text = stringResource(R.string.ticket_status_updating),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+
+        if (!state.statusSuccessMessage.isNullOrBlank()) {
+            Text(
+                text = state.statusSuccessMessage,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.primary
+            )
+        }
+
+        if (!state.statusErrorMessage.isNullOrBlank()) {
+            Text(
+                text = state.statusErrorMessage,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.error
+            )
+        }
+
+        if (state.availableStatusActions.isEmpty()) {
+            Text(
+                text = stringResource(R.string.ticket_status_actions_empty),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        } else {
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                state.availableStatusActions.forEach { status ->
+                    Button(
+                        onClick = { onUpdateStatus(status) },
+                        enabled = !state.isUpdatingStatus
+                    ) {
+                        Text(text = stringResource(status.actionLabelResId()))
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
 private fun TicketBadgeRow(ticketDetail: TicketDetail) {
-    androidx.compose.foundation.layout.FlowRow(
+    FlowRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {

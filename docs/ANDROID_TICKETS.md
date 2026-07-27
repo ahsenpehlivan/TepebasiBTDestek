@@ -2,8 +2,8 @@
 
 ## Ozet
 
-Bu dokuman artik Android tarafindaki personel ticket listeleme, ticket detay, ticket olusturma ve technician queue temelini birlikte ozetler.
-Bu fazda technician akisi icine `Is Kuyrugum` ekrani eklendi.
+Bu dokuman artik Android tarafindaki personel ticket listeleme, ticket detay, ticket olusturma, technician queue ve technician status update temelini birlikte ozetler.
+Bu fazda `TicketDetail` icine technician/admin icin temel status update aksiyon paneli eklendi.
 
 Kapsam:
 
@@ -17,12 +17,12 @@ Kapsam:
 - `TicketDetail` modeli ve `loadTicketDetail(ticketId)` repository fonksiyonu
 - `CreateTicketInput` modeli ve `createTicket(input)` repository fonksiyonu
 - `loadTechnicianQueue()` repository fonksiyonu
+- `updateTicketStatus(ticketId, status)` repository fonksiyonu
 - `MyTicketsScreen` kartindan veya `TechnicianQueueScreen` kartindan `TicketDetail/{ticketId}` route gecisi
+- `TicketDetail` icinde technician/admin icin status update aksiyonlari
 
 Bu fazda sunlar eklenmedi:
 
-- ticket detay aksiyonlari
-- ticket durum degistirme
 - ticket atama degistirme
 - ticket yorum ekleme
 - technician queue icinde filtreleme/siralama secenekleri
@@ -35,6 +35,7 @@ Runtime notu:
 - employee ve technician ticket ekranlarinin manuel runtime dogrulamasi bu fazda zorunlu tutulmadi
 - minimum MVP dogrulamasi olarak build, emulator install, app acilisi ve login ekran gorunurlugu kanitlandi
 - `TechnicianHome -> TechnicianQueue -> TicketDetail` baglantisi kaynak kod ve navigation seviyesinde dogrulandi
+- status update aksiyonlari kaynak kod, repository ve ViewModel seviyesinde baglandi; ancak technician login ile gercek runtime durum guncelleme kaniti bu fazda alinmadi
 
 ## Konumlar
 
@@ -79,6 +80,7 @@ Repository arayuzu:
 suspend fun loadMyTickets(): Result<List<TicketSummary>>
 suspend fun loadTechnicianQueue(): Result<List<TicketSummary>>
 suspend fun loadTicketDetail(ticketId: String): Result<TicketDetail>
+suspend fun updateTicketStatus(ticketId: String, status: TicketStatus): Result<Unit>
 suspend fun createTicket(input: CreateTicketInput): Result<String>
 ```
 
@@ -92,6 +94,8 @@ Davranis:
 - employee create akisi icin `department_id` mevcut session profile baglamindan cozulur
 - employee insert'inde `created_by` ve `status` alanlari trigger/RLS tarafina birakilir
 - technician queue varsayilan olarak `open`, `assigned`, `in_progress` ve `waiting_user` durumlarini newest-first getirir
+- status update akisi Android'den yalnizca `status` alanini gonderir
+- `assigned_to`, `assigned_at`, `resolved_at`, `closed_at` ve `updated_at` alanlari trigger/default mantigina birakilir
 
 Secilen alanlar:
 
@@ -151,7 +155,16 @@ Bu alanlar RLS nedeniyle her zaman gelmeyebilir; UI'da opsiyonel tutulur.
 2. mevcut session state'i kontrol eder
 3. session yoksa kontrollu hata durumu uretir
 4. `loadTicketDetail(ticketId)` ile detay verisini yukler
-5. sonucu `TicketDetailUiState` icine yazar
+5. technical role ise gecerli status aksiyonlarini hesaplar
+6. sonucu `TicketDetailUiState` icine yazar
+
+Status update akisi:
+
+1. technician veya admin `TicketDetailScreen` icindeki `Talep Islemleri` bolumunu gorur
+2. guvenli aksiyonlar yalnizca mevcut status'e gore acilir
+3. `updateTicketStatus(ticketId, status)` ViewModel uzerinden cagrilir
+4. basarili olursa detail verisi yeniden yuklenir ve basari mesaji gosterilir
+5. hata olursa kontrollu Turkce hata mesaji gosterilir
 
 `CreateTicketViewModel`:
 
@@ -187,6 +200,12 @@ Technician queue akisi:
 5. kart secimi
 6. `TicketDetailScreen`
 
+Status update akisi:
+
+1. technician veya admin `TicketDetailScreen`
+2. `Isleme Al`, `Kullanici Bekleniyor` veya `Cozuldu`
+3. basarili olursa detail refresh
+
 ## RLS Yaklasimi
 
 Bu ekranlar istemci bazli sahte yetki kontrolu yapmaz.
@@ -201,6 +220,7 @@ Bu nedenle:
 
 - auth kullanicisinin goremedigi ticket'lar Android'e donmez
 - ekstra service role veya gizli bypass kullanilmaz
+- status update RLS ve trigger kurallarini dolasmadan normal update istegi ile calisir
 
 ## Test Senaryolari
 
@@ -220,14 +240,20 @@ Bu nedenle:
 - ANDROID-TECH-QUEUE-03 queue ekrani durumlari
 - ANDROID-TECH-QUEUE-04 karttan detail route gecisi
 - ANDROID-TECH-QUEUE-05 minimum emulator acilisi
+- ANDROID-TICKET-STATUS-01 web/schema status mantigi ile uyum
+- ANDROID-TICKET-STATUS-02 `updateTicketStatus()` repository fonksiyonu
+- ANDROID-TICKET-STATUS-03 `TicketDetail` technician aksiyon paneli
+- ANDROID-TICKET-STATUS-04 status update state ve detail refresh
+- ANDROID-TICKET-STATUS-05 minimum emulator acilisi
 
 ## Bilinen Eksikler
 
 - Technician queue bu fazda read-only iskelet olarak eklendi
-- Queue icin kullaniciya acik filtre, durum guncelleme veya atama aksiyonu yok
+- Queue icin kullaniciya acik filtre veya atama aksiyonu yok
+- Status update bu fazda yalnizca `TicketDetail` icinde bulunur; `TechnicianQueue` kartlari uzerinde dogrudan aksiyon yoktur
 - Queue ekraninin gercek technician oturumuyla manuel liste kaniti bu fazda alinmadi
-- TicketDetail ekrani kaynak kod ve navigation duzeyinde queue'ye baglandi; ancak technician session ile manuel ekran akisi bu fazda yapilmadi
+- TicketDetail icindeki status update aksiyonlarinin gercek technician session ile runtime kaniti bu fazda alinmadi
 
 ## Sonraki Asama
 
-- Android technician ticket status update iskeleti
+- Android ticket yorum goruntuleme/yazma iskeleti

@@ -66,6 +66,12 @@
     <string name="ticket_detail_dates_section">Tarihler</string>
     <string name="ticket_detail_assignee_section">Teknik Personel</string>
     <string name="ticket_detail_comments_section">Yorumlar</string>
+    <string name="ticket_status_actions_title">Talep İşlemleri</string>
+    <string name="ticket_status_action_in_progress">İşleme Al</string>
+    <string name="ticket_status_action_waiting_user">Kullanıcı Bekleniyor</string>
+    <string name="ticket_status_action_resolved">Çözüldü</string>
+    <string name="ticket_status_updating">Durum güncelleniyor...</string>
+    <string name="ticket_status_actions_empty">Bu talep için şu anda ek bir durum işlemi bulunmuyor.</string>
     <string name="ticket_detail_device_empty">Bu talebe bağlı cihaz bulunmuyor.</string>
     <string name="ticket_detail_assignee_empty">Henüz teknik personele atanmadı.</string>
     <string name="ticket_detail_comments_empty">Henüz yorum bulunmuyor.</string>
