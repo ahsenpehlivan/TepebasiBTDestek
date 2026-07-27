@@ -44,6 +44,7 @@ class SupabaseDeviceRepository(
                     columns = Columns.list(
                         "id",
                         "asset_tag",
+                        "qr_token",
                         "device_type",
                         "brand",
                         "model",
@@ -274,6 +275,7 @@ private fun DeviceDetailRowDto.toDetail(
         id = id,
         assetTag = assetTag.trim(),
         type = mappedType,
+        qrToken = qrToken?.trim()?.takeIf { it.isNotEmpty() },
         brand = brand.trim().takeIf { it.isNotEmpty() },
         model = model.trim().takeIf { it.isNotEmpty() },
         serialNumber = serialNumber?.trim()?.takeIf { it.isNotEmpty() },
@@ -325,6 +327,8 @@ private data class DeviceDetailRowDto(
     val id: String,
     @SerialName("asset_tag")
     val assetTag: String,
+    @SerialName("qr_token")
+    val qrToken: String? = null,
     @SerialName("device_type")
     val deviceType: String,
     val brand: String,

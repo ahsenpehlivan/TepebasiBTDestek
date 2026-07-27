@@ -30,7 +30,8 @@ import com.ahsen.tepebasibtdestek.domain.device.DeviceMaintenanceRecord
 fun DeviceDetailScreen(
     state: DeviceDetailUiState,
     onBackClick: () -> Unit,
-    onRetryClick: () -> Unit
+    onRetryClick: () -> Unit,
+    onQrPreviewClick: (String) -> Unit
 ) {
     when {
         state.isLoading -> {
@@ -69,7 +70,8 @@ fun DeviceDetailScreen(
             DeviceDetailContent(
                 state = state,
                 onBackClick = onBackClick,
-                onRetryClick = onRetryClick
+                onRetryClick = onRetryClick,
+                onQrPreviewClick = onQrPreviewClick
             )
         }
     }
@@ -79,7 +81,8 @@ fun DeviceDetailScreen(
 private fun DeviceDetailContent(
     state: DeviceDetailUiState,
     onBackClick: () -> Unit,
-    onRetryClick: () -> Unit
+    onRetryClick: () -> Unit,
+    onQrPreviewClick: (String) -> Unit
 ) {
     val detail = state.detail ?: return
 
@@ -107,6 +110,11 @@ private fun DeviceDetailContent(
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+                Button(
+                    onClick = { onQrPreviewClick(detail.id) }
+                ) {
+                    Text(text = stringResource(R.string.device_qr_preview_button))
+                }
                 OutlinedButton(onClick = onBackClick) {
                     Text(text = stringResource(R.string.common_back))
                 }

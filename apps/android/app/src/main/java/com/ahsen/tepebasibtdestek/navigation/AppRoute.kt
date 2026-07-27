@@ -13,6 +13,11 @@ sealed class AppRoute(val route: String) {
 
         fun createRoute(deviceId: String): String = "device_detail/$deviceId"
     }
+    data object DeviceQrPreview : AppRoute("device_qr_preview/{deviceId}") {
+        const val deviceIdArg = "deviceId"
+
+        fun createRoute(deviceId: String): String = "device_qr_preview/$deviceId"
+    }
     data object MyTickets : AppRoute("my_tickets")
     data object CreateTicket : AppRoute("create_ticket")
     data object TechnicianQueue : AppRoute("technician_queue")

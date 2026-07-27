@@ -161,4 +161,12 @@
     <string name="device_maintenance_cost_label">Maliyet:</string>
     <string name="device_maintenance_empty_message">Bu cihaz için bakım kaydı bulunmuyor.</string>
     <string name="device_maintenance_error_message">Bakım kayıtları yüklenemedi. Lütfen tekrar deneyin.</string>
+    <string name="device_qr_preview_eyebrow">QR Önizleme</string>
+    <string name="device_qr_preview_title">QR Önizleme</string>
+    <string name="device_qr_preview_button">QR Önizlemeyi Aç</string>
+    <string name="device_qr_info_section_title">QR Bilgisi</string>
+    <string name="device_qr_payload_label">Güvenli QR İçeriği:</string>
+    <string name="device_qr_description">Bu QR yalnızca cihazı güvenli şekilde tanımlamak için kullanılır.</string>
+    <string name="device_qr_missing_message">Bu cihaz için QR bilgisi bulunmuyor.</string>
+    <string name="device_qr_error_message">QR bilgisi yüklenemedi. Lütfen tekrar deneyin.</string>
 </resources>

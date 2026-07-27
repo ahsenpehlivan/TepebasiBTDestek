@@ -21,6 +21,8 @@ import com.ahsen.tepebasibtdestek.feature.devices.DeviceDetailScreen
 import com.ahsen.tepebasibtdestek.feature.devices.DeviceDetailViewModel
 import com.ahsen.tepebasibtdestek.feature.devices.DeviceListScreen
 import com.ahsen.tepebasibtdestek.feature.devices.DeviceListViewModel
+import com.ahsen.tepebasibtdestek.feature.devices.DeviceQrPreviewScreen
+import com.ahsen.tepebasibtdestek.feature.devices.DeviceQrPreviewViewModel
 import com.ahsen.tepebasibtdestek.feature.home.AdminHomeScreen
 import com.ahsen.tepebasibtdestek.feature.home.EmployeeHomeScreen
 import com.ahsen.tepebasibtdestek.feature.home.HomeViewModel
@@ -59,6 +61,7 @@ fun AppNavHost(
                 AppRoute.EmployeeHome.route,
                 AppRoute.DeviceList.route,
                 AppRoute.DeviceDetail.route,
+                AppRoute.DeviceQrPreview.route,
                 AppRoute.MyTickets.route,
                 AppRoute.CreateTicket.route,
                 AppRoute.TechnicianQueue.route,
@@ -242,7 +245,43 @@ fun AppNavHost(
                         }
                     }
                 },
-                onRetryClick = detailViewModel::refresh
+                onRetryClick = detailViewModel::refresh,
+                onQrPreviewClick = { qrDeviceId ->
+                    navController.navigate(AppRoute.DeviceQrPreview.createRoute(qrDeviceId))
+                }
+            )
+        }
+
+        composable(
+            route = AppRoute.DeviceQrPreview.route,
+            arguments = listOf(
+                navArgument(AppRoute.DeviceQrPreview.deviceIdArg) {
+                    type = NavType.StringType
+                }
+            )
+        ) { backStackEntry ->
+            val deviceId = backStackEntry.arguments
+                ?.getString(AppRoute.DeviceQrPreview.deviceIdArg)
+                .orEmpty()
+            val qrPreviewViewModel: DeviceQrPreviewViewModel = viewModel(
+                factory = DeviceQrPreviewViewModel.factory(
+                    deviceId = deviceId,
+                    authRepository = appContainer.authRepository,
+                    deviceRepository = appContainer.deviceRepository
+                )
+            )
+            val uiState by qrPreviewViewModel.uiState.collectAsStateWithLifecycle()
+
+            DeviceQrPreviewScreen(
+                state = uiState,
+                onBackClick = {
+                    if (!navController.popBackStack()) {
+                        navController.navigate(AppRoute.DeviceDetail.createRoute(deviceId)) {
+                            launchSingleTop = true
+                        }
+                    }
+                },
+                onRetryClick = qrPreviewViewModel::refresh
             )
         }
 

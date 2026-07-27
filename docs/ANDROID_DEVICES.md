@@ -2,8 +2,8 @@
 
 ## Ozet
 
-Bu dokuman Android tarafindaki cihaz listesi, cihaz detay ve read-only bakim kayitlari iskeletini ozetler.
-Bu fazda cihaz detay ekranina bakim kayitlari goruntuleme bolumu eklendi.
+Bu dokuman Android tarafindaki cihaz listesi, cihaz detay, read-only bakim kayitlari ve QR preview iskeletini ozetler.
+Bu fazda cihaz detay ekranindan guvenli QR onizleme ekranina gecis eklendi.
 
 Kapsam:
 
@@ -11,8 +11,10 @@ Kapsam:
 - `DeviceRepository` ve `SupabaseDeviceRepository`
 - `DeviceListScreen`, `DeviceListViewModel`, `DeviceListUiState` ve `DeviceUi`
 - `DeviceDetailScreen`, `DeviceDetailViewModel` ve `DeviceDetailUiState`
+- `DeviceQrPreviewScreen`, `DeviceQrPreviewViewModel` ve `DeviceQrPreviewUiState`
 - Employee, technician ve admin home ekranlarindan `DeviceList` route'una gecis
 - `DeviceList` kartindan `DeviceDetail/{deviceId}` route'una gecis
+- `DeviceDetail` ekranindan `DeviceQrPreview/{deviceId}` route'una gecis
 - RLS'ye guvenen sade cihaz listeleme, cihaz detay ve bakim kaydi sorgulari
 - Loading, liste, empty ve error ekran durumlari
 - Turkce UI etiketleri ve durum badge'leri
@@ -22,7 +24,7 @@ Bu fazda sunlar eklenmedi:
 - cihaz olusturma veya duzenleme
 - cihaz pasife alma
 - bakim kaydi ekleme
-- QR, upload veya realtime
+- QR tarama, upload veya realtime
 
 ## Device Schema Uyumu
 
@@ -42,6 +44,7 @@ Incelenen temel alanlar:
 - `purchase_date`
 - `warranty_end_date`
 - `notes`
+- `qr_token`
 
 Notlar:
 
@@ -50,6 +53,7 @@ Notlar:
 - `tickets.assigned_to` ile karistirilmaz
 - Veritabani enum degerleri Ingilizce kalir; Android UI katmani Turkce label gosterir
 - Web tarafindaki gibi ham `qr_token` Android detay ekraninda gosterilmez
+- `qr_token` yalnizca guvenli QR payload uretmek icin read-only olarak okunur
 - Seri numarasi detail ekraninda kontrollu maskeli gosterilir
 
 ## Repository Yaklasimi
@@ -72,10 +76,12 @@ Davranis:
 - departman ve kullanici adlari ayri yardimci sorgularla zenginlestirilir
 - ham Supabase hatasi yerine kontrollu Turkce hata donulur
 - detail sorgusu minimum olarak kimlik, durum, zimmet, tarih ve not alanlarini okur
+- ayni detail sorgusu icine `qr_token` read-only alan olarak eklendi
 - cihaz detail erisimi yoksa kontrollu hata donulur; uygulama cokmez
 - `device_maintenance_records` tablosu `device_id`, `description`, `performed_by`, `performed_at` ve `cost` alanlariyla newest-first okunur
 - bakim kayitlarinda performer adi `profiles.full_name` yardimci sorgusuyla zenginlestirilir
 - bakim bolumu hata verirse detail ekraninin tamami degil, yalnizca ilgili kart kontrollu hata gosterir
+- QR preview icin ayri repository eklenmedi; mevcut `loadDeviceDetail(deviceId)` sonucu uzerinden `TBT-DEVICE:<qr_token>` payload'i uretilir
 
 ## ViewModel ve UI Akisi
 
@@ -110,15 +116,18 @@ Kartta gosterilen alanlar:
 - Tarihler
 - Notlar
 - Bakim Kayitlari
+- QR Onizleme butonu
 
 Detay ekraninda:
 
 - QR token gosterilmez
+- QR preview ekraninda yalnizca `TBT-DEVICE:<qr_token>` formunda guvenli payload gosterilir
 - Seri numarasi maskeli verilir
 - not yoksa `Bu cihaz icin not bulunmuyor.` mesaji gosterilir
 - bakim kaydi yoksa `Bu cihaz icin bakim kaydi bulunmuyor.` mesaji gosterilir
 - bakim kayitlari `performed_at desc` sirasiyla listelenir
 - maliyet `0` ise kullaniciya ayri bir maliyet satiri gosterilmez
+- `qr_token` yoksa `Bu cihaz icin QR bilgisi bulunmuyor.` mesaji gosterilir ve uygulama cokmez
 
 ## RLS Yaklasimi
 
@@ -136,8 +145,9 @@ Yaklasim:
 - Runtime'da cihaz listesi veya cihaz detayina employee ya da technician session ile manuel ilerleme kaniti bu fazda alinmadi
 - Filtreleme veya arama eklenmedi
 - Bakim kayitlari runtime'da canli session ile dogrulanmadi
-- QR akisi Android detail ekranina dahil edilmedi
+- QR preview runtime'da canli session ile dogrulanmadi
+- Gercek QR gorseli veya tarama kutuphanesi eklenmedi
 
 ## Sonraki Asama
 
-- Android cihaz QR preview iskeleti
+- Android genel MVP toparlama ve dokumantasyon final kontrolu

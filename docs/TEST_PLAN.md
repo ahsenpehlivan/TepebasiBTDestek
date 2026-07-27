@@ -320,6 +320,20 @@ Not: Bu route ve responsive kontrolleri local Supabase'e bagli ayri bir web inst
 | ANDROID-DEVICE-MAINT-07 minimum emulator acilisi | gecti | Bu fazda hedef guncel APK'nin derlenmesi, emulator'e kurulmasi ve uygulamanin login ekranina kadar acildiginin yeniden dogrulanmasidir |
 | ANDROID-DEVICE-MAINT-08 runtime maintenance bolumu | test edilemedi | Bu fazda employee veya technician session ile `DeviceDetail` ekranina canli ilerleme ve bakim kayitlari listesi kaniti alinmadi; runtime sonucu acikca `test edilemedi` olarak korunur |
 
+## Android Device QR Preview Iskeleti Dogrulamalari
+
+| Test | Sonuc | Neden |
+| --- | --- | --- |
+| ANDROID-DEVICE-QR-01 QR schema ve web mantigi incelendi mi? | gecti | `devices.qr_token` alani, web `getDeviceQrPayload()` mantigi ve `/devices/[id]/qr` ekranindaki `TBT-DEVICE:<qr_token>` payload yaklasimi incelendi; hassas veri gosterilmedigi dogrulandi |
+| ANDROID-DEVICE-QR-02 `DeviceDetail` modeli QR icin genisletildi mi? | gecti | `DeviceDetail` modeline opsiyonel `qrToken` alani eklendi; bu alan yalnizca read-only QR payload uretimi icin kullanilir |
+| ANDROID-DEVICE-QR-03 ayri repository yerine mevcut detail sorgusu kullanildi mi? | gecti | Gerekli `qr_token` alani mevcut `loadDeviceDetail(deviceId)` sorgusuna eklendi; gereksiz yeni repository fonksiyonu acilmadi |
+| ANDROID-DEVICE-QR-04 `DeviceQrPreviewScreen` ve ViewModel baglandi mi? | gecti | `DeviceQrPreviewScreen`, `DeviceQrPreviewViewModel` ve `DeviceQrPreviewUiState` eklendi; payload, empty ve kontrollu hata durumlari baglandi |
+| ANDROID-DEVICE-QR-05 `DeviceDetail -> DeviceQrPreview` navigation baglandi mi? | gecti | `DeviceDetail` ekranina `QR Önizlemeyi Aç` butonu eklendi; yeni `DeviceQrPreview/{deviceId}` route'u ve unauth guard baglandi |
+| ANDROID-DEVICE-QR-06 hassas veri icermeyen payload dogrulandi mi? | gecti | Android preview yalnizca `TBT-DEVICE:<qr_token>` payload'ini gosterir; seri numarasi, IP, MAC, personel adi veya e-posta QR icerigine alinmaz |
+| ANDROID-DEVICE-QR-07 Turkce karakter taramasi | gecti | Yeni metinlerde `Onizleme`, `Guvenli`, `Icerigi`, `Geri don` gibi ASCII varyantlari birakilmadi; yeni stringler `strings.xml` icine tasindi |
+| ANDROID-DEVICE-QR-08 minimum emulator acilisi | gecti | Bu fazda hedef guncel APK'nin derlenmesi, emulator'e kurulmasi ve uygulamanin login ekranina kadar acildiginin yeniden dogrulanmasidir |
+| ANDROID-DEVICE-QR-09 runtime QR preview | test edilemedi | Bu fazda employee veya technician session ile `DeviceDetail` ekranindan `DeviceQrPreview` ekranina canli ilerleme kaniti alinmadi; runtime sonucu acikca `test edilemedi` olarak korunur |
+
 ## Android Auth Foundation Dogrulamalari
 
 | Test | Sonuc | Neden |

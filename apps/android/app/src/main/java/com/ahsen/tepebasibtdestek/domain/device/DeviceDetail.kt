@@ -4,6 +4,7 @@ data class DeviceDetail(
     val id: String,
     val assetTag: String,
     val type: DeviceType,
+    val qrToken: String?,
     val brand: String?,
     val model: String?,
     val serialNumber: String?,

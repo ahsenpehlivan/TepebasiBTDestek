@@ -68,6 +68,9 @@ Not:
 - Android cihaz bakim kayitlari iskeleti icin planlanan ek ekran goruntusu:
   - `28-android-device-maintenance.png` -> `DeviceDetail` icinde `Bakim Kayitlari` bolumu ve maintenance kartlari
   - Bu ekran goruntusu henuz alinmadi; cunku runtime'da `DeviceDetail` ekranina employee veya technician session ile canli ilerleme ve maintenance listesi kaniti alinmadi
+- Android cihaz QR preview iskeleti icin planlanan ek ekran goruntusu:
+  - `29-android-device-qr-preview.png` -> `DeviceQrPreview` ekraninda guvenli `TBT-DEVICE:<qr_token>` payload onizlemesi
+  - Bu ekran goruntusu henuz alinmadi; cunku runtime'da `DeviceQrPreview` ekranina employee veya technician session ile canli ilerleme kaniti alinmadi
 
 | Sira | Onerilen Dosya Adi | Demo Adimi | Kanitladigi Ozellik |
 | --- | --- | --- | --- |
