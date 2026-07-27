@@ -13,6 +13,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -26,6 +27,8 @@ import com.ahsen.tepebasibtdestek.domain.auth.AuthenticatedProfile
 @Composable
 fun EmployeeHomeScreen(
     state: HomeUiState,
+    onMyTicketsClick: () -> Unit,
+    onCreateTicketClick: () -> Unit,
     onLogoutClick: () -> Unit
 ) {
     RoleHomeScreen(
@@ -33,6 +36,10 @@ fun EmployeeHomeScreen(
         title = stringResource(R.string.employee_home_title),
         description = stringResource(R.string.employee_home_description),
         secondaryDescription = stringResource(R.string.employee_home_secondary_description),
+        primaryActionLabel = stringResource(R.string.employee_home_my_tickets_button),
+        onPrimaryActionClick = onMyTicketsClick,
+        secondaryActionLabel = stringResource(R.string.employee_home_create_ticket_button),
+        onSecondaryActionClick = onCreateTicketClick,
         logoutLoading = state.isLogoutLoading,
         logoutErrorMessage = state.logoutErrorMessage,
         onLogoutClick = onLogoutClick
@@ -49,6 +56,8 @@ fun TechnicianHomeScreen(
         title = stringResource(R.string.technician_home_title),
         description = stringResource(R.string.technician_home_description),
         secondaryDescription = stringResource(R.string.technician_home_secondary_description),
+        primaryActionLabel = null,
+        onPrimaryActionClick = null,
         logoutLoading = state.isLogoutLoading,
         logoutErrorMessage = state.logoutErrorMessage,
         onLogoutClick = onLogoutClick
@@ -65,6 +74,8 @@ fun AdminHomeScreen(
         title = stringResource(R.string.admin_home_title),
         description = stringResource(R.string.admin_home_description),
         secondaryDescription = stringResource(R.string.admin_home_secondary_description),
+        primaryActionLabel = null,
+        onPrimaryActionClick = null,
         logoutLoading = state.isLogoutLoading,
         logoutErrorMessage = state.logoutErrorMessage,
         onLogoutClick = onLogoutClick
@@ -77,6 +88,10 @@ private fun RoleHomeScreen(
     title: String,
     description: String,
     secondaryDescription: String,
+    primaryActionLabel: String?,
+    onPrimaryActionClick: (() -> Unit)?,
+    secondaryActionLabel: String? = null,
+    onSecondaryActionClick: (() -> Unit)? = null,
     logoutLoading: Boolean,
     logoutErrorMessage: String?,
     onLogoutClick: () -> Unit
@@ -143,6 +158,24 @@ private fun RoleHomeScreen(
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.error
                         )
+                    }
+
+                    if (!primaryActionLabel.isNullOrBlank() && onPrimaryActionClick != null) {
+                        Button(
+                            onClick = onPrimaryActionClick,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(text = primaryActionLabel)
+                        }
+                    }
+
+                    if (!secondaryActionLabel.isNullOrBlank() && onSecondaryActionClick != null) {
+                        OutlinedButton(
+                            onClick = onSecondaryActionClick,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(text = secondaryActionLabel)
+                        }
                     }
 
                     Button(

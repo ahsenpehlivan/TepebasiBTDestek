@@ -4,9 +4,9 @@
 
 | Alan | Sonuc | Not |
 | --- | --- | --- |
-| Web `npm run lint` | gecti | 2026-07-07 tarihinde Android handoff cleanup dogrulamasi sonrasinda yeniden calistirildi |
-| Web `npm run build` | gecti | 2026-07-07 tarihinde erisilebilir sade tasarim polish fazi sonrasinda yeniden calistirildi |
-| Android `gradlew.bat assembleDebug` | gecti | 2026-07-08 tarihinde Android auth foundation fazi sonrasinda yeniden calistirildi |
+| Web `npm run lint` | gecti | 2026-07-14 tarihinde Android personel ticket listeleme fazi sonrasinda yeniden calistirildi |
+| Web `npm run build` | gecti | 2026-07-14 tarihinde Android personel ticket listeleme fazi sonrasinda yeniden calistirildi |
+| Android `gradlew.bat assembleDebug` | gecti | 2026-07-14 tarihinde Android personel ticket listeleme fazi sonrasinda yeniden calistirildi |
 | `docker version` | gecti | Docker engine erisimi var |
 | `npx supabase --version` | gecti | `2.109.0` |
 | `npx supabase db reset` | gecti | Yeni migration dahil tüm migrationlar ve seed basariyla uygulandi |
@@ -205,6 +205,44 @@ Not: Bu route ve responsive kontrolleri local Supabase'e bagli ayri bir web inst
 | Kart ve buton oranlari standartlasti mi? | gecti | Status/state kartlari ile form, detay ve aksiyon butonlari ortak yukseklik ve padding ailesine yaklastirildi |
 | Ticket ve device ekranlarinda bolum ayrimi guclendi mi? | gecti | Filtre kartlari, liste kartlari, detay ozetleri, yorum/bakım alanlari ve QR preview ayri section tonlariyla ayrildi |
 | 390px / 768px / desktop gorsel tekrar testi | test edilemedi | Bu turde in-app browser otomasyonu tekrar kullanilamadi; kullanici tarafinda manuel gorsel responsive kontrol onerilir |
+
+## Android Personel Ticket Listeleme Dogrulamalari
+
+| Test | Sonuc | Neden |
+| --- | --- | --- |
+| ANDROID-TICKET-LIST-01 employee login | test edilemedi | Kullanilabilir employee demo parolasi bu turde mevcut degildi; Supabase Dashboard/Auth UI icin de aktif kullanici oturumu bulunmadigi icin employee runtime oturumu acilamadi |
+| ANDROID-TICKET-LIST-02 `Taleplerimi Gor` butonu | test edilemedi | Buton ve route kaynak kodda eklendi; ancak employee runtime oturumu olmadan emulator uzerinde ekrana ilerlenemedi |
+| ANDROID-TICKET-LIST-03 employee ticket listesi | test edilemedi | Repository ve RLS-tabanli sorgu eklendi; fakat aktif employee runtime oturumu olmadan gercek liste sonucu kanitlanamadi |
+| ANDROID-TICKET-LIST-04 ticket kart icerigi | test edilemedi | Baslik, aciklama, durum, oncelik, kategori ve tarih alanlari UI'da kodlandi; ancak gercek ticket karti employee session olmadan acilamadi |
+| ANDROID-TICKET-LIST-05 empty state | test edilemedi | Ticket'i olmayan ayri bir employee runtime senaryosu bu turde olusturulamadi; normal signup denemesi de remote host erisimi nedeniyle tamamlanamadi |
+| ANDROID-TICKET-LIST-06 network/error state | test edilemedi | Kontrollu Turkce hata mesaji kodlandi; ancak login sonrasi liste ekraninda ayri bir network hata kaniti uretilemedi |
+| ANDROID-TICKET-LIST-07 logout sonrasi MyTicketsScreen'e geri donulmez | test edilemedi | Liste ekrani runtime'da acilamadigi icin logout-back-stack kaniti bu fazda alinmadi |
+| ANDROID-TICKET-LIST-08 Turkce karakter kontrolu | test edilemedi | Runtime'da `MyTicketsScreen` acilamadi; buna karsin kaynak kod ve `strings.xml` taramasinda `Taleplerim`, `Guncellendi`, `Islemde`, `Yuksek` ve `Olusturulma tarihi` gibi ticket UI metinleri dogru eklendi |
+
+## Android Personel Ticket Detay Temeli Dogrulamalari
+
+| Test | Sonuc | Neden |
+| --- | --- | --- |
+| ANDROID-TICKET-DETAIL-01 `TicketDetail/{ticketId}` route ve navigation baglantisi | gecti | `MyTicketsScreen` icinde kart tiklamasi `AppRoute.TicketDetail.createRoute(ticket.id)` ile baglandi; `AppNavHost` icinde `ticketId` argument'i ile yeni composable eklendi |
+| ANDROID-TICKET-DETAIL-02 repository `loadTicketDetail(ticketId)` eklendi mi? | gecti | `TicketRepository` arayuzune detay fonksiyonu eklendi; `SupabaseTicketRepository` ticket, cihaz, teknik personel ve gorulebilen yorum verisini kontrollu hata mesajlariyla yukleyecek sekilde guncellendi |
+| ANDROID-TICKET-DETAIL-03 detail ekrani bolumleri kaynak kodda bagli mi? | gecti | `TicketDetailScreen` icinde Ozet, Aciklama, Cihaz Bilgisi, Tarihler, Teknik Personel ve Yorumlar bolumleri eklendi |
+| ANDROID-TICKET-DETAIL-04 invalid `ticketId` icin kontrollu hata | gecti | `TicketDetailViewModel` bos veya gecersiz `ticketId` durumunda kontrollu Turkce hata mesaji uretir |
+| ANDROID-TICKET-DETAIL-05 Turkce karakter taramasi | gecti | Kaynak taramasinda `Talep Detayi`, `Aciklama`, `Oncelik`, `Guncellendi`, `Ic Not` veya `Geri don` gibi ASCII ticket detail metinleri bulunmadi |
+| ANDROID-TICKET-DETAIL-06 emulator kurulumu ve uygulama acilisi | gecti | `adb install -r` ile guncel APK kuruldu; uygulama emulator uzerinde acildi ve Login ekrani goruldu |
+| ANDROID-TICKET-DETAIL-07 detail ekraninin runtime'da manuel gorulmesi | test edilemedi | Bu hizli ilerleme fazinda kullanilabilir employee runtime oturumu olmadan `MyTicketsScreen` ve detail ekranina manuel olarak ilerlenemedi |
+
+## Android Personel Ticket Olusturma Temeli Dogrulamalari
+
+| Test | Sonuc | Neden |
+| --- | --- | --- |
+| ANDROID-TICKET-CREATE-01 `CreateTicket` route ve employee akisi baglantisi | gecti | `EmployeeHomeScreen` icine `Yeni Talep Olustur` butonu eklendi; `MyTicketsScreen` ust aksiyonuna `Yeni Talep` butonu baglandi; her iki akistan da `AppRoute.CreateTicket` route'una gidilecek sekilde navigation guncellendi |
+| ANDROID-TICKET-CREATE-02 create input modeli eklendi mi? | gecti | `CreateTicketInput` modeli baslik, aciklama, kategori, oncelik ve opsiyonel `deviceId` alanlariyla eklendi |
+| ANDROID-TICKET-CREATE-03 repository create fonksiyonu schema ile uyumlu mu? | gecti | `createTicket(input)` fonksiyonu eklendi; insert icin `title`, `description`, `category`, `priority`, `department_id` ve opsiyonel `device_id` gonderiliyor; `created_by` ve `status` employee trigger/RLS kurallarina birakiliyor |
+| ANDROID-TICKET-CREATE-04 create ekrani ve validasyonlari kaynak kodda bagli mi? | gecti | `CreateTicketScreen`, `CreateTicketViewModel` ve `CreateTicketUiState` eklendi; baslik, aciklama, kategori ve oncelik icin kontrollu Turkce validasyon mesajlari tanimlandi |
+| ANDROID-TICKET-CREATE-05 cihaz secimi kapsam disi notu acik mi? | gecti | Formda `Cihaz secimi sonraki asamada eklenecek.` notu gosterilecek sekilde bilerek sade birakildi |
+| ANDROID-TICKET-CREATE-06 Turkce karakter taramasi | gecti | Kaynak taramasinda `Olustur`, `Aciklama`, `Oncelik`, `Baslik`, `Vazgec` veya `Geri don` gibi ASCII create metinleri bulunmadi |
+| ANDROID-TICKET-CREATE-07 emulator kurulumu ve uygulama acilisi | gecti | Guncel APK `adb install -r` ile emulator'e kuruldu; uygulama acildi ve Login ekrani goruldu |
+| ANDROID-TICKET-CREATE-08 create ekraninin runtime'da manuel gorulmesi | test edilemedi | Bu hizli ilerleme fazinda kullanilabilir employee runtime oturumu olmadan `CreateTicket` ekranina manuel olarak ilerlenemedi |
 
 ## Android Auth Foundation Dogrulamalari
 

@@ -39,6 +39,18 @@ Bu plan, staj sunumu ve staj raporu icin alinacak ekran goruntulerinin kapsamini
 
 ## Onerilen Sunum Sirasi
 
+Not:
+
+- Android personel ticket listeleme fazi icin planlanan ek ekran goruntusu:
+  - `20-android-my-tickets.png` -> Employee icin `Taleplerim` ekrani ve ticket kartlari
+  - Bu ekran goruntusu henuz alinmadi; cunku employee runtime session bu turde dogrulanamadi
+- Android personel ticket detay temeli icin planlanan ek ekran goruntusu:
+  - `21-android-ticket-detail.png` -> Employee icin `Talep Detayi` ekrani
+  - Bu ekran goruntusu de henuz alinmadi; cunku runtime'da detail ekranina manuel ilerlenemedi
+- Android personel ticket olusturma temeli icin planlanan ek ekran goruntusu:
+  - `22-android-create-ticket.png` -> Employee icin `Yeni Talep Olustur` ekrani
+  - Bu ekran goruntusu de henuz alinmadi; cunku runtime'da create ekranina manuel ilerlenemedi
+
 | Sira | Onerilen Dosya Adi | Demo Adimi | Kanitladigi Ozellik |
 | --- | --- | --- | --- |
 | 1 | `02-login-screen.png` | Login | SSR auth giris ekrani |

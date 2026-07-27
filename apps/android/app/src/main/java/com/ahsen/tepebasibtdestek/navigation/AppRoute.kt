@@ -7,6 +7,13 @@ sealed class AppRoute(val route: String) {
     data object Splash : AppRoute("splash")
     data object Login : AppRoute("login")
     data object EmployeeHome : AppRoute("employee_home")
+    data object MyTickets : AppRoute("my_tickets")
+    data object CreateTicket : AppRoute("create_ticket")
+    data object TicketDetail : AppRoute("ticket_detail/{ticketId}") {
+        const val ticketIdArg = "ticketId"
+
+        fun createRoute(ticketId: String): String = "ticket_detail/$ticketId"
+    }
     data object TechnicianHome : AppRoute("technician_home")
     data object AdminHome : AppRoute("admin_home")
     data object AccessDenied : AppRoute("access_denied")

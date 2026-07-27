@@ -2,7 +2,8 @@
 
 ## Ozet
 
-Android uygulamasinda bu fazda yalnizca auth temeli kurulmustur.
+Android uygulamasinda auth temeli kurulmustur.
+Bu temel uzerine employee icin `Taleplerim` listeleme akisi eklenmistir.
 
 Kapsam:
 
@@ -12,7 +13,8 @@ Kapsam:
 - Employee, technician ve admin rollerinin Android tarafinda ayrilmasi
 - Eksik config, pasif profil ve profile satiri yok durumlari icin kontrollu ekranlar
 
-Bu fazda ticket listesi, ticket detay, QR tarama, foto yukleme, realtime, notification veya offline katmani eklenmemistir.
+Auth dokumaninin odagi session, role ve route davranisidir.
+Employee ticket listeleme mimarisi ayri olarak `docs/ANDROID_TICKETS.md` icinde anlatilir.
 
 ## Konumlar
 

@@ -5,12 +5,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.ahsen.tepebasibtdestek.core.AppContainer
 import com.ahsen.tepebasibtdestek.domain.auth.SessionState
 import com.ahsen.tepebasibtdestek.feature.auth.LoginScreen
@@ -24,6 +26,13 @@ import com.ahsen.tepebasibtdestek.feature.session.AuthErrorScreen
 import com.ahsen.tepebasibtdestek.feature.session.ConfigErrorScreen
 import com.ahsen.tepebasibtdestek.feature.splash.SplashScreen
 import com.ahsen.tepebasibtdestek.feature.splash.SplashViewModel
+import com.ahsen.tepebasibtdestek.feature.tickets.CreateTicketScreen
+import com.ahsen.tepebasibtdestek.feature.tickets.CreateTicketViewModel
+import com.ahsen.tepebasibtdestek.feature.tickets.TicketDetailScreen
+import com.ahsen.tepebasibtdestek.feature.tickets.TicketDetailViewModel
+import com.ahsen.tepebasibtdestek.feature.tickets.MyTicketsScreen
+import com.ahsen.tepebasibtdestek.feature.tickets.MyTicketsViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun AppNavHost(
@@ -42,6 +51,9 @@ fun AppNavHost(
         if (globalSessionState == SessionState.Unauthenticated &&
             currentRoute in listOf(
                 AppRoute.EmployeeHome.route,
+                AppRoute.MyTickets.route,
+                AppRoute.CreateTicket.route,
+                AppRoute.TicketDetail.route,
                 AppRoute.TechnicianHome.route,
                 AppRoute.AdminHome.route,
                 AppRoute.AccessDenied.route,
@@ -110,6 +122,12 @@ fun AppNavHost(
 
             EmployeeHomeScreen(
                 state = uiState,
+                onMyTicketsClick = {
+                    navController.navigate(AppRoute.MyTickets.route)
+                },
+                onCreateTicketClick = {
+                    navController.navigate(AppRoute.CreateTicket.route)
+                },
                 onLogoutClick = homeViewModel::signOut
             )
 
@@ -119,6 +137,116 @@ fun AppNavHost(
                     homeViewModel.consumeLogout()
                 }
             }
+        }
+
+        composable(AppRoute.MyTickets.route) {
+            val ticketsViewModel: MyTicketsViewModel = viewModel(
+                factory = MyTicketsViewModel.factory(
+                    authRepository = appContainer.authRepository,
+                    ticketRepository = appContainer.ticketRepository
+                )
+            )
+            val uiState by ticketsViewModel.uiState.collectAsStateWithLifecycle()
+
+            MyTicketsScreen(
+                state = uiState,
+                onBackClick = {
+                    if (!navController.popBackStack()) {
+                        navController.navigate(AppRoute.EmployeeHome.route) {
+                            launchSingleTop = true
+                        }
+                    }
+                },
+                onRetryClick = ticketsViewModel::refresh,
+                onTicketClick = { ticketId ->
+                    navController.navigate(AppRoute.TicketDetail.createRoute(ticketId))
+                },
+                onCreateTicketClick = {
+                    navController.navigate(AppRoute.CreateTicket.route)
+                }
+            )
+        }
+
+        composable(AppRoute.CreateTicket.route) {
+            val createTicketViewModel: CreateTicketViewModel = viewModel(
+                factory = CreateTicketViewModel.factory(
+                    authRepository = appContainer.authRepository,
+                    ticketRepository = appContainer.ticketRepository
+                )
+            )
+            val uiState by createTicketViewModel.uiState.collectAsStateWithLifecycle()
+
+            CreateTicketScreen(
+                state = uiState,
+                onTitleChanged = createTicketViewModel::onTitleChanged,
+                onDescriptionChanged = createTicketViewModel::onDescriptionChanged,
+                onCategorySelected = createTicketViewModel::onCategorySelected,
+                onPrioritySelected = createTicketViewModel::onPrioritySelected,
+                onSaveClick = createTicketViewModel::submit,
+                onCancelClick = {
+                    if (!navController.popBackStack()) {
+                        navController.navigate(AppRoute.EmployeeHome.route) {
+                            launchSingleTop = true
+                        }
+                    }
+                }
+            )
+
+            LaunchedEffect(uiState.createdTicketId, uiState.navigateToMyTickets) {
+                val createdTicketId = uiState.createdTicketId
+                if (createdTicketId != null || uiState.navigateToMyTickets) {
+                    delay(600)
+                    if (!createdTicketId.isNullOrBlank()) {
+                        navController.navigate(AppRoute.TicketDetail.createRoute(createdTicketId)) {
+                            popUpTo(AppRoute.CreateTicket.route) {
+                                inclusive = true
+                            }
+                            launchSingleTop = true
+                        }
+                    } else {
+                        navController.navigate(AppRoute.MyTickets.route) {
+                            popUpTo(AppRoute.CreateTicket.route) {
+                                inclusive = true
+                            }
+                            launchSingleTop = true
+                        }
+                    }
+                    createTicketViewModel.consumeNavigation()
+                }
+            }
+        }
+
+        composable(
+            route = AppRoute.TicketDetail.route,
+            arguments = listOf(
+                navArgument(AppRoute.TicketDetail.ticketIdArg) {
+                    type = NavType.StringType
+                }
+            )
+        ) { backStackEntry ->
+            val ticketId = backStackEntry.arguments
+                ?.getString(AppRoute.TicketDetail.ticketIdArg)
+                .orEmpty()
+            val detailViewModel: TicketDetailViewModel = viewModel(
+                factory = TicketDetailViewModel.factory(
+                    ticketId = ticketId,
+                    authRepository = appContainer.authRepository,
+                    ticketRepository = appContainer.ticketRepository
+                )
+            )
+            val uiState by detailViewModel.uiState.collectAsStateWithLifecycle()
+
+            TicketDetailScreen(
+                state = uiState,
+                onBackClick = {
+                    if (!navController.popBackStack()) {
+                        navController.navigate(AppRoute.MyTickets.route) {
+                            launchSingleTop = true
+                        }
+                    }
+                },
+                onRetryClick = detailViewModel::refresh
+            )
         }
 
         composable(AppRoute.TechnicianHome.route) {
