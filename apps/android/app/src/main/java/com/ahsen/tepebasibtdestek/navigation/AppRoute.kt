@@ -9,6 +9,7 @@ sealed class AppRoute(val route: String) {
     data object EmployeeHome : AppRoute("employee_home")
     data object MyTickets : AppRoute("my_tickets")
     data object CreateTicket : AppRoute("create_ticket")
+    data object TechnicianQueue : AppRoute("technician_queue")
     data object TicketDetail : AppRoute("ticket_detail/{ticketId}") {
         const val ticketIdArg = "ticketId"
 

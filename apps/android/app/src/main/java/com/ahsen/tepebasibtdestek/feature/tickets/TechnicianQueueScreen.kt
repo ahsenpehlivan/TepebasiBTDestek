@@ -21,26 +21,25 @@ import com.ahsen.tepebasibtdestek.core.ui.CenteredStatusCard
 import com.ahsen.tepebasibtdestek.core.ui.ScreenScaffold
 
 @Composable
-fun MyTicketsScreen(
-    state: MyTicketsUiState,
+fun TechnicianQueueScreen(
+    state: TechnicianQueueUiState,
     onBackClick: () -> Unit,
     onRetryClick: () -> Unit,
-    onTicketClick: (String) -> Unit,
-    onCreateTicketClick: () -> Unit
+    onTicketClick: (String) -> Unit
 ) {
     when {
         state.isLoading -> {
             CenteredStatusCard(
-                eyebrow = stringResource(R.string.my_tickets_eyebrow),
-                title = stringResource(R.string.my_tickets_title),
+                eyebrow = stringResource(R.string.technician_queue_eyebrow),
+                title = stringResource(R.string.technician_queue_title),
                 description = stringResource(R.string.common_loading)
             )
         }
 
         !state.errorMessage.isNullOrBlank() -> {
             CenteredStatusCard(
-                eyebrow = stringResource(R.string.my_tickets_eyebrow),
-                title = stringResource(R.string.my_tickets_title),
+                eyebrow = stringResource(R.string.technician_queue_eyebrow),
+                title = stringResource(R.string.technician_queue_title),
                 description = state.errorMessage,
                 action = {
                     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -63,9 +62,9 @@ fun MyTicketsScreen(
 
         state.isEmpty -> {
             CenteredStatusCard(
-                eyebrow = stringResource(R.string.my_tickets_eyebrow),
-                title = stringResource(R.string.my_tickets_title),
-                description = stringResource(R.string.my_tickets_empty_message),
+                eyebrow = stringResource(R.string.technician_queue_eyebrow),
+                title = stringResource(R.string.technician_queue_title),
+                description = stringResource(R.string.technician_queue_empty_message),
                 action = {
                     OutlinedButton(
                         onClick = onBackClick,
@@ -90,23 +89,20 @@ fun MyTicketsScreen(
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
                             Text(
-                                text = stringResource(R.string.my_tickets_eyebrow),
+                                text = stringResource(R.string.technician_queue_eyebrow),
                                 style = MaterialTheme.typography.labelLarge,
                                 color = MaterialTheme.colorScheme.primary
                             )
                             Text(
-                                text = stringResource(R.string.my_tickets_title),
+                                text = stringResource(R.string.technician_queue_title),
                                 style = MaterialTheme.typography.headlineSmall,
                                 color = MaterialTheme.colorScheme.onSurface
                             )
                             Text(
-                                text = stringResource(R.string.my_tickets_description),
+                                text = stringResource(R.string.technician_queue_description),
                                 style = MaterialTheme.typography.bodyLarge,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
-                            Button(onClick = onCreateTicketClick) {
-                                Text(text = stringResource(R.string.my_tickets_create_button))
-                            }
                             OutlinedButton(onClick = onBackClick) {
                                 Text(text = stringResource(R.string.common_back))
                             }

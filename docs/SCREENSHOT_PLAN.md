@@ -50,6 +50,9 @@ Not:
 - Android personel ticket olusturma temeli icin planlanan ek ekran goruntusu:
   - `22-android-create-ticket.png` -> Employee icin `Yeni Talep Olustur` ekrani
   - Bu ekran goruntusu de henuz alinmadi; cunku runtime'da create ekranina manuel ilerlenemedi
+- Android technician queue temeli icin planlanan ek ekran goruntusu:
+  - `23-android-technician-queue.png` -> Technician icin `Is Kuyrugum` ekrani
+  - Bu ekran goruntusu de henuz alinmadi; cunku bu fazda minimum dogrulama yeterli tutuldu ve queue ekranina technician runtime login ile manuel ilerlenmedi
 
 | Sira | Onerilen Dosya Adi | Demo Adimi | Kanitladigi Ozellik |
 | --- | --- | --- | --- |

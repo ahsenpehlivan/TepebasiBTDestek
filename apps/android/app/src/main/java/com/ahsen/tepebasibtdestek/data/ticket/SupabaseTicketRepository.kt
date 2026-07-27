@@ -19,6 +19,8 @@ import kotlinx.serialization.Serializable
 
 private const val DEFAULT_TICKET_LOAD_ERROR_MESSAGE =
     "Talepler yüklenemedi. Lütfen tekrar deneyin."
+private const val DEFAULT_TECHNICIAN_QUEUE_ERROR_MESSAGE =
+    "İş kuyruğu yüklenemedi. Lütfen tekrar deneyin."
 private const val DEFAULT_TICKET_DETAIL_ERROR_MESSAGE =
     "Talep detayı yüklenemedi. Lütfen tekrar deneyin."
 private const val DEFAULT_TICKET_CREATE_ERROR_MESSAGE =
@@ -32,55 +34,21 @@ class SupabaseTicketRepository(
     private val clientProvider: SupabaseClientProvider
 ) : TicketRepository {
     override suspend fun loadMyTickets(): Result<List<TicketSummary>> {
-        val client = when (val result = clientProvider.getClient()) {
-            is AppResult.Success -> result.value
-            is AppResult.Failure -> {
-                return Result.failure(IllegalStateException(DEFAULT_TICKET_LOAD_ERROR_MESSAGE))
-            }
-        }
+        return loadTicketSummaries(
+            errorMessage = DEFAULT_TICKET_LOAD_ERROR_MESSAGE
+        )
+    }
 
-        return try {
-            val ticketRows = client.postgrest
-                .from("tickets")
-                .select(
-                    columns = Columns.list(
-                        "id",
-                        "ticket_number",
-                        "title",
-                        "description",
-                        "status",
-                        "priority",
-                        "category",
-                        "created_at",
-                        "updated_at",
-                        "device_id",
-                        "assigned_to"
-                    )
-                ) {
-                    order(column = "created_at", order = Order.DESCENDING)
-                }
-                .decodeList<TicketRowDto>()
-
-            val deviceLabelMap = loadDeviceLabels(
-                client = client,
-                deviceIds = ticketRows.mapNotNull { it.deviceId }.distinct()
+    override suspend fun loadTechnicianQueue(): Result<List<TicketSummary>> {
+        return loadTicketSummaries(
+            errorMessage = DEFAULT_TECHNICIAN_QUEUE_ERROR_MESSAGE,
+            statuses = listOf(
+                TicketStatus.Open.rawValue,
+                TicketStatus.Assigned.rawValue,
+                TicketStatus.InProgress.rawValue,
+                TicketStatus.WaitingUser.rawValue
             )
-            val assigneeNameMap = loadProfileNames(
-                client = client,
-                profileIds = ticketRows.mapNotNull { it.assignedTo }.distinct()
-            )
-
-            Result.success(
-                ticketRows.mapNotNull { row ->
-                    row.toSummary(
-                        deviceLabel = row.deviceId?.let(deviceLabelMap::get),
-                        assignedToName = row.assignedTo?.let(assigneeNameMap::get)
-                    )
-                }
-            )
-        } catch (_: Exception) {
-            Result.failure(IllegalStateException(DEFAULT_TICKET_LOAD_ERROR_MESSAGE))
-        }
+        )
     }
 
     override suspend fun loadTicketDetail(ticketId: String): Result<TicketDetail> {
@@ -176,6 +144,66 @@ class SupabaseTicketRepository(
             Result.success(createdTicketId)
         } catch (_: Exception) {
             Result.failure(IllegalStateException(DEFAULT_TICKET_CREATE_ERROR_MESSAGE))
+        }
+    }
+
+    private suspend fun loadTicketSummaries(
+        errorMessage: String,
+        statuses: List<String>? = null
+    ): Result<List<TicketSummary>> {
+        val client = when (val result = clientProvider.getClient()) {
+            is AppResult.Success -> result.value
+            is AppResult.Failure -> {
+                return Result.failure(IllegalStateException(errorMessage))
+            }
+        }
+
+        return try {
+            val ticketRows = client.postgrest
+                .from("tickets")
+                .select(
+                    columns = Columns.list(
+                        "id",
+                        "ticket_number",
+                        "title",
+                        "description",
+                        "status",
+                        "priority",
+                        "category",
+                        "created_at",
+                        "updated_at",
+                        "device_id",
+                        "assigned_to"
+                    )
+                ) {
+                    filter {
+                        if (!statuses.isNullOrEmpty()) {
+                            isIn("status", statuses)
+                        }
+                    }
+                    order(column = "created_at", order = Order.DESCENDING)
+                }
+                .decodeList<TicketRowDto>()
+
+            val deviceLabelMap = loadDeviceLabels(
+                client = client,
+                deviceIds = ticketRows.mapNotNull { it.deviceId }.distinct()
+            )
+            val assigneeNameMap = loadProfileNames(
+                client = client,
+                profileIds = ticketRows.mapNotNull { it.assignedTo }.distinct()
+            )
+
+            Result.success(
+                ticketRows.mapNotNull { row ->
+                    row.toSummary(
+                        deviceLabel = row.deviceId?.let(deviceLabelMap::get),
+                        assignedToName = row.assignedTo?.let(assigneeNameMap::get)
+                    )
+                }
+            )
+        } catch (_: Exception) {
+            Result.failure(IllegalStateException(errorMessage))
         }
     }
 }

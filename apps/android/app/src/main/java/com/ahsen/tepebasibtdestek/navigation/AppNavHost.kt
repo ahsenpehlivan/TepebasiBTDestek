@@ -28,10 +28,12 @@ import com.ahsen.tepebasibtdestek.feature.splash.SplashScreen
 import com.ahsen.tepebasibtdestek.feature.splash.SplashViewModel
 import com.ahsen.tepebasibtdestek.feature.tickets.CreateTicketScreen
 import com.ahsen.tepebasibtdestek.feature.tickets.CreateTicketViewModel
-import com.ahsen.tepebasibtdestek.feature.tickets.TicketDetailScreen
-import com.ahsen.tepebasibtdestek.feature.tickets.TicketDetailViewModel
 import com.ahsen.tepebasibtdestek.feature.tickets.MyTicketsScreen
 import com.ahsen.tepebasibtdestek.feature.tickets.MyTicketsViewModel
+import com.ahsen.tepebasibtdestek.feature.tickets.TechnicianQueueScreen
+import com.ahsen.tepebasibtdestek.feature.tickets.TechnicianQueueViewModel
+import com.ahsen.tepebasibtdestek.feature.tickets.TicketDetailScreen
+import com.ahsen.tepebasibtdestek.feature.tickets.TicketDetailViewModel
 import kotlinx.coroutines.delay
 
 @Composable
@@ -53,6 +55,7 @@ fun AppNavHost(
                 AppRoute.EmployeeHome.route,
                 AppRoute.MyTickets.route,
                 AppRoute.CreateTicket.route,
+                AppRoute.TechnicianQueue.route,
                 AppRoute.TicketDetail.route,
                 AppRoute.TechnicianHome.route,
                 AppRoute.AdminHome.route,
@@ -257,6 +260,9 @@ fun AppNavHost(
 
             TechnicianHomeScreen(
                 state = uiState,
+                onQueueClick = {
+                    navController.navigate(AppRoute.TechnicianQueue.route)
+                },
                 onLogoutClick = homeViewModel::signOut
             )
 
@@ -266,6 +272,31 @@ fun AppNavHost(
                     homeViewModel.consumeLogout()
                 }
             }
+        }
+
+        composable(AppRoute.TechnicianQueue.route) {
+            val queueViewModel: TechnicianQueueViewModel = viewModel(
+                factory = TechnicianQueueViewModel.factory(
+                    authRepository = appContainer.authRepository,
+                    ticketRepository = appContainer.ticketRepository
+                )
+            )
+            val uiState by queueViewModel.uiState.collectAsStateWithLifecycle()
+
+            TechnicianQueueScreen(
+                state = uiState,
+                onBackClick = {
+                    if (!navController.popBackStack()) {
+                        navController.navigate(AppRoute.TechnicianHome.route) {
+                            launchSingleTop = true
+                        }
+                    }
+                },
+                onRetryClick = queueViewModel::refresh,
+                onTicketClick = { ticketId ->
+                    navController.navigate(AppRoute.TicketDetail.createRoute(ticketId))
+                }
+            )
         }
 
         composable(AppRoute.AdminHome.route) {

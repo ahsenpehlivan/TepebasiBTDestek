@@ -244,6 +244,18 @@ Not: Bu route ve responsive kontrolleri local Supabase'e bagli ayri bir web inst
 | ANDROID-TICKET-CREATE-07 emulator kurulumu ve uygulama acilisi | gecti | Guncel APK `adb install -r` ile emulator'e kuruldu; uygulama acildi ve Login ekrani goruldu |
 | ANDROID-TICKET-CREATE-08 create ekraninin runtime'da manuel gorulmesi | test edilemedi | Bu hizli ilerleme fazinda kullanilabilir employee runtime oturumu olmadan `CreateTicket` ekranina manuel olarak ilerlenemedi |
 
+## Android Technician Queue Temeli Dogrulamalari
+
+| Test | Sonuc | Neden |
+| --- | --- | --- |
+| ANDROID-TECH-QUEUE-01 `TechnicianHome` icine queue gecisi baglandi mi? | gecti | `TechnicianHomeScreen` icine `Is Kuyrugunu Ac` butonu eklendi ve `AppRoute.TechnicianQueue` route'una yonlendirildi |
+| ANDROID-TECH-QUEUE-02 repository `loadTechnicianQueue()` eklendi mi? | gecti | `TicketRepository` arayuzune queue fonksiyonu eklendi; `SupabaseTicketRepository` active workflow durumlari icin newest-first select yapan, publishable key ve RLS uzerinden calisan kontrollu hata donen iskeletle guncellendi |
+| ANDROID-TECH-QUEUE-03 `TechnicianQueueScreen` durumlari baglandi mi? | gecti | Loading, liste, empty ve error durumlari ile yeni `TechnicianQueueUiState`, `TechnicianQueueViewModel` ve `TechnicianQueueScreen` dosyalari eklendi |
+| ANDROID-TECH-QUEUE-04 `TechnicianQueue -> TicketDetail` route baglantisi | gecti | Queue kart tiklamasi mevcut `TicketDetail/{ticketId}` route'una yonlendirildi; geri aksiyonu queue ekranina veya fallback olarak `TechnicianHome` ekranina donecek sekilde kuruldu |
+| ANDROID-TECH-QUEUE-05 Turkce karakter taramasi | gecti | Kaynak taramasinda yeni queue metinlerinde `Is Kuyrugum`, `Kuyrugu`, `Oncelik`, `Geri don` gibi yanlis ASCII Turkce varyantlari bulunmadi |
+| ANDROID-TECH-QUEUE-06 emulator kurulumu ve uygulama acilisi | gecti | Guncel APK emulator'e yeniden kuruldu; `monkey` ile uygulama foreground'a getirildi ve `uiautomator dump` icinde `Mobil giris`, `E-posta`, `Parola` ve `Giris Yap` metinleri goruldu |
+| ANDROID-TECH-QUEUE-07 queue ekraninin runtime'da manuel gorulmesi | test edilemedi | Bu hizli ilerleme fazinda technician runtime login ve queue liste kaniti zorunlu tutulmadi; minimum dogrulama build, install, app acilisi ve navigation baglantisi seviyesinde tamamlandi |
+
 ## Android Auth Foundation Dogrulamalari
 
 | Test | Sonuc | Neden |

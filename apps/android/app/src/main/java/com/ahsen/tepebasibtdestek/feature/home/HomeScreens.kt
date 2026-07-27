@@ -49,6 +49,7 @@ fun EmployeeHomeScreen(
 @Composable
 fun TechnicianHomeScreen(
     state: HomeUiState,
+    onQueueClick: () -> Unit,
     onLogoutClick: () -> Unit
 ) {
     RoleHomeScreen(
@@ -56,8 +57,8 @@ fun TechnicianHomeScreen(
         title = stringResource(R.string.technician_home_title),
         description = stringResource(R.string.technician_home_description),
         secondaryDescription = stringResource(R.string.technician_home_secondary_description),
-        primaryActionLabel = null,
-        onPrimaryActionClick = null,
+        primaryActionLabel = stringResource(R.string.technician_home_queue_button),
+        onPrimaryActionClick = onQueueClick,
         logoutLoading = state.isLogoutLoading,
         logoutErrorMessage = state.logoutErrorMessage,
         onLogoutClick = onLogoutClick

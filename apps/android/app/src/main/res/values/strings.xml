@@ -14,8 +14,9 @@
     <string name="employee_home_description">Kendi taleplerinizi mobilde görüntüleyebilirsiniz.</string>
     <string name="employee_home_secondary_description">Talep listesi, detay ve oluşturma temeli bu prototipte kademeli olarak doğrulanır.</string>
     <string name="technician_home_title">Teknik Personel Mobil Başlangıç</string>
-    <string name="technician_home_description">Teknik personel mobil iş kuyruğu sonraki aşamada eklenecek.</string>
-    <string name="technician_home_secondary_description">Bu fazda yalnızca auth ve rol ayrımı doğrulanır.</string>
+    <string name="technician_home_description">Teknik personel mobil iş kuyruğuna bu ekrandan geçebilir.</string>
+    <string name="technician_home_secondary_description">Bekleyen talepler listesi bu prototipte okuma odaklı iskelet olarak sunulur.</string>
+    <string name="technician_home_queue_button">İş Kuyruğunu Aç</string>
     <string name="admin_home_title">Yönetici Mobil Başlangıç</string>
     <string name="admin_home_description">Mobil yönetici özeti sonraki aşamada eklenecek.</string>
     <string name="admin_home_secondary_description">Bu fazda yalnızca auth ve profil rol çözümlemesi hazırlanmıştır.</string>
@@ -41,6 +42,10 @@
     <string name="my_tickets_description">Bu ekranda yalnızca erişebildiğiniz talepler listelenir.</string>
     <string name="my_tickets_empty_message">Henüz oluşturulmuş bir talebiniz bulunmuyor.</string>
     <string name="my_tickets_create_button">Yeni Talep</string>
+    <string name="technician_queue_eyebrow">Bekleyen Talepler</string>
+    <string name="technician_queue_title">İş Kuyruğum</string>
+    <string name="technician_queue_description">Size ve teknik ekibe görünür talepler burada listelenir.</string>
+    <string name="technician_queue_empty_message">Şu anda bekleyen talep bulunmuyor.</string>
     <string name="create_ticket_eyebrow">Personel Talebi</string>
     <string name="create_ticket_title">Yeni Talep Oluştur</string>
     <string name="create_ticket_description">Bu ekranda yeni destek talebinizi temel bilgilerle oluşturabilirsiniz.</string>
