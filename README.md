@@ -1,10 +1,10 @@
-# Tepebasi BT Destek
+# Tepebaşı BT Destek
 
-Tepebasi BT Destek, belediye personeli ile teknik ekipler icin teknik destek talep yonetimi ve cihaz envanteri takibini hedefleyen cok platformlu bir prototiptir.
+Tepebaşı BT Destek, belediye personelinin teknik destek taleplerini yönetmek ve cihaz envanterini takip etmek için hazırlanan çok platformlu bir MVP prototipidir. Proje; Next.js tabanlı bir web yönetim paneli, Kotlin/Compose tabanlı bir Android uygulaması ve Supabase tabanlı veri, kimlik doğrulama ve RLS güvenlik katmanından oluşur.
 
-Bu repository bir uretim sistemi degildir. Gercek kurum verisi, gercek personel adi, gercek kurum e-postasi ve gizli anahtarlar kullanilmaz.
+Bu depo bir üretim sistemi değildir. Gerçek kurum verisi, gerçek kullanıcı parolası, gerçek kurum e-postası veya gizli anahtarlar kullanılmaz.
 
-## Teknoloji Ozeti
+## Teknoloji Özeti
 
 ### Web
 
@@ -12,25 +12,26 @@ Bu repository bir uretim sistemi degildir. Gercek kurum verisi, gercek personel 
 - TypeScript
 - ESLint
 - CSS Modules
-- Supabase SSR auth client katmani
+- Supabase SSR auth istemcisi
 
 ### Android
 
 - Kotlin
 - Jetpack Compose
-- Gradle Kotlin DSL
 - Navigation Compose
-- Supabase Kotlin client
+- Gradle Kotlin DSL
+- Supabase Kotlin istemcisi
 - Kotlin serialization
 
 ### Supabase
 
-- PostgreSQL migration dosyalari
-- Row Level Security politika taslagi
-- Private Storage bucket migrationi
-- Seed ve SQL smoke test dosyalari
+- PostgreSQL migration dosyaları
+- Row Level Security policy yapısı
+- Private Storage bucket
+- Seed verileri
+- SQL smoke test dosyaları
 
-## Repository Yapisi
+## Repository Yapısı
 
 ```text
 .
@@ -40,6 +41,7 @@ Bu repository bir uretim sistemi degildir. Gercek kurum verisi, gercek personel 
 |-- docs/
 |-- supabase/
 |   |-- migrations/
+|   |-- snippets/
 |   |-- tests/
 |   |-- config.toml
 |   `-- seed.sql
@@ -48,123 +50,95 @@ Bu repository bir uretim sistemi degildir. Gercek kurum verisi, gercek personel 
 `-- README.md
 ```
 
-## Mevcut Durum
+## Web MVP'de Tamamlananlar
 
-### Tamamlananlar
+- Supabase SSR auth, login ve logout akışı
+- Server-side role guard ve protected route yapısı
+- Dashboard ve gerçek sayaç kartları
+- Ticket listeleme, filtreleme ve detay ekranları
+- Ticket atama, durum güncelleme ve public/internal yorum işlemleri
+- Device listeleme, detay, create, edit ve passive akışları
+- Maintenance records görüntüleme ve ekleme
+- Güvenli QR preview ve token route yönlendirmesi
+- Türkçe, sade ve kurumsal frontend tasarımı
+- Responsive web doğrulamaları ve demo akışı
 
-- Web icin Supabase SSR browser/server/proxy katmani
-- Web login ve logout server action akisi
-- Profile ve rol cozumleme
-- Technician ve admin icin protected route yapisi
-- Employee web erisim reddi sayfasi
-- Gercek `tickets` tablosundan filtrelenebilir listeleme sayfasi
-- Ticket detay route'u, durum gecmisi ve yorum gorunumu
-- Technician/admin icin ticket atama, durum degistirme ve public/internal yorum action'lari
-- Ticket detay ekraninda mevcut duruma gore daraltilmis status gecisleri ve son durumlarda pasiflesen durum formu
-- Dashboard kartlarinin gercek ticket ve cihaz sayilariyla beslenmesi
-- Controlled demo ticket/comment SQL snippet'i ve local/remote demo veri dogrulamasi
-- Cihaz envanteri listeleme, filtreleme ve detay ekranlari
-- Technician/admin icin cihaz olusturma, duzenleme ve pasife alma akislari
-- Cihaz bakim kayitlarini goruntuleme ve ekleme akisi
-- Protected QR onizleme ve token yonlendirme route'lari
-- Ticket ve device ekranlarinda Android handoff oncesi is akisi ve kavram netlestirmeleri
-- Ticket ve cihaz ekranlari icin UI/UX polish, responsive iyilestirmeler ve tutarli loading/empty/error state'leri
-- QR print ekraninin sunuma uygun sade gorunumu
-- Staj raporu icin screenshot plani
-- Yerel `supabase db reset`, seed ve smoke test dogrulamalari
-- Remote `db push` ve demo profile rol/department kontrolu
-- Gercek browser oturumu ile auth ve protected route dogrulamasi
-- Gercek session ile ticket, comment, device ve maintenance RLS runtime dogrulamasi
-- Web lint ve production build dogrulamasi
-- Android `assembleDebug` regresyon dogrulamasi
-- Android icin Supabase auth foundation, role/profile cozumleme ve role-based baslangic ekranlari
-- Migration, seed, RLS ve storage SQL dosyalari
+## Android MVP'de Tamamlananlar
 
-### Henuz Tamamlanmayan veya Bloklu Alanlar
+### Runtime'da doğrulanan temel alanlar
 
-- Ticket create/update ekranlari
-- Android personel ticket listeleme ve detay ekranlari
-- Android technician queue ekranlari
-- QR, realtime, bildirim ve dosya yukleme akislari
-- AUTH-12 eksik env senaryosunun ayrik browser instance ile tekrar uretimi
+- Supabase auth foundation
+- Role-based home ekranları
+- Login, logout ve erişim engeli akışları
+- Geçersiz giriş ve eksik config hata ekranları
+- Minimum emulator açılış doğrulamaları
 
-## Gelecek Faz Fikirleri
+### Foundation seviyesinde tamamlanan alanlar
 
-Detayli gelecek faz notlari icin `docs/FUTURE_PHASES.md` dosyasini kullanin. Bu fikirler mevcut MVP'nin parcasi degildir; Android handoff sonrasinda ayri fazlar olarak ele alinmalidir.
+- Employee ticket list, detail ve create foundation
+- Technician queue foundation
+- Technician status update foundation
+- Ticket comment foundation
+- Device list foundation
+- Device detail foundation
+- Device maintenance history foundation
+- Device QR preview foundation
 
-### Akilli Cozum Oneri Akisi
+Bu Android ekranlarının önemli bir kısmı build, navigation ve kaynak kod seviyesinde tamamlanmıştır; ancak hepsi gerçek employee veya technician oturumuyla uçtan uca runtime doğrulanamamıştır.
 
-- Personel ticket acmadan once sorunu yazar.
-- Ilk surum ML olmak zorunda degildir; onayli cozum kutuphanesi, kategori eslestirme ve anahtar kelime eslestirme ile baslamalidir.
-- Kullanici onerilen guvenli adimlari denerse ticket acilmadan sorun kapanabilir.
-- Sorun devam ederse ticket acilir ve kayda `onerilen cozum denendi ama cozulmedi` bilgisi eklenir.
-- Ileride bu yapi ML, semantic search veya embedding tabanli onerilere donusturulebilir.
+## Android Tarafında Runtime'da Hâlâ Test Edilemeyen Noktalar
 
-### Istatistiksel Karar Destek Paneli
+- Employee `MyTicketsScreen` canlı listeleme
+- Employee ticket detail canlı ilerleyişi
+- Employee ticket create canlı insert kanıtı
+- Technician queue canlı listeleme
+- Technician status update canlı kanıtı
+- Ticket comment submit canlı kanıtı
+- Device list ve device detail canlı kanıtı
+- Device maintenance history canlı kanıtı
+- Device QR preview canlı kanıtı
+- Session restore testi
 
-- Technician ve admin kullanicilar icin karar destek niteliginde analiz ekranlari hedeflenir.
-- En cok ticket acilan departmanlar, sik ariza veren cihaz turleri, kategori yogunlugu ve ortalama cozum suresi gibi gostergeler sunulabilir.
-- Uzun vadede cozum onerisiyle ticket acilmadan kapanan sorun sayisi da bu panelde izlenebilir.
+Bu alanlar kapsam dışı bırakılmadı; yalnızca bu fazda güvenli demo hesap/parola erişimi ve kontrollü runtime ilerleyişi sağlanamadığı için `test edilemedi` olarak korundu.
 
-## MVP Demo Akisi
+## Supabase ve Güvenlik Yaklaşımı
 
-Web MVP'nin Android handoff oncesi onerilen demo sirasi:
+- Service role veya secret key istemciye verilmez.
+- Web tarafında rol kararı her zaman `public.profiles.role` üzerinden server-side çözülür.
+- Android tarafında yalnızca `SUPABASE_URL` ve `SUPABASE_PUBLISHABLE_KEY` kullanılır.
+- `devices.assigned_user_id` cihazı kullanan personeli, `tickets.assigned_to` ise ticket üzerinde çalışan teknik personeli ifade eder.
+- RLS tüm ana tablolarda etkindir.
+- İlk demo admin veya technician rol ataması için yalnızca database-owner bağlamında çalışan kontrollü bootstrap istisnası vardır.
+- Normal `authenticated` kullanıcılar kendi rollerini yükseltemez.
 
-1. Login
-2. Dashboard
-3. Ticket listesi ve filtreleme
-4. Ticket detay, teknik atama ve durum degistirme
-5. Public yorum ve internal teknik not
-6. Device listesi ve device detay
-7. QR preview ve maintenance kaydi
-8. Access denied ornegi
-9. RLS ve test kaniti
+## Doğrulama Özeti
 
-Detayli sunum akisi icin `docs/MVP_DEMO_SCENARIO.md` dosyasini, ekran goruntusu plani icin `docs/SCREENSHOT_PLAN.md` dosyasini kullanin.
+- `npx supabase db reset` geçti
+- Seed doğrulaması geçti
+- Schema smoke test geçti
+- RLS smoke test geçti
+- Web `npm run lint` geçti
+- Web `npm run build` geçti
+- Android `gradlew.bat assembleDebug` geçti
+- Remote web auth ve RLS runtime doğrulamaları tamamlandı
+- Android tarafında minimum emulator açılış kontrolleri tekrar tekrar doğrulandı
 
-Ticket detay ekraninda yalnizca mevcut duruma uygun status secenekleri gosterilir. `closed` ve `cancelled` durumlarinda form pasif hale gelir ve kullaniciya Turkce son-durum mesaji gosterilir.
+Detaylar için:
 
-Not: `devices.assigned_user_id` cihazi kullanan veya zimmetli personeli, `tickets.assigned_to` ise talep uzerinde calisan teknik personeli ifade eder.
+- [Architecture](docs/ARCHITECTURE.md)
+- [Authentication](docs/AUTHENTICATION.md)
+- [Android Auth](docs/ANDROID_AUTH.md)
+- [Android Tickets](docs/ANDROID_TICKETS.md)
+- [Android Devices](docs/ANDROID_DEVICES.md)
+- [Database](docs/DATABASE.md)
+- [RLS Matrix](docs/RLS_MATRIX.md)
+- [Test Plan](docs/TEST_PLAN.md)
+- [Daily Progress](docs/DAILY_PROGRESS.md)
+- [MVP Demo Scenario](docs/MVP_DEMO_SCENARIO.md)
+- [Screenshot Plan](docs/SCREENSHOT_PLAN.md)
+- [Future Phases](docs/FUTURE_PHASES.md)
 
-## Erisilebilir ve Sade Tasarim Kararlari
-
-- Yasli kullanicilar ve ileri duzey bilgisayar kullanmayan personel icin okunabilirlik artirildi.
-- Buyuk butonlar, ferah kart bosluklari ve net Turkce metinler tercih edildi.
-- Fazla beyaz ve duz gorunum azaltildi; acik mavi-gri zeminler ve section tonlari ile ekran ayrimi guclendirildi.
-- Baslik, aciklama, icerik ve aksiyon alanlari arasindaki gorsel hiyerarsi belirginlestirildi.
-- Kart ve buton oranlari standartlastirildi; ayni aksiyon aileleri daha tutarli hale getirildi.
-- Renkler daha sade ve goz yormayacak tonda tutuldu.
-- Yasli kullanicilar icin okunabilirlik ve tiklanabilirlik artirildi.
-- Kritik durumlar yalnizca renkle degil, metin etiketiyle de gosterildi.
-- Mobil ve masaustu duzen birlikte gozden gecirildi.
-
-## Supabase Durumu
-
-- `npx supabase --version`: `2.109.0`
-- `docker version`: Docker engine erisimi var
-- `npx supabase db reset`: gecti
-- Linked remote migration gecmisi: `20260706000200_restore_public_api_grants.sql` kaydi mevcut
-- Schema ve RLS smoke testleri: gecti
-
-2026-07-06 tarihi itibariyla linked remote Supabase projesi uzerinde demo profile kayitlari, controlled demo ticket/comment verileri, `/tickets`, `/tickets/[id]`, `/devices`, `/devices/[id]` ve `/devices/[id]/qr` ekranlari ile web auth akislari dogrulanmistir. Local ortamda ise `20260706000200_restore_public_api_grants.sql` migration'i ile Data API grant'leri reset sonrasinda kalici hale getirilmis; gercek session ile ticket/comment/device/maintenance RLS testleri gecmistir.
-
-## Web Ortam Degiskenleri
-
-`apps/web/.env.local` icinde yalnizca su iki public deger bulunmalidir:
-
-```bash
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
-```
-
-Asagidaki degerleri istemci ortamina eklemeyin:
-
-- `SUPABASE_SECRET_KEY`
-- `SUPABASE_SERVICE_ROLE_KEY`
-- `DATABASE_URL`
-- `DATABASE_PASSWORD`
-
-## Yerel Gelistirme Komutlari
+## Yerel Geliştirme
 
 ### Web
 
@@ -182,11 +156,7 @@ cd apps/android
 gradlew.bat assembleDebug
 ```
 
-Android auth icin gercek degerler repository'ye yazilmaz. `apps/android/secrets.defaults.properties` yalnizca bos anahtar isimlerini tutar; gercek `SUPABASE_URL` ve `SUPABASE_PUBLISHABLE_KEY` degerleri yerel `apps/android/secrets.properties` dosyasinda tutulmalidir.
-
 ### Supabase
-
-Docker engine calisiyorsa:
 
 ```bash
 npx supabase stop
@@ -195,34 +165,13 @@ npx supabase db reset
 npx supabase status
 ```
 
-Smoke testler:
+## Ortam Dosyaları
 
-```bash
-psql -f supabase/tests/schema_smoke_test.sql
-psql -f supabase/tests/rls_smoke_test.sql
-```
+- `apps/web/.env.local` Git'e eklenmez.
+- `apps/android/secrets.properties` Git'e eklenmez.
+- `apps/android/local.properties` Git'e eklenmez.
+- Service role key, database password ve demo kullanıcı parolaları dokümana yazılmaz.
 
-## Guvenlik Notlari
+## Teslim Notu
 
-- Service role veya secret key istemciye eklenmez.
-- Android tarafinda yalnizca `SUPABASE_URL` ve `SUPABASE_PUBLISHABLE_KEY` BuildConfig uzerinden okunur.
-- `.env.local` Git'e eklenmez.
-- Rol bilgisi client state, cookie metadata veya localStorage uzerinden dogrulanmaz.
-- Web paneli erisimi yalnizca server-side profile ve rol cozumlemesi ile acilir.
-- Ilk demo admin veya technician role assignment islemi icin yalnizca database-owner baglaminda calisan kontrollu bootstrap istisnasi vardir.
-- Normal `authenticated` kullanicilar kendi rollerini yukseltemez.
-- Public API grant'leri migration ile korunur; local reset sonrasinda tablo erisimleri RLS policy'lerine kadar ulasabilir.
-
-## Dokumantasyon
-
-- [Architecture](docs/ARCHITECTURE.md)
-- [Android Auth](docs/ANDROID_AUTH.md)
-- [Authentication](docs/AUTHENTICATION.md)
-- [Database](docs/DATABASE.md)
-- [RLS Matrix](docs/RLS_MATRIX.md)
-- [Demo Data Setup](docs/DEMO_DATA_SETUP.md)
-- [Supabase Remote Setup](docs/SUPABASE_REMOTE_SETUP.md)
-- [Daily Progress](docs/DAILY_PROGRESS.md)
-- [Future Phases](docs/FUTURE_PHASES.md)
-- [Test Plan](docs/TEST_PLAN.md)
-- [Screenshot Plan](docs/SCREENSHOT_PLAN.md)
+Mevcut MVP, staj teslimi için anlatılabilir durumdadır. Web panel tarafı uçtan uca güçlü biçimde tamamlanmıştır. Android tarafı ise auth omurgası ve ana iş akışlarının foundation düzeyinde hazırlanmış, build güvenliği korunmuş ve sonraki fazlara devredilebilir hale getirilmiştir.

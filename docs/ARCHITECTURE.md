@@ -1,61 +1,109 @@
 # ARCHITECTURE
 
-## Genel Yapi
+## Genel Yapı
 
-Sistem; teknik personel ve yoneticiler icin Next.js web paneli, personel ve saha kullanimlari icin Android uygulamasi ve Supabase tabanli veri/auth altyapisindan olusur.
+Sistem üç ana katmandan oluşur:
+
+1. Next.js tabanlı web yönetim paneli
+2. Kotlin/Compose tabanlı Android istemcisi
+3. Supabase tabanlı veri, auth ve güvenlik katmanı
 
 ```mermaid
 flowchart LR
-    Web["Web Paneli<br/>Next.js 16"] --> API["Supabase API Katmani"]
-    Android["Android Uygulamasi<br/>Kotlin + Compose"] --> API
+    Web["Web Paneli<br/>Next.js 16"] --> API["Supabase API Katmanı"]
+    Android["Android Uygulaması<br/>Kotlin + Compose"] --> API
     API --> DB["PostgreSQL"]
-    API --> Storage["Private Storage Bucket"]
-    API --> Realtime["Realtime (gelecek asama)"]
+    API --> Storage["Private Storage"]
 ```
 
-## Katmanlar
+## Web Katmanı
+
+Web panel, teknik personel ve yöneticiler için hazırlanmıştır.
+
+Tamamlanan ana sorumluluklar:
+
+- SSR auth ve oturum yenileme
+- Role guard
+- Dashboard
+- Ticket listeleme, detay, atama, durum ve yorum akışları
+- Device listeleme, detay, create, edit, passive
+- Maintenance records
+- Güvenli QR preview
+
+Web tarafında `employee` rolü yönetim paneline alınmaz ve `access-denied` ekranına yönlendirilir.
+
+## Android Katmanı
+
+Android uygulama katmanları düzenli biçimde ayrılmıştır:
+
+- `core`
+- `data`
+- `domain`
+- `feature`
+- `navigation`
+
+Bu yapı şu açıdan tutarlıdır:
+
+- `domain` modelleri iş nesnelerini taşır
+- `data` Supabase repository katmanını içerir
+- `feature` ekran, state ve ViewModel katmanını toplar
+- `navigation` route ve akış bağlarını yönetir
+
+Android tarafında şu iş akışları MVP foundation seviyesinde hazırlanmıştır:
+
+- auth foundation
+- role-based home ekranları
+- employee ticket list/detail/create
+- technician queue
+- technician status update
+- ticket comment
+- device list/detail
+- device maintenance history
+- device QR preview
+
+## Supabase Katmanı
+
+Supabase katmanı SQL migration tabanlıdır.
+
+Temel bileşenler:
+
+- enum tipleri
+- 9 ana tablo
+- trigger ve helper function yapısı
+- RLS policy seti
+- private storage bucket
+- seed verileri
+- smoke testler
+
+Bu yapı web ve Android istemcilerinin publishable key + kullanıcı session yaklaşımıyla güvenli çalışmasını hedefler.
+
+## Kimlik Doğrulama ve Yetkilendirme
 
 ### Web
 
-- Supabase SSR auth yapisi kullanir.
-- Login, logout, protected layout ve role guard server-side calisir.
-- `/dashboard` ve `/tickets` yalnizca `technician` ve `admin` rollerine aciktir.
-- `employee` rolundeki kullanici web paneline alinmaz ve `access-denied` ekranina yonlendirilir.
+- `src/proxy.ts` auth cookie zincirini korur
+- server component ve server action tarafında `@supabase/ssr` kullanılır
+- rol her zaman `public.profiles.role` üzerinden çözülür
+- service role kullanılmaz
 
 ### Android
 
-- Android uygulamasi halen prototip katmanindadir.
-- `assembleDebug` dogrulamasi korunmustur.
-- Supabase auth ve veri baglantisi sonraki asamaya birakilmistir.
+- `BuildConfig.SUPABASE_URL`
+- `BuildConfig.SUPABASE_PUBLISHABLE_KEY`
+- Supabase Kotlin auth/postgrest istemcisi
+- role çözümleme `profiles.role` üzerinden yapılır
+- pasif profil ve profile satırı olmayan kullanıcılar kontrollü hata ekranlarına yönlendirilir
 
-### Supabase
+## Güvenlik Kararları
 
-- PostgreSQL semasi SQL migration dosyalari ile hazirlanmistir.
-- Ana enumlar, dokuz ana tablo, trigger fonksiyonlari ve helper function'lar tanimlanmistir.
-- RLS policy taslagi migration seviyesinde olusturulmustur.
-- `ticket-attachments` private storage bucket migrationi hazirdir.
-- Seed dosyasi yalnizca kurgusal departman ve cihaz referans verisi uretir.
+- Service role veya database password istemciye verilmez.
+- Cookie, localStorage veya client-side metadata içindeki role değerine güvenilmez.
+- RLS kapatılmaz.
+- `devices.assigned_user_id` ile `tickets.assigned_to` kavramları bilinçli olarak ayrılır.
+- QR payload yalnızca `TBT-DEVICE:<qr_token>` biçiminde güvenli token içerir.
 
-## Auth ve Yetkilendirme Akisi
+## Mevcut Mimari Durumu
 
-1. `src/proxy.ts`, auth cookie'lerini yenilemek ve temel oturum kontrolunu yapmak icin her protected istekte calisir.
-2. Server component ve server action'lar `@supabase/ssr` ile server client olusturur.
-3. `auth.getUser()` ile dogrulanmis kullanici okunur.
-4. `public.profiles` tablosundan rol, aktiflik ve birim bilgisi cozumlenir.
-5. Protected layout, employee veya pasif profilleri web paneline almaz.
-6. Ticket listesi ve sayaçlar service role kullanmadan, mevcut publishable key + user session ile sorgulanir.
+Web MVP iş akışları, gerçek runtime ve RLS doğrulamalarıyla güçlü biçimde tamamlanmıştır.
 
-## Mevcut Supabase Gercegi
-
-- Migration dosyalari, RLS ve storage katmani hazir durumdadir.
-- Web ve Android istemci baglantilari asamali olarak kurulmustur; web tarafinda SSR auth katmani eklendi.
-- Runtime RLS guvenligi, yerel `supabase db reset` ve gercek session testleri tamamlanmadan guvenli kabul edilmez.
-- 2026-07-06 tarihinde Docker engine erisimi olmadigi icin yerel migration reset kapisi gecilememistir.
-
-## Guvenlik Kararlari
-
-- Service role key istemci tarafina verilmez.
-- Cookie veya localStorage icindeki role degerine guvenilmez.
-- Rol her zaman `profiles.role` alanindan okunur.
-- `middleware.ts` yerine Next.js 16 uyumlu `src/proxy.ts` kullanilir.
-- Uzak Supabase migration uygulamasi, yerel reset ve seed dogrulamasi tamamlanmadan baslatilmaz.
+Android tarafında mimari omurga ve ekran iskeletleri build güvenli biçimde tamamlanmıştır. Ancak bazı Android ekranlar employee veya technician canlı oturumuyla uçtan uca test edilemediği için dokümantasyonda foundation olarak işaretlenmiştir.

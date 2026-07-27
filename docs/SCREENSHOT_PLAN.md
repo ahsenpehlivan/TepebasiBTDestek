@@ -1,103 +1,65 @@
-# SCREENSHOT_PLAN
+# SCREENSHOT PLAN
 
-Bu plan, staj sunumu ve staj raporu icin alinacak ekran goruntulerinin kapsamini tanimlar.
+Bu plan, staj sunumu ve final teslimi için alınacak ekran görüntülerinin kapsamını tanımlar.
 
-## Guvenlik Kurali
+## Güvenlik Kuralı
 
-- Gercek kurum verisi, gercek kisi bilgisi, gercek seri numarasi, gercek IP, gercek MAC, parola, token veya secret iceren ekran goruntusu alinmamalidir.
-- Yalnizca demo kullanicilar, demo ticket kayitlari ve demo cihaz verileri kullanilmalidir.
-- Login ekraninda parola alani doldurulmus halde ekran goruntusu alinmamalidir.
+- Gerçek kurum verisi, gerçek kişi bilgisi, gerçek seri numarası, parola, token, secret veya anahtar içeren ekran görüntüsü alınmamalıdır.
+- Yalnızca demo kullanıcılar, demo ticket kayıtları ve demo cihaz verileri kullanılmalıdır.
+- Login ekranında parola alanı doldurulmuş halde ekran görüntüsü alınmamalıdır.
 
-## Onerilen Ekranlar
+## Web İçin Final Screenshot Listesi
 
-| Ekran | Onerilen Dosya Adi | Rapor Bolumu | Kanitladigi Ozellik |
+| Sıra | Ekran | Önerilen Dosya Adı | Not |
 | --- | --- | --- | --- |
-| Dashboard genel gorunumu | `01-dashboard-overview.png` | Web yonetim paneli | Role guard sonrasi gercek count kartlari ve panel girisi |
-| Login ekrani | `02-login-screen.png` | Kimlik dogrulama | SSR login giris formu ve demo kullanim siniri |
-| Access denied ekrani | `03-access-denied.png` | Yetkilendirme | Employee hesabinin web panelden engellenmesi |
-| Ticket listesi filtreli gorunum | `04-ticket-list-filtered.png` | Ticket yonetimi | Server-side filtreleme ve responsive liste/kart yapisi |
-| Ticket detay ve ic not | `05-ticket-detail-internal-comment.png` | Ticket detay akisi | Public/internal comment ayrimi ve durum gecmisi |
-| Device listesi filtreli gorunum | `06-device-list-filtered.png` | Cihaz envanteri | Device filtreleri, durum etiketleri ve aktif/pasif ayrimi |
-| Device detay ekrani | `07-device-detail.png` | Cihaz detay akisi | Teknik bilgiler, guvenli QR ozeti ve bakim gecmisi |
-| Device duzenleme formu | `08-device-edit-form.png` | Cihaz form akislari | Zorunlu alanlar, yardim metinleri ve form tutarliligi |
-| QR preview ekrani | `09-device-qr-preview.png` | QR akisi | Sunuma uygun QR gorunumu ve demo uyari metni |
-| Maintenance record bolumu | `10-device-maintenance.png` | Bakim kayitlari | Bakim gecmisi ve kayit ekleme alani |
-| Test veya smoke test kaniti | `11-test-results.png` | Dogrulama ve testler | Lint, build, smoke test veya route dogrulama ciktilari |
+| 1 | Login ekranı | `01-web-login.png` | Supabase auth giriş akışı |
+| 2 | Dashboard | `02-web-dashboard.png` | Genel özet ve sayaç kartları |
+| 3 | Talepler listesi | `03-web-ticket-list.png` | Filtreleme ve liste görünümü |
+| 4 | Talep detay ekranı | `04-web-ticket-detail.png` | Ticket özeti ve bağlı cihaz alanı |
+| 5 | Talep yorum ve durum alanı | `05-web-ticket-comments-status.png` | Atama, durum değişikliği ve yorum akışı |
+| 6 | Cihaz listesi | `06-web-device-list.png` | Envanter görünümü |
+| 7 | Cihaz detay ekranı | `07-web-device-detail.png` | Teknik bilgiler ve zimmet özeti |
+| 8 | Cihaz oluşturma veya düzenleme ekranı | `08-web-device-form.png` | Form yapısı ve validasyon |
+| 9 | Bakım kayıtları bölümü | `09-web-maintenance.png` | Bakım geçmişi |
+| 10 | QR preview ekranı | `10-web-qr-preview.png` | Güvenli QR önizleme |
 
-## Android Ekranlari
+## Android İçin Final Screenshot Listesi
 
-| Ekran | Onerilen Dosya Adi | Rapor Bolumu | Kanitladigi Ozellik |
+| Sıra | Ekran | Önerilen Dosya Adı | Durum |
 | --- | --- | --- | --- |
-| Android login ekrani | `12-android-login.png` | Android auth | Supabase auth giriş formu ve demo uyarı metni |
-| Android employee home | `13-android-employee-home.png` | Android role yonlendirmesi | Employee rolu icin mobil başlangıç ekrani |
-| Android technician home | `14-android-technician-home.png` | Android role yonlendirmesi | Technician rolu icin mobil başlangıç ekrani |
-| Android admin home | `15-android-admin-home.png` | Android role yonlendirmesi | Admin rolu icin mobil başlangıç ekrani |
-| Android access denied | `16-android-access-denied.png` | Android auth hata akisi | Pasif profile kontrollu erişim engeli |
-| Android auth error | `17-android-auth-error.png` | Android auth hata akisi | Profile satiri olmayan kullanicida kontrollu hata |
-| Android config error | `18-android-config-error.png` | Android config guvenligi | Eksik secrets durumunda anlasılır hata |
-| Android logout sonrasi login | `19-android-logout-login.png` | Android logout | Logout sonrasi login ekranina temiz dönüş |
+| 1 | Android login | `11-android-login.png` | Alınabilir, runtime doğrulandı |
+| 2 | Employee home | `12-android-employee-home.png` | Alınabilir, runtime doğrulandı |
+| 3 | Technician home | `13-android-technician-home.png` | Alınabilir, runtime doğrulandı |
+| 4 | Admin home | `14-android-admin-home.png` | Alınabilir, runtime doğrulandı |
+| 5 | Taleplerim ekranı | `15-android-my-tickets.png` | Screenshot alınamadı veya foundation seviyesinde |
+| 6 | Talep detayı ekranı | `16-android-ticket-detail.png` | Screenshot alınamadı veya foundation seviyesinde |
+| 7 | Yeni talep oluştur ekranı | `17-android-create-ticket.png` | Screenshot alınamadı veya foundation seviyesinde |
+| 8 | Cihazlar ekranı | `18-android-device-list.png` | Screenshot alınamadı veya foundation seviyesinde |
+| 9 | Cihaz detayı ekranı | `19-android-device-detail.png` | Screenshot alınamadı veya foundation seviyesinde |
+| 10 | QR önizleme ekranı | `20-android-device-qr-preview.png` | Screenshot alınamadı veya foundation seviyesinde |
 
-## Onerilen Sunum Sirasi
+Android ticket ve device ekranları bu kapanış turunda canlı employee veya technician oturumuyla güvenilir biçimde açılamadığı için, bu ekranlar raporda dürüstçe `screenshot alınamadı` veya `foundation seviyesinde` notuyla sunulmalıdır.
 
-Not:
+## Önerilen Sunum Sırası
 
-- Android personel ticket listeleme fazi icin planlanan ek ekran goruntusu:
-  - `20-android-my-tickets.png` -> Employee icin `Taleplerim` ekrani ve ticket kartlari
-  - Bu ekran goruntusu henuz alinmadi; cunku employee runtime session bu turde dogrulanamadi
-- Android personel ticket detay temeli icin planlanan ek ekran goruntusu:
-  - `21-android-ticket-detail.png` -> Employee icin `Talep Detayi` ekrani
-  - Bu ekran goruntusu de henuz alinmadi; cunku runtime'da detail ekranina manuel ilerlenemedi
-- Android personel ticket olusturma temeli icin planlanan ek ekran goruntusu:
-  - `22-android-create-ticket.png` -> Employee icin `Yeni Talep Olustur` ekrani
-  - Bu ekran goruntusu de henuz alinmadi; cunku runtime'da create ekranina manuel ilerlenemedi
-- Android technician queue temeli icin planlanan ek ekran goruntusu:
-  - `23-android-technician-queue.png` -> Technician icin `Is Kuyrugum` ekrani
-  - Bu ekran goruntusu de henuz alinmadi; cunku bu fazda minimum dogrulama yeterli tutuldu ve queue ekranina technician runtime login ile manuel ilerlenmedi
-- Android technician status update temeli icin planlanan ek ekran goruntusu:
-  - `24-android-ticket-status-actions.png` -> Technician icin `Talep Islemleri` butonlari gorunen `TicketDetail` ekrani
-  - Bu ekran goruntusu de henuz alinmadi; cunku bu fazda technician runtime login ile detail ekraninda canli status update kaniti alinmadi
-- Android ticket yorum iskeleti icin planlanan ek ekran goruntusu:
-  - `25-android-ticket-comments.png` -> `TicketDetail` icinde yorum listesi, `Genel Yorum` / `Ic Not` badge'leri ve yorum ekleme formu
-  - Bu ekran goruntusu henuz alinmadi; cunku runtime'da employee veya technician session ile detail ekranina ilerlenip canli yorum gonderimi kanitlanamadi
-- Android cihaz listesi iskeleti icin planlanan ek ekran goruntusu:
-  - `26-android-device-list.png` -> Employee veya technician icin `Cihazlar` ekrani ve cihaz kartlari
-  - Bu ekran goruntusu henuz alinmadi; cunku runtime'da `DeviceList` ekranina employee veya technician session ile canli ilerleme kaniti alinmadi
-- Android cihaz detay iskeleti icin planlanan ek ekran goruntusu:
-  - `27-android-device-detail.png` -> `DeviceDetail` ekraninda cihaz kimligi, durum, zimmet ve notlar bolumleri
-  - Bu ekran goruntusu henuz alinmadi; cunku runtime'da `DeviceList` ekranindan `DeviceDetail` ekranina employee veya technician session ile canli ilerleme kaniti alinmadi
-- Android cihaz bakim kayitlari iskeleti icin planlanan ek ekran goruntusu:
-  - `28-android-device-maintenance.png` -> `DeviceDetail` icinde `Bakim Kayitlari` bolumu ve maintenance kartlari
-  - Bu ekran goruntusu henuz alinmadi; cunku runtime'da `DeviceDetail` ekranina employee veya technician session ile canli ilerleme ve maintenance listesi kaniti alinmadi
-- Android cihaz QR preview iskeleti icin planlanan ek ekran goruntusu:
-  - `29-android-device-qr-preview.png` -> `DeviceQrPreview` ekraninda guvenli `TBT-DEVICE:<qr_token>` payload onizlemesi
-  - Bu ekran goruntusu henuz alinmadi; cunku runtime'da `DeviceQrPreview` ekranina employee veya technician session ile canli ilerleme kaniti alinmadi
+| Sıra | Ekran |
+| --- | --- |
+| 1 | Web login |
+| 2 | Web dashboard |
+| 3 | Web talepler listesi |
+| 4 | Web talep detay ve yorum/durum alanı |
+| 5 | Web cihaz listesi |
+| 6 | Web cihaz detay ve bakım alanı |
+| 7 | Web QR preview |
+| 8 | Android login |
+| 9 | Android role-based home ekranları |
+| 10 | Android foundation olarak kalan ticket ve device ekran açıklaması |
+| 11 | Test sonuç ekranı |
 
-| Sira | Onerilen Dosya Adi | Demo Adimi | Kanitladigi Ozellik |
-| --- | --- | --- | --- |
-| 1 | `02-login-screen.png` | Login | SSR auth giris ekrani |
-| 2 | `01-dashboard-overview.png` | Dashboard | Gercek count kartlari ve panel girisi |
-| 3 | `04-ticket-list-filtered.png` | Ticket listesi ve filtre | Server-side filtreleme |
-| 4 | `05-ticket-detail-internal-comment.png` | Ticket detay, atama, durum ve internal not | Ticket yasam dongusu ve yorum ayrimi |
-| 5 | `06-device-list-filtered.png` | Device listesi | Envanter filtreleme ve durum gorunumu |
-| 6 | `07-device-detail.png` | Device detay | Cihazi kullanan personel ile teknik atama ayrimi |
-| 7 | `08-device-edit-form.png` | Device duzenleme | Form ve zimmetli personel kavrami |
-| 8 | `09-device-qr-preview.png` | QR preview | Guvenli QR yaklasimi |
-| 9 | `10-device-maintenance.png` | Maintenance record | Bakim gecmisi ve cihaz takibi |
-| 10 | `03-access-denied.png` | Access denied | Employee panel kisiti |
-| 11 | `11-test-results.png` | RLS/test kaniti | Lint, build ve test dogrulamasi |
+## Final Teslim Kontrolü
 
-## Cekim Notlari
-
-- Dashboard ve liste ekranlarinda bosluklarin, kart stillerinin ve Turkce metinlerin duzgun gorunmesi icin desktop genislikte cekim alin.
-- Responsive kanit gerekiyorsa ayni ekran icin 390px ve tablet gorunumleri ayrica kaydedilebilir.
-- QR preview ekraninda yazdirma butonu ve demo uyarisi birlikte gorunecek sekilde cekim alin.
-- Test sonucu ekran goruntulerinde secret veya `.env.local` icerigi yer almamalidir.
-- `docs/MVP_DEMO_SCENARIO.md` icindeki sira ile uyumlu kalin.
-
-## Erisilebilir Tasarim Notu
-
-- Ekran goruntulerinde buyuk butonlar, ferah form alanlari ve rahat okunur yazi boyutlari korunmalidir.
-- Durum ve oncelik etiketleri sadece renk lekesi gibi kalmamali; metinleri de net secilmelidir.
-- Login, access denied ve auth error ekranlari korkutucu veya asiri teknik gorunmemelidir.
-- Dashboard, ticket ve device ekranlarinda fazla beyaz gorunum yerine yumusak section ayrimlari ve kart baslik hiyerarsisi gorunur olmalidir.
-- Android ekran goruntulerinde de gercek Supabase URL, publishable key veya parola gosterilmemelidir.
+- Ekran görüntülerinde Türkçe karakterlerin doğru göründüğü tekrar kontrol edilmelidir.
+- Web tarafında gerçek tamamlanmış MVP akışı öncelikli olarak gösterilmelidir.
+- Android tarafında yalnızca gerçekten runtime’da doğrulanan auth ekranları kesin kanıt olarak kullanılmalıdır.
+- Android foundation ekranları kullanılacaksa, sunum veya raporda açıkça `foundation hazır, canlı runtime doğrulaması eksik` notu düşülmelidir.
+- Görseller `docs/MVP_DEMO_SCENARIO.md` akışıyla uyumlu sırada seçilmelidir.

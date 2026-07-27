@@ -1,124 +1,82 @@
 # ANDROID_AUTH
 
-## Ozet
+## Özet
 
-Android uygulamasinda auth temeli kurulmustur.
-Bu temel uzerine employee icin `Taleplerim` listeleme akisi eklenmistir.
+Android uygulamada Supabase auth temeli tamamlanmıştır. Bu temel, Android MVP'nin kalan tüm ticket ve device foundation ekranlarının giriş noktasıdır.
 
 Kapsam:
 
-- Supabase Auth ile giriş ve çıkış omurgası
-- `profiles` tablosundan rol ve profil cozumleme
-- Role gore baslangic ekrani yonlendirmesi
-- Employee, technician ve admin rollerinin Android tarafinda ayrilmasi
-- Eksik config, pasif profil ve profile satiri yok durumlari icin kontrollu ekranlar
+- Supabase ile giriş ve çıkış
+- splash session kontrolü
+- role-based home ekranları
+- pasif profil için erişim engeli
+- profile satırı olmayan kullanıcı için kontrollü hata
+- eksik config için kontrollü hata
 
-Auth dokumaninin odagi session, role ve route davranisidir.
-Employee ticket listeleme mimarisi ayri olarak `docs/ANDROID_TICKETS.md` icinde anlatilir.
+## Dosya Konumları
 
-## Konumlar
+- `apps/android/app/src/main/java/com/ahsen/tepebasibtdestek/MainActivity.kt`
+- `apps/android/app/src/main/java/com/ahsen/tepebasibtdestek/core/AppContainer.kt`
+- `apps/android/app/src/main/java/com/ahsen/tepebasibtdestek/data/remote/supabase/SupabaseClientProvider.kt`
+- `apps/android/app/src/main/java/com/ahsen/tepebasibtdestek/data/auth/SupabaseAuthRepository.kt`
+- `apps/android/app/src/main/java/com/ahsen/tepebasibtdestek/domain/auth/*`
+- `apps/android/app/src/main/java/com/ahsen/tepebasibtdestek/navigation/*`
 
-- Uygulama giris noktasi: `apps/android/app/src/main/java/com/ahsen/tepebasibtdestek/MainActivity.kt`
-- App container: `apps/android/app/src/main/java/com/ahsen/tepebasibtdestek/core/AppContainer.kt`
-- Supabase client: `apps/android/app/src/main/java/com/ahsen/tepebasibtdestek/data/remote/supabase/SupabaseClientProvider.kt`
-- Auth repository: `apps/android/app/src/main/java/com/ahsen/tepebasibtdestek/data/auth/SupabaseAuthRepository.kt`
-- Session modelleri: `apps/android/app/src/main/java/com/ahsen/tepebasibtdestek/domain/auth/*`
-- Navigation: `apps/android/app/src/main/java/com/ahsen/tepebasibtdestek/navigation/*`
+## Config ve Secrets Yaklaşımı
 
-## Config ve Secrets Yaklasimi
+- `SUPABASE_URL`
+- `SUPABASE_PUBLISHABLE_KEY`
 
-- Android istemcisi yalnizca iki public deger kullanir:
-  - `SUPABASE_URL`
-  - `SUPABASE_PUBLISHABLE_KEY`
-- Gercek degerler `apps/android/secrets.properties` dosyasinda tutulur.
-- Repository'ye yalnizca `apps/android/secrets.defaults.properties` eklenir.
-- `apps/android/secrets.properties` ve `apps/android/local.properties` Git tarafindan izlenmez.
-- Service role key, database password veya secret key Android uygulamasina eklenmez.
+Gerçek değerler yalnızca yerel `apps/android/secrets.properties` dosyasında tutulur.
 
-`BuildConfig` alanlari:
+Repository'ye yalnızca:
 
-- `BuildConfig.SUPABASE_URL`
-- `BuildConfig.SUPABASE_PUBLISHABLE_KEY`
+- `apps/android/secrets.defaults.properties`
 
-Eksik config durumunda uygulama crash etmek yerine şu mesajı temel alır:
+eklenir.
 
-`Supabase yapılandırması eksik. Lütfen Android secrets.properties dosyasını kontrol edin.`
+Git'e alınmaması gerekenler:
 
-## Auth Mimarisi
+- `apps/android/secrets.properties`
+- `apps/android/local.properties`
+- secret key, service role key, database password
 
-Akis:
-
-1. Uygulama `Splash` rotasinda acilir.
-2. Supabase client yapilandirmasi kontrol edilir.
-3. Auth plugin baslatimi beklenir ve mevcut session okunur.
-4. Session varsa `profiles` tablosundan kullanicinin profili okunur.
-5. `is_active = false` ise `AccessDenied` ekranina gidilir.
-6. Profil varsa rol okunur ve role gore ana ekrana gidilir.
-7. Profil yoksa `AuthError` ekranina gidilir.
-
-Role davranisi:
+## Role Davranışı
 
 - `employee` -> `EmployeeHomeScreen`
 - `technician` -> `TechnicianHomeScreen`
 - `admin` -> `AdminHomeScreen`
+- `is_active = false` -> `AccessDenied`
+- profile satırı yok -> `AuthError`
 
-Web'den farkli olarak employee rolu Android tarafinda kendi mobil baslangic ekranina yonlendirilir.
+## Gerçek Runtime'da Doğrulananlar
 
-## Login ve Logout Akisi
-
-Login:
-
-- E-posta trim ve lowercase normalize edilir.
-- Bos alanlar icin Turkce validation mesaji gosterilir.
-- Ham Supabase hata metni kullaniciya verilmez.
-- Başarılı giriş sonrası profile/role çözümlemesi yapılır ve doğru route açılır.
-
-Logout:
-
-- Supabase session kapatilir.
-- Back stack temizlenerek `Login` ekranına dönülür.
-- Hata olursa Türkçe mesaj gösterilir.
-
-## Role-Based Home Ekranlari
-
-Bu fazdaki home ekranlari iskelet niteligindedir.
-
-- Employee home: personel mobil ekraninin hazirlandigini bildirir
-- Technician home: teknik kuyrugun sonraki fazda gelecegini bildirir
-- Admin home: mobil yonetici ozetinin sonraki faza birakildigini bildirir
-
-Tum home ekranlarinda:
-
-- kullanici adi
-- rol etiketi
-- sonraki faz notu
-- logout butonu
-
-bulunur.
-
-## Test Senaryolari
-
-Hedef senaryolar:
-
-- eksik config
-- geçersiz giriş
-- employee / technician / admin login
-- pasif profile
-- profile satiri olmayan auth kullanicisi
+- eksik config hata ekranı
+- geçersiz e-posta/parola
+- employee login
+- technician login
+- admin login
+- pasif profile giriş
+- profile satırı olmayan auth kullanıcısı
 - logout
 - logout sonrası geri tuşu
-- uygulama yeniden açıldığında mevcut session ile doğru role dönüş
 
-2026-07-08 tarihli emulator doğrulamasında eksik config, geçersiz giriş, employee/technician/admin login, pasif profil, profile satırı olmayan kullanıcı, logout ve logout sonrası geri tuşu akışları gerçek runtime üzerinde doğrulandı. Session restore akışı ise bu kapanış turunda yeniden kanıtlanamadığı için açık kaldı.
+## Hâlâ Test Edilemeyenler
 
-## Bilinen Eksikler
+- session restore
 
-- Session restore akışı bu kapanış turunda yeniden kanıtlanamadı.
-- Ticket listeleme ve detay ekranlari sonraki faza birakildi.
-- Android tarafinda demo kullanici parolalari dokumante edilmedi ve source code'a yazilmadi.
+Bu akış build seviyesinde değil, canlı oturum seviyesinde açık kaldı. Bunun nedeni yeni geçici auth kullanıcısı oluşturmama ve mevcut demo parola bilgilerini dokümana taşımama kuralıdır.
 
-## Sonraki Asama
+## Android Auth Sonrası Foundation Ekranları
 
-- Android personel ticket listeleme
-- Android personel ticket detay ekrani
-- Android technician ticket queue iskeleti
+Auth sonrası açılan foundation ekranları hazır durumdadır:
+
+- employee ticket list/detail/create
+- technician queue
+- technician status update
+- ticket comment
+- device list/detail
+- device maintenance history
+- device QR preview
+
+Bu ekranların tamamı build ve navigation düzeyinde bağlıdır; ancak hepsi gerçek employee veya technician oturumu ile uçtan uca runtime kanıtı almış değildir.

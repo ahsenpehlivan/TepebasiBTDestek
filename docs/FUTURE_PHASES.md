@@ -1,88 +1,70 @@
 # FUTURE_PHASES
 
-Bu belge, mevcut Web MVP ve Android handoff sonrasinda dusunulen gelecek faz fikirlerini toplar.
+Bu belge, mevcut MVP tesliminden sonra düşünülebilecek gelecek faz fikirlerini toplar.
 
-Bu basliklar:
+Bu başlıklar:
 
-- mevcut MVP'nin parcasi degildir
-- tamamlanmis ozellik gibi yorumlanmamalidir
-- yeni faz planlamasi, veri modeli tasarimi ve guvenlik degerlendirmesi gerektirir
+- mevcut MVP'nin parçası değildir
+- tamamlanmış özellik gibi sunulmamalıdır
+- ayrı planlama, test ve güvenlik değerlendirmesi gerektirir
 
-## 1. Akilli Cozum Oneri Akisi
+## 1. Akıllı Çözüm Öneri Akışı
 
-### Amac
+### Amaç
 
-Personel ticket acmadan once yasadigi sorunu serbest metin olarak yazar. Sistem, onceden onaylanmis kolay cozum adimlarini onerir. Kullanici:
+Personel ticket açmadan önce yaşadığı sorunu yazar. Sistem, önceden onaylanmış güvenli çözüm adımlarını önerir.
 
-- `Denedim, sorun cozuldu` derse ticket acilmaz
-- `Denedim, sorun devam ediyor` derse ticket acilir
+Kullanıcı:
 
-Ticket acildiginda, kayitta onerilen cozumun denendigi bilgisi de tutulur.
+- `Denedim, sorun çözüldü` derse ticket açılmaz
+- `Denedim, sorun devam ediyor` derse ticket açılır
 
-### Ilk Faz Yaklasimi
+### İlk Sürüm Yaklaşımı
 
-Ilk surum ML olmak zorunda degildir. Ilk surum su yapiyla baslamalidir:
+İlk sürüm ML olmak zorunda değildir.
 
-- onayli cozum kutuphanesi
-- kategori eslestirme
-- anahtar kelime eslestirme
-- kolay uygulanabilir cozum adimlari
+İlk sürüm şu yapı ile başlamalıdır:
 
-Bu sayede sistem once kural tabanli ve denetlenebilir bir yardim katmani olarak calisir.
+- onaylı çözüm kütüphanesi
+- kategori eşleştirme
+- anahtar kelime eşleştirme
+- kolay uygulanabilir çözüm adımları
 
-### Ornek Cozum Turleri
+### Güvenlik Notları
 
-- cihazi kapatip acma
-- internet baglantisini kontrol etme
-- yazici kuyrugunu temizleme
-- dogru aga bagli oldugunu kontrol etme
-- kablo veya guc baglantisini kontrol etme
-- basit ayar kontrolu
+- öneriler technician veya admin tarafından onaylanmış olmalıdır
+- riskli donanım müdahaleleri kullanıcıya önerilmemelidir
+- kullanıcı cevabı loglanmalıdır
+- sorun çözülmezse normal ticket akışı devam etmelidir
 
-### Guvenlik ve Kalite Notlari
+## 2. İstatistiksel Karar Destek Paneli
 
-- Oneriler technician veya admin tarafindan onceden onaylanmis olmalidir.
-- Riskli, donanima zarar verebilecek veya uzmanlik gerektiren adimlar kullaniciya gosterilmemelidir.
-- Kullanici cevabi loglanmalidir.
-- Sorun cozulmezse standart ticket akisi devam etmelidir.
-- Ticket kaydina `onerilen cozum denendi ama cozulmedi` benzeri bir bilgi eklenmelidir.
+### Amaç
 
-### Uzun Vadeli Genisleme
+Technician ve admin kullanıcıları için ticket, cihaz ve bakım verilerinden özet analiz üretmektir.
 
-Ileride bu yapi:
+### Örnek Göstergeler
 
-- ML destekli siniflandirma
-- semantic search
-- embedding tabanli benzer sorun bulma
+- en çok ticket açılan departmanlar
+- en sık arıza çıkaran cihaz türleri
+- en sık ticket kategorileri
+- ortalama çözüm süresi
+- açık / bekleyen / çözülen ticket sayıları
+- bakım kaydı yoğunluğu
 
-yaklasimlarina genisletilebilir. Ancak ilk surumun kural tabanli ve onayli cozum kutuphanesi olarak baslamasi daha guvenli ve daha aciklanabilir bir yaklasimdir.
+### Beklenen Değer
 
-## 2. Istatistiksel Karar Destek Paneli
+- tekrar eden sorun alanları görünür olur
+- önleyici bakım planları desteklenir
+- cihaz yenileme kararları veriye dayalı hale gelir
 
-### Amac
+## 3. Bilinçli Olarak Sonraya Bırakılan Teknik Alanlar
 
-Technician ve admin kullanicilari icin hangi departmanlarda, hangi cihaz turlerinde ve hangi kategorilerde daha cok sorun ciktigini gosteren analiz ekranlari tasarlamaktir.
+- QR tarama
+- kamera entegrasyonu
+- fotoğraf upload
+- realtime
+- push notification
+- gelişmiş Android device CRUD
 
-Bu panel, Bilgi Islem Mudurlugu icin karar destek sistemi niteligindedir.
-
-### Ornek Gostergeler
-
-- en cok ticket acilan departmanlar
-- en cok ariza cikaran cihazlar
-- en sik sorun cikan cihaz turleri
-- en sik ticket kategorileri
-- ortalama cozum suresi
-- acik, bekleyen ve cozulen ticket sayilari
-- bakim kaydi yogunlugu
-- cozum onerisiyle ticket acilmadan cozulen sorun sayisi
-
-### Beklenen Deger
-
-- tekrar eden sorun alanlari gorunur hale gelir
-- onleyici bakim planlari daha verili yapilabilir
-- cihaz yenileme veya dagitim kararlarina veri saglanir
-- departman bazli destek yukleri daha net izlenir
-
-### Faz Notu
-
-Bu panel gelecekte ayri bir analiz ve raporlama fazi olarak ele alinmalidir. Mevcut Web MVP demo akisinda gosterilen temel dashboard kartlarindan farkli, daha derin karar destek ekranlari hedefler.
+Bu başlıklar MVP teslimini büyütmemek ve mevcut çalışan yapıyı riske atmamak için sonraki fazlara bırakılmıştır.

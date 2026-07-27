@@ -1,64 +1,44 @@
 # ANDROID_DEVICES
 
-## Ozet
+## Özet
 
-Bu dokuman Android tarafindaki cihaz listesi, cihaz detay, read-only bakim kayitlari ve QR preview iskeletini ozetler.
-Bu fazda cihaz detay ekranindan guvenli QR onizleme ekranina gecis eklendi.
+Android cihaz katmanı foundation seviyesinde hazırlanmıştır. Cihaz listesi, cihaz detay, bakım geçmişi ve QR preview ekranları build ve navigation düzeyinde bağlıdır.
 
-Kapsam:
+## Kapsam
 
-- `DeviceSummary`, `DeviceType`, `DeviceStatus`, `DeviceDetail` ve `DeviceMaintenanceRecord` domain modelleri
-- `DeviceRepository` ve `SupabaseDeviceRepository`
-- `DeviceListScreen`, `DeviceListViewModel`, `DeviceListUiState` ve `DeviceUi`
-- `DeviceDetailScreen`, `DeviceDetailViewModel` ve `DeviceDetailUiState`
-- `DeviceQrPreviewScreen`, `DeviceQrPreviewViewModel` ve `DeviceQrPreviewUiState`
-- Employee, technician ve admin home ekranlarindan `DeviceList` route'una gecis
-- `DeviceList` kartindan `DeviceDetail/{deviceId}` route'una gecis
-- `DeviceDetail` ekranindan `DeviceQrPreview/{deviceId}` route'una gecis
-- RLS'ye guvenen sade cihaz listeleme, cihaz detay ve bakim kaydi sorgulari
-- Loading, liste, empty ve error ekran durumlari
-- Turkce UI etiketleri ve durum badge'leri
+- `DeviceList`
+- `DeviceDetail`
+- `DeviceMaintenanceRecord`
+- `DeviceQrPreview`
 
-Bu fazda sunlar eklenmedi:
+## Tamamlanan Foundation Akışları
 
-- cihaz olusturma veya duzenleme
-- cihaz pasife alma
-- bakim kaydi ekleme
-- QR tarama, upload veya realtime
+- employee / technician / admin home ekranlarından `DeviceList` geçişi
+- `DeviceList -> DeviceDetail`
+- `DeviceDetail` içinde bakım kayıtları bölümü
+- `DeviceDetail -> DeviceQrPreview`
 
-## Device Schema Uyumu
+## Schema Uyumu
 
-Android listeleme akisi mevcut `devices` semasi ile uyumludur.
-Incelenen temel alanlar:
+İncelenen temel alanlar:
 
-- `id`
 - `asset_tag`
 - `device_type`
 - `brand`
 - `model`
+- `serial_number`
 - `status`
 - `department_id`
 - `assigned_user_id`
-- `is_active`
-- `serial_number`
 - `purchase_date`
 - `warranty_end_date`
 - `notes`
+- `is_active`
 - `qr_token`
 
-Notlar:
+## Repository Yaklaşımı
 
-- `asset_tag` demirbas kodu olarak gosterilir
-- `assigned_user_id` cihazi kullanan veya zimmetli gorunen personeli ifade eder
-- `tickets.assigned_to` ile karistirilmaz
-- Veritabani enum degerleri Ingilizce kalir; Android UI katmani Turkce label gosterir
-- Web tarafindaki gibi ham `qr_token` Android detay ekraninda gosterilmez
-- `qr_token` yalnizca guvenli QR payload uretmek icin read-only olarak okunur
-- Seri numarasi detail ekraninda kontrollu maskeli gosterilir
-
-## Repository Yaklasimi
-
-Repository arayuzu:
+Hazır fonksiyonlar:
 
 ```kotlin
 suspend fun loadDevices(): Result<List<DeviceSummary>>
@@ -66,88 +46,51 @@ suspend fun loadDeviceDetail(deviceId: String): Result<DeviceDetail>
 suspend fun loadMaintenanceRecords(deviceId: String): Result<List<DeviceMaintenanceRecord>>
 ```
 
-Davranis:
+Kurallar:
 
-- publishable key ile normal istemci baglantisi kullanilir
-- service role kullanilmaz
-- RLS sonucuna guvenilir
-- minimum alanlar secilir
-- kayitlar once `is_active desc`, sonra `asset_tag asc` ile siralanir
-- departman ve kullanici adlari ayri yardimci sorgularla zenginlestirilir
-- ham Supabase hatasi yerine kontrollu Turkce hata donulur
-- detail sorgusu minimum olarak kimlik, durum, zimmet, tarih ve not alanlarini okur
-- ayni detail sorgusu icine `qr_token` read-only alan olarak eklendi
-- cihaz detail erisimi yoksa kontrollu hata donulur; uygulama cokmez
-- `device_maintenance_records` tablosu `device_id`, `description`, `performed_by`, `performed_at` ve `cost` alanlariyla newest-first okunur
-- bakim kayitlarinda performer adi `profiles.full_name` yardimci sorgusuyla zenginlestirilir
-- bakim bolumu hata verirse detail ekraninin tamami degil, yalnizca ilgili kart kontrollu hata gosterir
-- QR preview icin ayri repository eklenmedi; mevcut `loadDeviceDetail(deviceId)` sonucu uzerinden `TBT-DEVICE:<qr_token>` payload'i uretilir
+- service role kullanılmaz
+- RLS sonucuna güvenilir
+- `qr_token` yalnızca read-only preview için kullanılır
+- bakım kayıtları newest-first okunur
+- ham Supabase hata mesajı kullanıcıya gösterilmez
 
-## ViewModel ve UI Akisi
+## Güvenli QR Yaklaşımı
 
-`DeviceListViewModel`:
+Android QR preview ekranı yalnızca:
 
-1. mevcut session state'i kontrol eder
-2. authenticated profile yoksa kontrollu hata durumu uretir
-3. varsa `loadDevices()` cagrisi yapar
-4. sonucu `DeviceListUiState` icine yazar
+```text
+TBT-DEVICE:<qr_token>
+```
 
-`DeviceListScreen` durumlari:
+payload'ını gösterir.
 
-- loading
-- liste
-- empty
-- error
+Gösterilmeyenler:
 
-Kartta gosterilen alanlar:
+- seri numarası
+- IP adresi
+- MAC adresi
+- personel adı
+- e-posta
+- telefon
 
-- Demirbas Kodu
-- Cihaz Turu
-- Marka / Model
-- Durum badge
-- Departman
-- Cihazi Kullanan Personel
+Bu yaklaşım web ile aynıdır.
 
-`DeviceDetailScreen` bolumleri:
+## Foundation Seviyesinde Kalan Noktalar
 
-- Cihaz Kimligi
-- Durum
-- Zimmet Bilgisi
-- Tarihler
-- Notlar
-- Bakim Kayitlari
-- QR Onizleme butonu
+Canlı runtime kanıtı eksik olan alanlar:
 
-Detay ekraninda:
-
-- QR token gosterilmez
-- QR preview ekraninda yalnizca `TBT-DEVICE:<qr_token>` formunda guvenli payload gosterilir
-- Seri numarasi maskeli verilir
-- not yoksa `Bu cihaz icin not bulunmuyor.` mesaji gosterilir
-- bakim kaydi yoksa `Bu cihaz icin bakim kaydi bulunmuyor.` mesaji gosterilir
-- bakim kayitlari `performed_at desc` sirasiyla listelenir
-- maliyet `0` ise kullaniciya ayri bir maliyet satiri gosterilmez
-- `qr_token` yoksa `Bu cihaz icin QR bilgisi bulunmuyor.` mesaji gosterilir ve uygulama cokmez
-
-## RLS Yaklasimi
-
-Android istemcisi cihazlar icin sahte ek yetki kontrolu uygulamaz.
-
-Yaklasim:
-
-- `devices` tablosuna normal select istegi atilir
-- hangi kayitlarin donecegine `users_can_read_accessible_devices` policy'si karar verir
-- employee yalnizca kendi uzerine atanmis aktif cihazlari gorebilir
-- technician ve admin policy'nin izin verdigi cihazlari gorebilir
+- device list canlı employee/technician görüntüleme
+- device detail canlı ilerleyişi
+- maintenance history canlı listeleme
+- QR preview canlı ilerleyişi
 
 ## Bilinen Eksikler
 
-- Runtime'da cihaz listesi veya cihaz detayina employee ya da technician session ile manuel ilerleme kaniti bu fazda alinmadi
-- Filtreleme veya arama eklenmedi
-- Bakim kayitlari runtime'da canli session ile dogrulanmadi
-- QR preview runtime'da canli session ile dogrulanmadi
-- Gercek QR gorseli veya tarama kutuphanesi eklenmedi
+- create/edit/passive Android tarafında yok
+- QR tarama yok
+- gerçek QR görseli yok
+- kamera izni yok
+- photo upload yok
+- realtime yok
 
-## Sonraki Asama
-
-- Android genel MVP toparlama ve dokumantasyon final kontrolu
+Bu alanlar bilinçli olarak sonraki fazlara bırakılmıştır.
