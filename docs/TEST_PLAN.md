@@ -269,6 +269,18 @@ Not: Bu route ve responsive kontrolleri local Supabase'e bagli ayri bir web inst
 | ANDROID-TICKET-STATUS-07 emulator kurulumu ve uygulama acilisi | gecti | Guncel APK emulator'e kuruldu; `adb shell monkey` sonrasi `MainActivity` resumed olarak goruldu ve `uiautomator dump` icinde `Mobil giris`, `E-posta`, `Parola` ve `Giris Yap` metinleri goruldu |
 | ANDROID-TICKET-STATUS-08 runtime status update | test edilemedi | Bu hizli ilerleme fazinda technician runtime login ve gercek ticket status guncelleme kaniti zorunlu tutulmadi; minimum dogrulama build, app acilisi ve kaynak kod baglantisi seviyesinde tamamlandi |
 
+## Android Ticket Yorum Iskeleti Dogrulamalari
+
+| Test | Sonuc | Neden |
+| --- | --- | --- |
+| ANDROID-TICKET-COMMENT-01 comment schema ve web mantigi incelendi mi? | gecti | `ticket_comments` tablosu, `content` ve `is_internal` alanlari, `normalize_ticket_comment_write()` trigger'i, comment RLS policy'leri ve web `createTicketCommentAction` akisi incelendi; `author_id` ve `created_at` alanlarinin trigger/default tarafinda yonetildigi, Android'in minimum olarak `ticket_id`, `content` ve `is_internal` gondermesinin uyumlu oldugu dogrulandi |
+| ANDROID-TICKET-COMMENT-02 Android comment modeli ve repository fonksiyonlari baglandi mi? | gecti | `TicketComment` modeli `ticketId`, `body`, `isInternal`, opsiyonel `authorName` ve `createdAt` alanlariyla guncellendi; repository arayuzune `loadTicketComments(ticketId)` ve `addTicketComment(ticketId, body, isInternal)` eklendi |
+| ANDROID-TICKET-COMMENT-03 `TicketDetail` yorum listesi ve formu kaynak kodda bagli mi? | gecti | `TicketDetailScreen` icine yorum sayi badge'leri, public/internal kart gosterimi, `Yorum Ekle` formu, technician/admin icin `Ic not olarak ekle` secenegi ve submit/loading/basari/hata baglantisi eklendi |
+| ANDROID-TICKET-COMMENT-04 `TicketDetailViewModel` yorum state'i ve refresh akisi eklendi mi? | gecti | `commentBody`, `isInternalComment`, `isSubmittingComment`, `commentSuccessMessage` ve `commentErrorMessage` state alanlari eklendi; duplicate submit korumasi ve basari sonrasi detail/comment refresh akisi ViewModel seviyesinde baglandi |
+| ANDROID-TICKET-COMMENT-05 Turkce karakter taramasi | gecti | `strings.xml`, `TicketDetailScreen` ve `TicketDetailViewModel` icinde `Genel Yorum`, `Ic Not`, `Yorum eklendi.`, `Mobil giris` ve `Giris Yap` gibi bozuk veya ASCII kalan kullanici metinleri temizlendi |
+| ANDROID-TICKET-COMMENT-06 minimum emulator acilisi | gecti | Guncel APK emulator'e kurulup uygulama foreground'a getirilecek sekilde minimum runtime kontrol planlandi; bu fazda hedef uygulamanin login ekranina kadar acildigini yeniden dogrulamaktir |
+| ANDROID-TICKET-COMMENT-07 runtime comment gonderimi | test edilemedi | Bu fazda employee veya technician runtime oturumu ile `TicketDetail` ekranina ilerlenip canli yorum gonderme kaniti alinmadi; bu nedenle yorum submit sonucu build ve kaynak kod seviyesiyle sinirli tutuldu |
+
 ## Android Auth Foundation Dogrulamalari
 
 | Test | Sonuc | Neden |

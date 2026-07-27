@@ -23,6 +23,10 @@ private const val DEFAULT_TECHNICIAN_QUEUE_ERROR_MESSAGE =
     "İş kuyruğu yüklenemedi. Lütfen tekrar deneyin."
 private const val DEFAULT_TICKET_DETAIL_ERROR_MESSAGE =
     "Talep detayı yüklenemedi. Lütfen tekrar deneyin."
+private const val DEFAULT_TICKET_COMMENT_LOAD_ERROR_MESSAGE =
+    "Yorumlar yüklenemedi. Lütfen tekrar deneyin."
+private const val DEFAULT_TICKET_COMMENT_ADD_ERROR_MESSAGE =
+    "Yorum eklenemedi. Lütfen tekrar deneyin."
 private const val DEFAULT_TICKET_STATUS_UPDATE_ERROR_MESSAGE =
     "Talep durumu güncellenemedi. Lütfen tekrar deneyin."
 private const val DEFAULT_TICKET_CREATE_ERROR_MESSAGE =
@@ -97,7 +101,7 @@ class SupabaseTicketRepository(
             val assignedToName = row.assignedTo?.let { id ->
                 loadProfileNames(client = client, profileIds = listOf(id))[id]
             }
-            val comments = loadTicketComments(client = client, ticketId = row.id)
+            val comments = loadTicketCommentsInternal(client = client, ticketId = row.id)
 
             val detail = row.toDetail(
                 deviceLabel = deviceLabel,
@@ -108,6 +112,58 @@ class SupabaseTicketRepository(
             Result.success(detail)
         } catch (_: Exception) {
             Result.failure(IllegalStateException(DEFAULT_TICKET_DETAIL_ERROR_MESSAGE))
+        }
+    }
+
+    override suspend fun loadTicketComments(ticketId: String): Result<List<TicketComment>> {
+        if (ticketId.isBlank()) {
+            return Result.failure(IllegalStateException(DEFAULT_TICKET_COMMENT_LOAD_ERROR_MESSAGE))
+        }
+
+        val client = when (val result = clientProvider.getClient()) {
+            is AppResult.Success -> result.value
+            is AppResult.Failure -> {
+                return Result.failure(IllegalStateException(DEFAULT_TICKET_COMMENT_LOAD_ERROR_MESSAGE))
+            }
+        }
+
+        return try {
+            Result.success(loadTicketCommentsInternal(client = client, ticketId = ticketId))
+        } catch (_: Exception) {
+            Result.failure(IllegalStateException(DEFAULT_TICKET_COMMENT_LOAD_ERROR_MESSAGE))
+        }
+    }
+
+    override suspend fun addTicketComment(
+        ticketId: String,
+        body: String,
+        isInternal: Boolean
+    ): Result<Unit> {
+        if (ticketId.isBlank() || body.isBlank()) {
+            return Result.failure(IllegalStateException(DEFAULT_TICKET_COMMENT_ADD_ERROR_MESSAGE))
+        }
+
+        val client = when (val result = clientProvider.getClient()) {
+            is AppResult.Success -> result.value
+            is AppResult.Failure -> {
+                return Result.failure(IllegalStateException(DEFAULT_TICKET_COMMENT_ADD_ERROR_MESSAGE))
+            }
+        }
+
+        return try {
+            client.postgrest
+                .from("ticket_comments")
+                .insert(
+                    value = CreateTicketCommentPayload(
+                        ticketId = ticketId,
+                        content = body.trim(),
+                        isInternal = isInternal
+                    )
+                )
+
+            Result.success(Unit)
+        } catch (_: Exception) {
+            Result.failure(IllegalStateException(DEFAULT_TICKET_COMMENT_ADD_ERROR_MESSAGE))
         }
     }
 
@@ -348,39 +404,36 @@ private suspend fun loadProfileNames(
     }
 }
 
-private suspend fun loadTicketComments(
+private suspend fun loadTicketCommentsInternal(
     client: SupabaseClient,
     ticketId: String
 ): List<TicketComment> {
-    return try {
-        val commentRows = client.postgrest
-            .from("ticket_comments")
-            .select(
-                columns = Columns.list("id", "author_id", "content", "is_internal", "created_at")
-            ) {
-                filter {
-                    eq("ticket_id", ticketId)
-                }
-                order(column = "created_at", order = Order.ASCENDING)
+    val commentRows = client.postgrest
+        .from("ticket_comments")
+        .select(
+            columns = Columns.list("id", "ticket_id", "author_id", "content", "is_internal", "created_at")
+        ) {
+            filter {
+                eq("ticket_id", ticketId)
             }
-            .decodeList<TicketCommentDto>()
-
-        val authorNames = loadProfileNames(
-            client = client,
-            profileIds = commentRows.map { it.authorId }.distinct()
-        )
-
-        commentRows.map { comment ->
-            TicketComment(
-                id = comment.id,
-                authorName = authorNames[comment.authorId],
-                content = comment.content.trim(),
-                isInternal = comment.isInternal,
-                createdAt = comment.createdAt
-            )
+            order(column = "created_at", order = Order.ASCENDING)
         }
-    } catch (_: Exception) {
-        emptyList()
+        .decodeList<TicketCommentDto>()
+
+    val authorNames = loadProfileNames(
+        client = client,
+        profileIds = commentRows.map { it.authorId }.distinct()
+    )
+
+    return commentRows.map { comment ->
+        TicketComment(
+            id = comment.id,
+            ticketId = comment.ticketId,
+            authorName = authorNames[comment.authorId],
+            body = comment.content.trim(),
+            isInternal = comment.isInternal,
+            createdAt = comment.createdAt
+        )
     }
 }
 
@@ -505,6 +558,8 @@ private data class ProfileDepartmentDto(
 @Serializable
 private data class TicketCommentDto(
     val id: String,
+    @SerialName("ticket_id")
+    val ticketId: String,
     @SerialName("author_id")
     val authorId: String,
     val content: String,
@@ -524,6 +579,15 @@ private data class CreateTicketPayload(
     val departmentId: String,
     @SerialName("device_id")
     val deviceId: String? = null
+)
+
+@Serializable
+private data class CreateTicketCommentPayload(
+    @SerialName("ticket_id")
+    val ticketId: String,
+    val content: String,
+    @SerialName("is_internal")
+    val isInternal: Boolean = false
 )
 
 @Serializable

@@ -12,8 +12,16 @@ data class TicketDetailUiState(
     val availableStatusActions: List<TicketStatus> = emptyList(),
     val isUpdatingStatus: Boolean = false,
     val statusSuccessMessage: String? = null,
-    val statusErrorMessage: String? = null
+    val statusErrorMessage: String? = null,
+    val commentBody: String = "",
+    val isInternalComment: Boolean = false,
+    val isSubmittingComment: Boolean = false,
+    val commentSuccessMessage: String? = null,
+    val commentErrorMessage: String? = null
 ) {
     val canManageStatus: Boolean
+        get() = viewerRole == AppRole.Technician || viewerRole == AppRole.Admin
+
+    val canAddInternalComment: Boolean
         get() = viewerRole == AppRole.Technician || viewerRole == AppRole.Admin
 }

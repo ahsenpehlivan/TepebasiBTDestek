@@ -3,23 +3,27 @@ package com.ahsen.tepebasibtdestek.feature.tickets
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -35,7 +39,10 @@ fun TicketDetailScreen(
     state: TicketDetailUiState,
     onBackClick: () -> Unit,
     onRetryClick: () -> Unit,
-    onUpdateStatus: (TicketStatus) -> Unit
+    onUpdateStatus: (TicketStatus) -> Unit,
+    onCommentBodyChanged: (String) -> Unit,
+    onInternalCommentChanged: (Boolean) -> Unit,
+    onSubmitComment: () -> Unit
 ) {
     when {
         state.isLoading -> {
@@ -74,7 +81,10 @@ fun TicketDetailScreen(
             TicketDetailContent(
                 state = state,
                 onBackClick = onBackClick,
-                onUpdateStatus = onUpdateStatus
+                onUpdateStatus = onUpdateStatus,
+                onCommentBodyChanged = onCommentBodyChanged,
+                onInternalCommentChanged = onInternalCommentChanged,
+                onSubmitComment = onSubmitComment
             )
         }
     }
@@ -84,7 +94,10 @@ fun TicketDetailScreen(
 private fun TicketDetailContent(
     state: TicketDetailUiState,
     onBackClick: () -> Unit,
-    onUpdateStatus: (TicketStatus) -> Unit
+    onUpdateStatus: (TicketStatus) -> Unit,
+    onCommentBodyChanged: (String) -> Unit,
+    onInternalCommentChanged: (Boolean) -> Unit,
+    onSubmitComment: () -> Unit
 ) {
     val ticketDetail = state.ticketDetail ?: return
 
@@ -176,6 +189,15 @@ private fun TicketDetailContent(
             }
 
             TicketSectionCard(title = stringResource(R.string.ticket_detail_comments_section)) {
+                CommentSummaryRow(comments = ticketDetail.comments)
+
+                CommentComposer(
+                    state = state,
+                    onCommentBodyChanged = onCommentBodyChanged,
+                    onInternalCommentChanged = onInternalCommentChanged,
+                    onSubmitComment = onSubmitComment
+                )
+
                 if (ticketDetail.comments.isEmpty()) {
                     Text(
                         text = stringResource(R.string.ticket_detail_comments_empty),
@@ -249,6 +271,108 @@ private fun TicketStatusActionCard(
 }
 
 @Composable
+private fun CommentSummaryRow(comments: List<TicketComment>) {
+    val publicCount = comments.count { !it.isInternal }
+    val internalCount = comments.count { it.isInternal }
+
+    FlowRow(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        TicketBadge(
+            text = stringResource(R.string.ticket_comment_public_count, publicCount),
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+        )
+        TicketBadge(
+            text = stringResource(R.string.ticket_comment_internal_count, internalCount),
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+        )
+    }
+}
+
+@Composable
+private fun CommentComposer(
+    state: TicketDetailUiState,
+    onCommentBodyChanged: (String) -> Unit,
+    onInternalCommentChanged: (Boolean) -> Unit,
+    onSubmitComment: () -> Unit
+) {
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Text(
+            text = stringResource(R.string.ticket_comment_form_title),
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.onSurface,
+            fontWeight = FontWeight.SemiBold
+        )
+
+        OutlinedTextField(
+            value = state.commentBody,
+            onValueChange = onCommentBodyChanged,
+            modifier = Modifier.fillMaxWidth(),
+            enabled = !state.isSubmittingComment,
+            label = {
+                Text(text = stringResource(R.string.ticket_comment_body_label))
+            },
+            placeholder = {
+                Text(text = stringResource(R.string.ticket_comment_body_placeholder))
+            },
+            minLines = 3
+        )
+
+        if (state.canAddInternalComment) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Checkbox(
+                    checked = state.isInternalComment,
+                    onCheckedChange = onInternalCommentChanged,
+                    enabled = !state.isSubmittingComment
+                )
+                Text(
+                    text = stringResource(R.string.ticket_comment_internal_toggle),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+
+        if (!state.commentSuccessMessage.isNullOrBlank()) {
+            Text(
+                text = state.commentSuccessMessage,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.primary
+            )
+        }
+
+        if (!state.commentErrorMessage.isNullOrBlank()) {
+            Text(
+                text = state.commentErrorMessage,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.error
+            )
+        }
+
+        Button(
+            onClick = onSubmitComment,
+            enabled = !state.isSubmittingComment,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = if (state.isSubmittingComment) {
+                    stringResource(R.string.ticket_comment_submitting)
+                } else {
+                    stringResource(R.string.ticket_comment_submit)
+                }
+            )
+        }
+    }
+}
+
+@Composable
 private fun TicketBadgeRow(ticketDetail: TicketDetail) {
     FlowRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -311,34 +435,39 @@ private fun CommentCard(comment: TicketComment) {
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            TicketBadge(
-                text = stringResource(
-                    if (comment.isInternal) {
-                        R.string.ticket_comment_internal
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                TicketBadge(
+                    text = stringResource(
+                        if (comment.isInternal) {
+                            R.string.ticket_comment_internal
+                        } else {
+                            R.string.ticket_comment_public
+                        }
+                    ),
+                    containerColor = if (comment.isInternal) {
+                        MaterialTheme.colorScheme.secondaryContainer
                     } else {
-                        R.string.ticket_comment_public
+                        MaterialTheme.colorScheme.primaryContainer
+                    },
+                    contentColor = if (comment.isInternal) {
+                        MaterialTheme.colorScheme.onSecondaryContainer
+                    } else {
+                        MaterialTheme.colorScheme.onPrimaryContainer
                     }
-                ),
-                containerColor = if (comment.isInternal) {
-                    MaterialTheme.colorScheme.secondaryContainer
-                } else {
-                    MaterialTheme.colorScheme.primaryContainer
-                },
-                contentColor = if (comment.isInternal) {
-                    MaterialTheme.colorScheme.onSecondaryContainer
-                } else {
-                    MaterialTheme.colorScheme.onPrimaryContainer
-                }
-            )
-            if (!comment.authorName.isNullOrBlank()) {
-                Text(
-                    text = comment.authorName,
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.onSurface
                 )
+                if (!comment.authorName.isNullOrBlank()) {
+                    TicketBadge(
+                        text = comment.authorName,
+                        containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                        contentColor = MaterialTheme.colorScheme.onSurface
+                    )
+                }
             }
             Text(
-                text = comment.content,
+                text = comment.body,
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

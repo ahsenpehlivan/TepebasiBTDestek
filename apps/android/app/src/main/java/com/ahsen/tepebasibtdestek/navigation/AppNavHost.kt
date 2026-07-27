@@ -258,7 +258,10 @@ fun AppNavHost(
                     }
                 },
                 onRetryClick = detailViewModel::refresh,
-                onUpdateStatus = detailViewModel::updateStatus
+                onUpdateStatus = detailViewModel::updateStatus,
+                onCommentBodyChanged = detailViewModel::onCommentBodyChanged,
+                onInternalCommentChanged = detailViewModel::onInternalCommentChanged,
+                onSubmitComment = detailViewModel::submitComment
             )
         }
 

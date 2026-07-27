@@ -56,6 +56,9 @@ Not:
 - Android technician status update temeli icin planlanan ek ekran goruntusu:
   - `24-android-ticket-status-actions.png` -> Technician icin `Talep Islemleri` butonlari gorunen `TicketDetail` ekrani
   - Bu ekran goruntusu de henuz alinmadi; cunku bu fazda technician runtime login ile detail ekraninda canli status update kaniti alinmadi
+- Android ticket yorum iskeleti icin planlanan ek ekran goruntusu:
+  - `25-android-ticket-comments.png` -> `TicketDetail` icinde yorum listesi, `Genel Yorum` / `Ic Not` badge'leri ve yorum ekleme formu
+  - Bu ekran goruntusu henuz alinmadi; cunku runtime'da employee veya technician session ile detail ekranina ilerlenip canli yorum gonderimi kanitlanamadi
 
 | Sira | Onerilen Dosya Adi | Demo Adimi | Kanitladigi Ozellik |
 | --- | --- | --- | --- |

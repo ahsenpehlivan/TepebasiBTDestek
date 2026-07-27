@@ -2,8 +2,8 @@
 
 ## Ozet
 
-Bu dokuman artik Android tarafindaki personel ticket listeleme, ticket detay, ticket olusturma, technician queue ve technician status update temelini birlikte ozetler.
-Bu fazda `TicketDetail` icine technician/admin icin temel status update aksiyon paneli eklendi.
+Bu dokuman artik Android tarafindaki personel ticket listeleme, ticket detay, ticket olusturma, technician queue, technician status update ve ticket yorum iskeletini birlikte ozetler.
+Bu fazda `TicketDetail` icine tum roller icin temel yorum goruntuleme/ekleme formu, technician/admin icin de internal not secenegi eklendi.
 
 Kapsam:
 
@@ -18,17 +18,21 @@ Kapsam:
 - `CreateTicketInput` modeli ve `createTicket(input)` repository fonksiyonu
 - `loadTechnicianQueue()` repository fonksiyonu
 - `updateTicketStatus(ticketId, status)` repository fonksiyonu
+- `loadTicketComments(ticketId)` repository fonksiyonu
+- `addTicketComment(ticketId, body, isInternal)` repository fonksiyonu
 - `MyTicketsScreen` kartindan veya `TechnicianQueueScreen` kartindan `TicketDetail/{ticketId}` route gecisi
 - `TicketDetail` icinde technician/admin icin status update aksiyonlari
+- `TicketDetail` icinde yorum listesi, yorum sayi badge'leri ve yorum ekleme formu
 
 Bu fazda sunlar eklenmedi:
 
 - ticket atama degistirme
-- ticket yorum ekleme
 - technician queue icinde filtreleme/siralama secenekleri
 - admin ticket ekranlari
 - pagination, pull-to-refresh
 - cihaz secimi
+- yorum duzenleme veya silme
+- yorum gonderimi icin runtime kanit
 
 Runtime notu:
 
@@ -80,6 +84,8 @@ Repository arayuzu:
 suspend fun loadMyTickets(): Result<List<TicketSummary>>
 suspend fun loadTechnicianQueue(): Result<List<TicketSummary>>
 suspend fun loadTicketDetail(ticketId: String): Result<TicketDetail>
+suspend fun loadTicketComments(ticketId: String): Result<List<TicketComment>>
+suspend fun addTicketComment(ticketId: String, body: String, isInternal: Boolean): Result<Unit>
 suspend fun updateTicketStatus(ticketId: String, status: TicketStatus): Result<Unit>
 suspend fun createTicket(input: CreateTicketInput): Result<String>
 ```
@@ -93,8 +99,11 @@ Davranis:
 - gorulebilen satirlar Supabase RLS sonucuna birakilir
 - employee create akisi icin `department_id` mevcut session profile baglamindan cozulur
 - employee insert'inde `created_by` ve `status` alanlari trigger/RLS tarafina birakilir
+- comment insert'inde `author_id` ve `created_at` alanlari trigger/default tarafina birakilir
+- employee icin internal comment secenegi UI'da acilmaz; insert tarafinda da RLS ve `normalize_ticket_comment_write()` trigger'i korumayi surdurur
 - technician queue varsayilan olarak `open`, `assigned`, `in_progress` ve `waiting_user` durumlarini newest-first getirir
 - status update akisi Android'den yalnizca `status` alanini gonderir
+- comment insert akisi Android'den yalnizca `ticket_id`, `content` ve `is_internal` alanlarini gonderir
 - `assigned_to`, `assigned_at`, `resolved_at`, `closed_at` ve `updated_at` alanlari trigger/default mantigina birakilir
 
 Secilen alanlar:
@@ -165,6 +174,15 @@ Status update akisi:
 3. `updateTicketStatus(ticketId, status)` ViewModel uzerinden cagrilir
 4. basarili olursa detail verisi yeniden yuklenir ve basari mesaji gosterilir
 5. hata olursa kontrollu Turkce hata mesaji gosterilir
+
+Comment akisi:
+
+1. `TicketDetailScreen` yorumlar bolumunde public/internal badge dagilimi gorulur
+2. kullanici yorum metnini girer
+3. technician/admin ise `Ic not olarak ekle` secenegi acilir
+4. `addTicketComment(ticketId, body, isInternal)` ViewModel uzerinden cagrilir
+5. basarili olursa `Yorum eklendi.` mesaji gorulur, form temizlenir ve detail/comments yenilenir
+6. hata olursa kontrollu Turkce hata mesaji gosterilir
 
 `CreateTicketViewModel`:
 
@@ -245,6 +263,11 @@ Bu nedenle:
 - ANDROID-TICKET-STATUS-03 `TicketDetail` technician aksiyon paneli
 - ANDROID-TICKET-STATUS-04 status update state ve detail refresh
 - ANDROID-TICKET-STATUS-05 minimum emulator acilisi
+- ANDROID-TICKET-COMMENT-01 comment schema ve web mantigi incelemesi
+- ANDROID-TICKET-COMMENT-02 repository comment fonksiyonlari
+- ANDROID-TICKET-COMMENT-03 `TicketDetail` yorum listesi ve form wiring
+- ANDROID-TICKET-COMMENT-04 Turkish string ve badge kontrolu
+- ANDROID-TICKET-COMMENT-05 minimum emulator acilisi
 
 ## Bilinen Eksikler
 
@@ -253,7 +276,8 @@ Bu nedenle:
 - Status update bu fazda yalnizca `TicketDetail` icinde bulunur; `TechnicianQueue` kartlari uzerinde dogrudan aksiyon yoktur
 - Queue ekraninin gercek technician oturumuyla manuel liste kaniti bu fazda alinmadi
 - TicketDetail icindeki status update aksiyonlarinin gercek technician session ile runtime kaniti bu fazda alinmadi
+- TicketDetail icindeki yorum gonderme akisinin gercek employee veya technician session ile runtime kaniti bu fazda alinmadi
 
 ## Sonraki Asama
 
-- Android ticket yorum goruntuleme/yazma iskeleti
+- Android cihaz listesi iskeleti
