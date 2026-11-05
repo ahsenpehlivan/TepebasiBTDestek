@@ -1,5 +1,15 @@
 # Tepebaşı BT Destek
 
+![Next.js](https://img.shields.io/badge/Next.js-Web-000000?logo=nextdotjs&logoColor=white) ![Kotlin](https://img.shields.io/badge/Kotlin-Android-7F52FF?logo=kotlin&logoColor=white) ![Supabase](https://img.shields.io/badge/Supabase-Backend-3FCF8E?logo=supabase&logoColor=white)
+
+A cross-platform **IT support and device-inventory MVP** developed during my internship at Tepebaşı Municipality. The web panel covers ticket and device workflows. The Android app includes authentication, role-based home screens, and the screen, repository, and navigation foundations for ticket and device features.
+
+**Explore:** [Web app](apps/web/) · [Android app](apps/android/) · [Supabase schema and policies](supabase/) · [Project notes](docs/)
+
+---
+
+## Türkçe proje açıklaması
+
 Tepebaşı BT Destek, belediye içindeki teknik destek taleplerini ve cihaz envanterini daha düzenli takip edebilmek için hazırladığım çok platformlu bir MVP prototipidir. Proje, web tarafında yönetim paneli; mobil tarafta ise Android için temel kullanıcı akışlarını içerir.
 
 ## Projenin Amacı
